@@ -4,21 +4,32 @@ from handler.supplier import SupplierHandler
 # Import Cross-Origin Resource Sharing to enable
 # services on other ports on this machine or on other
 # machines to access this app
-# from flask_cors import CORS, cross_origin
+from flask_cors import CORS, cross_origin
+
 
 # Activate
 app = Flask(__name__)
+
 # Apply CORS to this app
-# CORS(app)
+CORS(app)
+
+# -----------------------Modified stuff---------------------------------##
 
 
-#-----------------------Modified stuff---------------------------------
-@app.route('/InstaPost')
+@app.route('/api')
+@cross_origin()
 def greeting():
     return 'Hello, this is the InstaPost DB App!'
 
+
+@app.route('/api/test')
+@cross_origin()
+def greeting22():
+    return jsonify('Hello, this is adasdasdasdthe InstaPost DB App!')
+
+
 @app.route('/InstaPost/chats', methods=['GET', 'POST'])
-def getAllParts():
+def getAllChats():
     if request.method == 'POST':
         # cambie a request.json pq el form no estaba bregando
         # parece q estaba poseido por satanas ...
@@ -33,9 +44,11 @@ def getAllParts():
 
 #----------------------------Original---------------------------------
 
+
 @app.route('/')
-def greeting():
+def greeting2():
     return 'Hello, this is the parts DB App!'
+
 
 @app.route('/PartApp/parts', methods=['GET', 'POST'])
 def getAllParts():
@@ -51,6 +64,7 @@ def getAllParts():
         else:
             return PartHandler().searchParts(request.args)
 
+
 @app.route('/PartApp/parts/<int:pid>', methods=['GET', 'PUT', 'DELETE'])
 def getPartById(pid):
     if request.method == 'GET':
@@ -62,9 +76,11 @@ def getPartById(pid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 @app.route('/PartApp/parts/<int:pid>/suppliers')
 def getSuppliersByPartId(pid):
     return PartHandler().getSuppliersByPartId(pid)
+
 
 @app.route('/PartApp/suppliers', methods=['GET', 'POST'])
 def getAllSuppliers():
@@ -75,6 +91,7 @@ def getAllSuppliers():
             return SupplierHandler().getAllSuppliers()
         else:
             return SupplierHandler().searchSuppliers(request.args)
+
 
 @app.route('/PartApp/suppliers/<int:sid>',
            methods=['GET', 'PUT', 'DELETE'])
@@ -93,9 +110,11 @@ def getSupplierById(sid):
 def getPartsBySuplierId(sid):
     return SupplierHandler().getPartsBySupplierId(sid)
 
+
 @app.route('/PartApp/parts/countbypartid')
 def getCountByPartId():
     return PartHandler().getCountByPartId()
 
-if __name__ == '__main__':
-    app.run()
+
+if __name__ == "__main__":
+    app.run(port=8000, debug=True)
