@@ -31,6 +31,10 @@ def getAllParts():
         else:
             return PartHandler().searchParts(request.args)
 
+@app.route('/InstaPost/posts', methods=['GET', 'POST', 'PUT'])
+def greeting():
+    return 'Hello, this is where you should see your posts for this chat!'
+
 #----------------------------Original---------------------------------
 
 @app.route('/')
