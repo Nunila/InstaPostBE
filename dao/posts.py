@@ -1,12 +1,23 @@
 from config.dbconfig import pg_config
-import psycopg2
+#import psycopg2
 class PostsDao:
     def __init__(self):
 
-        connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
-                                                            pg_config['user'],
-                                                            pg_config['passwd'])
-        self.conn = psycopg2._connect(connection_url)
+        # connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
+        #                                                     pg_config['user'],
+        #                                                     pg_config['passwd'])
+        # self.conn = psycopg2._connect(connection_url)
+
+    def insert(self, photoId, caption, postDate, userId, chatId):
+        #cursor = self.conn.cursor()
+        query = "insert into parts(pname, pcolor, pmaterial, pprice) values (%s, %s, %s, %s) returning pid;"
+        #cursor.execute(query, (pname, pcolor, pmaterial, pprice,))
+        #pid = cursor.fetchone()[0]
+        #self.conn.commit()
+        #return pid
+        return "Successfully inserted {photo:%s, %s, %s, %s, %s)!" %(photoId, caption, postDate, userId, chatId)
+
+#-----------------------------------------------------------------------------------------------------------------------
 
     def getAllParts(self):
         cursor = self.conn.cursor()
