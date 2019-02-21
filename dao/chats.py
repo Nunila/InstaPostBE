@@ -1,21 +1,26 @@
 from config.dbconfig import pg_config
 import psycopg2
+import datetime
+
 class ChatsDAO:
-    def __init__(self):
+    chatArray = [{"chatId": 1, "chatName": 'DBProject', "creationDate": datetime.datetime.now(), "chatOwnerId": 45}]
 
-        connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
-                                                            pg_config['user'],
-                                                            pg_config['passwd'])
-        self.conn = psycopg2._connect(connection_url)
+    # def __init__(self):
+    #
+    #     connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
+    #                                                         pg_config['user'],
+    #                                                         pg_config['passwd'])
+    #     self.conn = psycopg2._connect(connection_url)
 
-    def getAllParts(self):
-        cursor = self.conn.cursor()
-        query = "select pid, pname, pmaterial, pcolor, pprice from parts;"
-        cursor.execute(query)
-        result = []
-        for row in cursor:
-            result.append(row)
-        return result
+    def getAllChats(self):
+        return self.chatArray
+        # cursor = self.conn.cursor()
+        # query = "select pid, pname, pmaterial, pcolor, pprice from parts;"
+        # cursor.execute(query)
+        # result = []
+        # for row in cursor:
+        #     result.append(row)
+        # return result
 
     def getPartById(self, pid):
         cursor = self.conn.cursor()
@@ -90,5 +95,4 @@ class ChatsDAO:
         for row in cursor:
             result.append(row)
         return result
-
 
