@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from handler.parts import PartHandler
 from handler.supplier import SupplierHandler
+from handler.chats import ChatHandler
 # Import Cross-Origin Resource Sharing to enable
 # services on other ports on this machine or on other
 # machines to access this app
@@ -16,31 +17,48 @@ CORS(app)
 # -----------------------Modified stuff---------------------------------##
 
 
-@app.route('/api')
+@app.route('/')
 @cross_origin()
 def greeting():
     return 'Hello, this is the InstaPost DB App!'
 
 
-@app.route('/api/test')
-@cross_origin()
-def greeting22():
-    return jsonify('Hello, this is adasdasdasdthe InstaPost DB App!')
-
-
 @app.route('/InstaPost/chats', methods=['GET', 'POST'])
 def getAllChats():
     if request.method == 'POST':
-        # cambie a request.json pq el form no estaba bregando
-        # parece q estaba poseido por satanas ...
-        # DEBUG a ver q trae el json q manda el cliente con la nueva pieza
         print("REQUEST: ", request.json)
-        return PartHandler().insertPartJson(request.json)
+        return ChatHandler().insertChatJson(request.json)
     else:
         if not request.args:
-            return PartHandler().getAllParts()
+            return ChatHandler().getAllChats()
         else:
-            return PartHandler().searchParts(request.args)
+            #Accepts queries for chat name and creation date
+            return ChatHandler().searchChats(request.args)
+
+@app.route('/InstaPot/chats/<int:cid>', methods=['GET', 'PUT', 'DELETE'])
+def getChatById(cid):
+    if request.method == 'GET':
+        return ChatHandler().getChatById(cid)
+    elif request.method == 'PUT':
+        return ChatHandler().updateChat(cid, request.form)
+    elif request.method == 'DELETE':
+        return ChatHandler().deleteChat(cid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPot/chats/<int:uid>/member', methods=['GET'])
+def getChatByMemberId(uid):
+    if request.method == 'GET':
+        return ChatHandler().getChatsByMemberId(uid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPot/chats/<int:uid>/owner', methods=['GET'])
+def getChatByOwnerId(uid):
+    if request.method == 'GET':
+        return ChatHandler().getChatsByOwnerId(uid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 #----------------------------Original---------------------------------
 
