@@ -28,10 +28,9 @@ def getAllChats():
         if not request.args:
             return ChatHandler().getAllChats()
         else:
-            #Accepts queries for chat name and creation date
             return ChatHandler().searchChats(request.args)
 
-@app.route('/InstaPot/chats/<int:cid>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/InstaPost/chats/<int:cid>', methods=['GET', 'PUT', 'DELETE'])
 def getChatById(cid):
     if request.method == 'GET':
         return ChatHandler().getChatById(cid)
@@ -42,19 +41,13 @@ def getChatById(cid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
-@app.route('/InstaPot/chats/<int:uid>/member', methods=['GET'])
+@app.route('/InstaPost/chats/<int:uid>/member', methods=['GET'])
 def getChatByMemberId(uid):
     if request.method == 'GET':
         return ChatHandler().getChatsByMemberId(uid)
     else:
         return jsonify(Error="Method not allowed."), 405
 
-@app.route('/InstaPot/chats/<int:uid>/owner', methods=['GET'])
-def getChatByOwnerId(uid):
-    if request.method == 'GET':
-        return ChatHandler().getChatsByOwnerId(uid)
-    else:
-        return jsonify(Error="Method not allowed."), 405
 
 #----------------------------Original---------------------------------
 
