@@ -1,8 +1,6 @@
 from flask import jsonify
 from dao.chats import ChatsDAO
 
-import datetime
-
 
 class ChatHandler:
 

@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from handler.chats import ChatHandler
+from handler.reactions import ReactionHandler
 # Import Cross-Origin Resource Sharing to enable
 # services on other ports on this machine or on other
 # machines to access this app
@@ -19,6 +20,9 @@ def greeting():
     return 'Hello, this is the InstaPost DB App!'
 
 
+# -----------------------------CHATS----------------------------------
+
+
 @app.route('/InstaPost/chats', methods=['GET', 'POST'])
 def getAllChats():
     if request.method == 'POST':
@@ -29,6 +33,7 @@ def getAllChats():
             return ChatHandler().getAllChats()
         else:
             return ChatHandler().searchChats(request.args)
+
 
 @app.route('/InstaPost/chats/<int:cid>', methods=['GET', 'PUT', 'DELETE'])
 def getChatById(cid):
@@ -41,6 +46,7 @@ def getChatById(cid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 @app.route('/InstaPost/chats/<int:uid>/member', methods=['GET'])
 def getChatByMemberId(uid):
     if request.method == 'GET':
@@ -48,71 +54,33 @@ def getChatByMemberId(uid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+# ---------------------------REACTIONS--------------------------------
 
-#----------------------------Original---------------------------------
+
+@app.route('/InstaPost/reactions', methods=['GET', 'POST'])
+def getAllReactions():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ReactionHandler().insertReactionJson(request.json)
+    else:
+        if not request.args:
+            return ReactionHandler().getAllReactions()
+        else:
+            return ReactionHandler().searchReactions(request.args)
 
 
-# @app.route('/PartApp/parts', methods=['GET', 'POST'])
-# def getAllParts():
-#     if request.method == 'POST':
-#         # cambie a request.json pq el form no estaba bregando
-#         # parece q estaba poseido por satanas ...
-#         # DEBUG a ver q trae el json q manda el cliente con la nueva pieza
-#         print("REQUEST: ", request.json)
-#         return PartHandler().insertPartJson(request.json)
-#     else:
-#         if not request.args:
-#             return PartHandler().getAllParts()
-#         else:
-#             return PartHandler().searchParts(request.args)
-#
-#
-# @app.route('/PartApp/parts/<int:pid>', methods=['GET', 'PUT', 'DELETE'])
-# def getPartById(pid):
-#     if request.method == 'GET':
-#         return PartHandler().getPartById(pid)
-#     elif request.method == 'PUT':
-#         return PartHandler().updatePart(pid, request.form)
-#     elif request.method == 'DELETE':
-#         return PartHandler().deletePart(pid)
-#     else:
-#         return jsonify(Error="Method not allowed."), 405
-#
-#
-# @app.route('/PartApp/parts/<int:pid>/suppliers')
-# def getSuppliersByPartId(pid):
-#     return PartHandler().getSuppliersByPartId(pid)
-#
-#
-# @app.route('/PartApp/suppliers', methods=['GET', 'POST'])
-# def getAllSuppliers():
-#     if request.method == 'POST':
-#         return SupplierHandler().insertSupplier(request.form)
-#     else :
-#         if not request.args:
-#             return SupplierHandler().getAllSuppliers()
-#         else:
-#             return SupplierHandler().searchSuppliers(request.args)
-#
-#
-# @app.route('/PartApp/suppliers/<int:sid>',
-#            methods=['GET', 'PUT', 'DELETE'])
-# def getSupplierById(sid):
-#     if request.method == 'GET':
-#         return SupplierHandler().getSupplierById(sid)
-#     elif request.method == 'PUT':
-#         pass
-#     elif request.method == 'DELETE':
-#         pass
-#     else:
-#         return jsonify(Error = "Method not allowed"), 405
-#
-#
-# @app.route('/PartApp/suppliers/<int:sid>/parts')
-# def getPartsBySuplierId(sid):
-#     return SupplierHandler().getPartsBySupplierId(sid)
-#
-#
+@app.route('/InstaPost/reactions/<int:rid>', methods=['GET', 'PUT', 'DELETE'])
+def getReactionById(rid):
+    if request.method == 'GET':
+        return ReactionHandler().getReactionById(rid)
+    elif request.method == 'PUT':
+        return ReactionHandler().updateReaction(rid, request.form)
+    elif request.method == 'DELETE':
+        return ReactionHandler().deleteReaction(rid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
 # @app.route('/PartApp/parts/countbypartid')
 # def getCountByPartId():
 #     return PartHandler().getCountByPartId()
