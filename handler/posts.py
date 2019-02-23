@@ -1,8 +1,8 @@
 from flask import jsonify
-from dao.posts import PostsDao
+from dao.posts import PostsDAO
 
 
-class postHandler:
+class PostHandler:
 
 
     def buildPostDict(self, row):
@@ -28,87 +28,27 @@ class postHandler:
 #---------------Operations---------------------------------------------------------
 
     def getAllPosts(self):
-        p1={}
-        p1['postId'] = 1
-        p1['photoId'] = "265A2"
-        p1['caption'] = "Some inspiring caption"
-        p1['postDate'] = '2/14/2018 15:00:00'
-        p1['userId'] = '1'
-        p1['chatId'] = '1'
-        
-        p2={}
-        p2['postId'] = 2
-        p2['photoId'] = "542B1"
-        p2['caption'] = "Yesterday in Condado!"
-        p2['postDate'] = '2/17/2018 10:00:00'
-        p2['userId'] = '2'
-        p2['chatId'] = '1'
-        
-        p3={}
-        p3['postId'] = 3
-        p3['photoId'] = "21476"
-        p3['caption'] = "Some inspiring caption"
-        p3['postDate'] = '2/14/2018 15:00:00'
-        p3['userId'] = '1'
-        p3['chatId'] = '1'
-
-        postsList = []
-        postsList.append(p1)
-        postsList.append(p2)
-        postsList.append(p3)
-        return jsonify(Posts=postsList)
+        dao = PostsDAO()
+        posts_List = dao.getAllPosts()
+        return jsonify(posts_List)
 
     def getPostsByChatId(self, chatId):
-        if(chatId == 1):
-            p1 = {}
-            p1['postId'] = 1
-            p1['photoId'] = "265A2"
-            p1['caption'] = "Some inspiring caption"
-            p1['postDate'] = '2/14/2018 15:00:00'
-            p1['userId'] = '1'
-            p1['chatId'] = '1'
-
-            p2 = {}
-            p2['postId'] = 2
-            p2['photoId'] = "542B1"
-            p2['caption'] = "Yesterday in Condado!"
-            p2['postDate'] = '2/17/2018 10:00:00'
-            p2['userId'] = '2'
-            p2['chatId'] = '1'
-
-            postsList = []
-            postsList.append(p1)
-            postsList.append(p2)
-            return jsonify(Post=postsList)
-
-        elif(chatId == 2):
-            p3 = {}
-            p3['postId'] = 3
-            p3['photoId'] = "21476"
-            p3['caption'] = "Some inspiring caption"
-            p3['postDate'] = '2/14/2018 15:00:00'
-            p3['userId'] = '1'
-            p3['chatId'] = '2'
-
-            postsList = []
-            postsList.append(p3)
-            return jsonify(Post=postsList)
-
-        else:
-            return 'There is no chat group with id %d' %chatId
+        dao = PostsDAO()
+        posts_List = dao.getPostsByChatId(chatId)
+        return jsonify(posts_List)
 
     def insertPost(self, json):
-        photoId = json('photoId')
-        caption = json('caption')
-        postDate = json('postDate')
-        userId = json('userId')
-        chatId = json('chatId')
-        if photoId and caption and postDate and userId and chatId:
-            dao = PostsDao()
-            pid = dao.insert(photoId, caption, postDate, userId, chatId)
-            result = self.build_part_attributes(photoId, caption, postDate, userId, chatId)
-            return jsonify(Part=result), 201
-        else:
-            return jsonify(Error="Unexpected attributes in post request"), 400
+        dao = PostsDAO()
+        newPost = dao.insert(json)
+        return jsonify(newPost)
 
+    def updateReaction(self, cid, form):
+        dao = PostsDAO()
+        updatePost = dao.update(cid, form)
+        return jsonify(updatePost)
+
+    def deleteReaction(self, cid):
+        dao = PostsDAO()
+        id = dao.delete(cid)
+        return jsonify(DeleteStatus="OK"), 200
 

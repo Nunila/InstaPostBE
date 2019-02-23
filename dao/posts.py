@@ -1,105 +1,31 @@
-from config.dbconfig import pg_config
-#import psycopg2
-class PostsDao:
-    def __init__(self):
 
-        # connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
-        #                                                     pg_config['user'],
-        #                                                     pg_config['passwd'])
-        # self.conn = psycopg2._connect(connection_url)
+class PostsDAO:
 
-    def insert(self, photoId, caption, postDate, userId, chatId):
-        #cursor = self.conn.cursor()
-        query = "insert into parts(pname, pcolor, pmaterial, pprice) values (%s, %s, %s, %s) returning pid;"
-        #cursor.execute(query, (pname, pcolor, pmaterial, pprice,))
-        #pid = cursor.fetchone()[0]
-        #self.conn.commit()
-        #return pid
-        return "Successfully inserted {photo:%s, %s, %s, %s, %s)!" %(photoId, caption, postDate, userId, chatId)
+    postsArray = [{"postId": 1, "photoId": '345C6', "postDate": '2/21/2019 12:00:00'},
+                  {"postId": 2, "photoId": '265A2', "postDate": '2/14/2018 15:00:00'},
+                  {"postId": 3, "photoId": '542B1', "postDate": '2/17/2019 21:00:00'},
+                  {"postId": 4, "photoId": '21476', "postDate": '2/23/2019 11:00:00'},
+                  {"postId": 5, "photoId": '635W9', "postDate": '5/01/2019 4:00:00'}]
 
-#-----------------------------------------------------------------------------------------------------------------------
+    def getAllPosts(self):
+        return self.postsArray
 
-    def getAllParts(self):
-        cursor = self.conn.cursor()
-        query = "select pid, pname, pmaterial, pcolor, pprice from parts;"
-        cursor.execute(query)
-        result = []
-        for row in cursor:
-            result.append(row)
-        return result
+    def getPostsByUserId(self, userId):
+        return self.postsArray[0]
 
-    def getPartById(self, pid):
-        cursor = self.conn.cursor()
-        query = "select pid, pname, pmaterial, pcolor, pprice from parts where pid = %s;"
-        cursor.execute(query, (pid,))
-        result = cursor.fetchone()
-        return result
+    def getPostsByChatId(self, chatId):
+        return self.postsArray
 
-    def getPartsByColor(self, color):
-        cursor = self.conn.cursor()
-        query = "select * from parts where pcolor = %s;"
-        cursor.execute(query, (color,))
-        result = []
-        for row in cursor:
-            result.append(row)
-        return result
+    def getPostsByDate(self, postDate):
+        return self.postsArray[4]
 
-    def getPartsByMaterial(self, material):
-        cursor = self.conn.cursor()
-        query = "select * from parts where pmaterial = %s;"
-        cursor.execute(query, (material,))
-        result = []
-        for row in cursor:
-            result.append(row)
-        return result
+    def insertPost(self, photoId, postDate, userId, chatId):
+        return 'Succesfully inserted new post!'
 
-    def getPartsByColorAndMaterial(self, color, material):
-        cursor = self.conn.cursor()
-        query = "select * from parts where pmaterial = %s and pcolor = %s;"
-        cursor.execute(query, (material,color))
-        result = []
-        for row in cursor:
-            result.append(row)
-        return result
+    def updatePost(self, postId):
+        return self.postsArray[2]
 
-    def getSuppliersByPartId(self, pid):
-        cursor = self.conn.cursor()
-        query = "select sid, sname, scity, sphone from parts natural inner join supplier natural inner join supplies where pid = %s;"
-        cursor.execute(query, (pid,))
-        result = []
-        for row in cursor:
-            result.append(row)
-        return result
-
-    def insert(self, pname, pcolor, pmaterial, pprice):
-        cursor = self.conn.cursor()
-        query = "insert into parts(pname, pcolor, pmaterial, pprice) values (%s, %s, %s, %s) returning pid;"
-        cursor.execute(query, (pname, pcolor, pmaterial, pprice,))
-        pid = cursor.fetchone()[0]
-        self.conn.commit()
-        return pid
-
-    def delete(self, pid):
-        cursor = self.conn.cursor()
-        query = "delete from parts where pid = %s;"
-        cursor.execute(query, (pid,))
-        self.conn.commit()
-        return pid
-
-    def update(self, pid, pname, pcolor, pmaterial, pprice):
-        cursor = self.conn.cursor()
-        query = "update parts set pname = %s, pcolor = %s, pmaterial = %s, pprice = %s where pid = %s;"
-        cursor.execute(query, (pname, pcolor, pmaterial, pprice, pid,))
-        self.conn.commit()
-        return pid
-
-    def getCountByPartId(self):
-        cursor = self.conn.cursor()
-        query = "select pid, pname, sum(stock) from parts natural inner join supplies group by pid, pname order by pname;"
-        cursor.execute(query)
-        result = []
-        for row in cursor:
-            result.append(row)
-        return result
+    def deletePost(self, postId):
+        return 'Sucessfully deleted!'
 
 
