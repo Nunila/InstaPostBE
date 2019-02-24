@@ -1,49 +1,49 @@
 from flask import jsonify
-from dao import personDAO
+from dao.personDAO import PersonDAO
 
 class PersonsHandler:
 
     def getAllPersons(self):
-        dao = personDAO()
+        dao = PersonDAO()
         person_list = dao.getAllPersons()
         return jsonify(person_list)
 
     def getPersonByID(self, perid):
-        dao = personDAO()
+        dao = PersonDAO()
         person = dao.getPersonByID(perid)
         return jsonify(person)
 
     def getPersonByFName(self, pfname):
-        dao = personDAO()
+        dao = PersonDAO()
         person_list = dao.getPersonByFName(pfname)
         return jsonify(person_list)
 
     def getPersonByLName(self, plname):
-        dao = personDAO()
+        dao = PersonDAO()
         person_list = dao.getPersonByLName(plname)
         return jsonify(person_list)
 
     def getPersonByFullName(self, pfname, plname):
-        dao = personDAO()
+        dao = PersonDAO()
         person_list = dao.getPersonByFullName(pfname, plname)
         return jsonify(person_list)
 
     def getPersonByEmail(self, permail):
-        dao = personDAO()
+        dao = PersonDAO()
         person_list = dao.getPersonByEmail(permail)
         return jsonify(person_list)
 
     def insertPersonJson(self, json):
-        dao = personDAO()
+        dao = PersonDAO()
         new_person = dao.insert(json)
         return jsonify(new_person)
 
     def updatePerson(self, perid, form):
-        dao = personDAO()
+        dao = PersonDAO()
         updated_person = dao.update(perid, form)
         return jsonify(updated_person)
 
     def deletePerson(self, perid):
-        dao = personDAO()
+        dao = PersonDAO()
         id = dao.delete(perid)
         return jsonify(DeleteStatus = "OK"), 200
