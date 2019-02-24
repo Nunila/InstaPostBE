@@ -1,4 +1,4 @@
-from config import dbconf
+from config import dbconfig
 import psycopg2
 
 class UsersDAO:
@@ -16,5 +16,17 @@ class UsersDAO:
         return self.userArray
 
     def getUserByID(self, uid):
-        return self
+        return self.userArray[0]
+
+    def getUserByUName(self, uname):
+        return self.userArray[1]
+
+    def insert(self, json):
+        return self.userArray[1]
+
+    def update(self, uid, form):
+        return self.userArray[1]
+
+    def delete(self, uid):
+        return uid
 
