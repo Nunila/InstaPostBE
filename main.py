@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from handler.users import UsersHandler
+from handler.persons import PersonsHandler
 from flask_cors import CORS, cross_origin
 
 # Import Cross-Origin Resource Sharing to enable
@@ -28,7 +29,7 @@ def getAllUsers():
         return UsersHandler().insertUserJson(request.json)
     else:
         if not request.args:
-            return UsersHandler().getAllUserss()
+            return UsersHandler().getAllUsers()
         else:
             return UsersHandler().getUserByUName(request.args)
 
@@ -36,15 +37,46 @@ def getAllUsers():
 @app.route('/InstaPost/users/<int:uid>', methods=['GET', 'PUT', 'DELETE'])
 def getUsersById(uid):
     if request.method == 'GET':
-        return UsersHandler().getUsersById(uid)
+        return UsersHandler().getUserById(uid)
     elif request.method == 'PUT':
-        return UsersHandler().updateUsers(uid, request.form)
+        return UsersHandler().updateUser(uid, request.form)
     elif request.method == 'DELETE':
-        return UsersHandler().deleteUsers(uid)
+        return UsersHandler().deleteUser(uid)
     else:
         return jsonify(Error="Method not allowed."), 405
 
 
+
+#===============================================PERSONS========================================================#
+
+@app.route('/InstaPost/person', methods=['GET', 'POST'])
+def getAllPerson():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return PersonsHandler().insertPersonJson(request.json)
+    else:
+        if not request.args:
+            return PersonsHandler().getAllPersons()
+        else:
+            return PersonsHandler().getPersonByFullName(request.args[0],request.args[1])
+
+@app.route('/InstaPost/person/<int:perid>', methods=['GET', 'PUT', 'DELETE'])
+def getPersonByID(perid):
+    if request.method == 'GET':
+        return PersonsHandler().getPersonById(perid)
+    elif request.method == 'PUT':
+        return PersonsHandler().updatePerson(perid, request.form)
+    elif request.method == 'DELETE':
+        return PersonsHandler().deletePerson(perid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPost/person/email', methods=['GET'])
+def getPersonByEmail(permail):
+    if request.method == 'GET':
+        return PersonsHandler().getPersonByEmail(permail)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 # @app.route('/PartApp/parts/countbypartid')
 # def getCountByPartId():
