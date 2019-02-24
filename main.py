@@ -86,7 +86,7 @@ def getReactionById(rid):
 # def getCountByPartId():
 #     return PartHandler().getCountByPartId()
 
-#--------------------------POSTS-----------------------------------------
+# --------------------------POSTS-----------------------------------------
 @app.route('/InstaPost/posts', methods=['GET', 'POST'])
 def getAllPosts():
     if request.method == 'POST':
