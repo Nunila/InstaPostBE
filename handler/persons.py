@@ -28,6 +28,11 @@ class PersonsHandler:
         person_list = dao.getPersonByFullName(pfname, plname)
         return jsonify(person_list)
 
+    def getPersonByEmail(self, permail):
+        dao = personDAO()
+        person_list = dao.getPersonByEmail(permail)
+        return jsonify(person_list)
+
     def insertPersonJson(self, json):
         dao = personDAO()
         new_person = dao.insert(json)
