@@ -22,10 +22,13 @@ class PostsDAO:
     def getPostsByDate(self, postDate):
         return self.postsArray[4]
 
+    def getNumOfPostsByDateAndUser(self, date, userId):
+        return 8
+
     def getNumOfPostsByDate(self, date):
         return 100
 
-    def insertPost(self, photoId, postDate, userId, chatId):
+    def insertPost(self, photoId, postDate):
         return 'Succesfully inserted new post!'
 
     def updatePost(self, postId):

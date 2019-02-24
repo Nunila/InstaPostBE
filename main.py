@@ -1,4 +1,6 @@
 from flask import Flask, jsonify, request
+from handler.users import UsersHandler
+from flask_cors import CORS, cross_origin
 from handler.chats import ChatHandler
 from handler.reactions import ReactionHandler
 from handler.posts import PostHandler
@@ -6,8 +8,6 @@ from handler.messages import MessageHandler
 # Import Cross-Origin Resource Sharing to enable
 # services on other ports on this machine or on other
 # machines to access this app
-from flask_cors import CORS, cross_origin
-
 
 # Activate
 app = Flask(__name__)
@@ -20,6 +20,32 @@ CORS(app)
 @cross_origin()
 def greeting():
     return 'Hello, this is the InstaPost DB App!'
+
+# =========================================USERS============================================#
+
+
+@app.route('/InstaPost/users', methods=['GET', 'POST'])
+def getAllUsers():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return UsersHandler().insertUserJson(request.json)
+    else:
+        if not request.args:
+            return UsersHandler().getAllUserss()
+        else:
+            return UsersHandler().getUserByUName(request.args)
+
+
+@app.route('/InstaPost/users/<int:uid>', methods=['GET', 'PUT', 'DELETE'])
+def getUsersById(uid):
+    if request.method == 'GET':
+        return UsersHandler().getUsersById(uid)
+    elif request.method == 'PUT':
+        return UsersHandler().updateUsers(uid, request.form)
+    elif request.method == 'DELETE':
+        return UsersHandler().deleteUsers(uid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 
 # -----------------------------CHATS----------------------------------
@@ -82,12 +108,12 @@ def getReactionById(rid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
-
 # @app.route('/PartApp/parts/countbypartid')
 # def getCountByPartId():
 #     return PartHandler().getCountByPartId()
 
-#--------------------------POSTS-----------------------------------------
+# --------------------------POSTS-----------------------------------------
+
 @app.route('/InstaPost/posts', methods=['GET', 'POST'])
 def getAllPosts():
     if request.method == 'POST':
@@ -109,7 +135,7 @@ def getPostById(postId):
         return jsonify(Error="Method not allowed."), 405
 
 #Needs fixing, not working
-@app.route('/InstaPost/posts/<string:date>', methods=['GET'])
+@app.route('/InstaPost/posts/numberOfPosts/<string:date>', methods=['GET'])
 def getNumOfPostsByDate(date):
     if request.method == 'GET':
         return PostHandler().getNumOfPostsByDate(date)
@@ -136,6 +162,7 @@ def getMessageById(messageId):
         return MessageHandler().deleteMessage(messageId)
     else:
         return jsonify(Error="Method not allowed."), 405
+
 
 
 if __name__ == "__main__":

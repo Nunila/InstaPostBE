@@ -38,10 +38,15 @@ class MessageHandler:
         messages_List = dao.getMessagesByChatId(chatId)
         return jsonify(messages_List)
 
-    def getNumOfMessagesByDate(self, date):
+    def getNumOfRepliesByDate(self, date):
         dao = MessagesDAO()
-        numOfMessages = dao.getNumOfMessagesByDate(date)
-        return jsonify(numOfMessages)
+        numOfReplies = dao.getNumOfRepliesByDate(date)
+        return jsonify(numOfReplies)
+
+    def getNumOfRepliesByDateAndUser(self, date, userId):
+        dao = MessagesDAO()
+        numOfReplies = dao.getNumOfRepliesByDateAndUser(date, userId)
+        return jsonify(numOfReplies)
 
     def insertMessage(self, json):
         dao = MessagesDAO()

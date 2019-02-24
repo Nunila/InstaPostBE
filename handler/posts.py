@@ -9,20 +9,14 @@ class PostHandler:
         result = {}
         result['postId'] = row[0]
         result['photoId'] = row[1]
-        result['caption'] = row[2]
-        result['postDate'] = row[3]
-        result['userId'] = row[4]
-        result['chatId'] = row[5]
+        result['postDate'] = row[2]
         return result
 
-    def buildPostAttributes(self, postId, photoId, caption, postDate, userId, chatId):
+    def buildPostAttributes(self, postId, photoId, postDate):
         result = {}
         result['postId'] = postId
         result['photoId'] = photoId
-        result['caption'] = caption
         result['postDate'] = postDate
-        result['userId'] = userId
-        result['chatId'] = chatId
         return result
 
 #---------------Operations---------------------------------------------------------
@@ -47,6 +41,11 @@ class PostHandler:
         numOfPosts = dao.getNumOfPostsByDate(date)
         return jsonify(numOfPosts)
 
+    def getNumOfPostsByDateAndUser(self, date, userId):
+        dao = PostsDAO()
+        numOfPosts = dao.getNumOfPostsByDateAndUser(date, userId)
+        return jsonify(numOfPosts)
+
     def insertPost(self, json):
         dao = PostsDAO()
         newPost = dao.insertPost(json)
@@ -59,6 +58,6 @@ class PostHandler:
 
     def deletePost(self, postId):
         dao = PostsDAO()
-        id = dao.deletePost(PostId)
+        id = dao.deletePost(postId)
         return jsonify(DeleteStatus="OK"), 200
 

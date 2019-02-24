@@ -18,8 +18,11 @@ class MessagesDAO:
     def getMessagesByDate(self, messageDate):
         return self.messagesArray
 
-    def getNumOfMessagesByDate(self, date):
+    def getNumOfRepliesByDate(self, date):
         return 100
+
+    def getNumOfRepliesByDateAndUser(self, date, userId):
+        return 20
 
     def insertMessage(self, messageId, messageDate, userId, chatId):
         return 'Succesfully inserted new post!'
