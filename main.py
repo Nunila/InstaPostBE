@@ -1,9 +1,10 @@
 from flask import Flask, jsonify, request
-from handler.users import UsersHandler
 from flask_cors import CORS, cross_origin
+from handler.users import UsersHandler
 from handler.chats import ChatHandler
 from handler.reactions import ReactionHandler
 from handler.posts import PostHandler
+from handler.hashtag import HashtagHandler
 # Import Cross-Origin Resource Sharing to enable
 # services on other ports on this machine or on other
 # machines to access this app
@@ -107,11 +108,27 @@ def getReactionById(rid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
+@app.route('/InstaPost/reactions/countlikes/<string:date>', methods=['GET'])
+def getLikesByDate(date):
+    if request.method == 'GET':
+        return ReactionHandler().getLikesCountOnDate(date)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/reactions/countdislikes/<string:date>', methods=['GET'])
+def getDislikesByDate(date):
+    if request.method == 'GET':
+        return ReactionHandler().getDislikesCountOnDate(date)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 # @app.route('/PartApp/parts/countbypartid')
 # def getCountByPartId():
 #     return PartHandler().getCountByPartId()
 
 # --------------------------POSTS-----------------------------------------
+
 
 @app.route('/InstaPost/posts', methods=['GET', 'POST'])
 def getAllPosts():
@@ -123,6 +140,32 @@ def getAllPosts():
             return PostHandler().getAllPosts()
 #         else:
 #             return ReactionHandler().searchReactions(request.args)
+
+
+# ---------------------------- HASHTAGS --------------------------------
+
+@app.route('/InstaPost/hashtags', methods=['GET', 'POST'])
+def getAllHashtags():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return HashtagHandler().insertHashtagJson(request.json)
+    else:
+        if not request.args:
+            return HashtagHandler().getAllHashtags()
+        else:
+            return HashtagHandler().searchHashtags(request.args)
+
+
+@app.route('/InstaPost/hashtags/<int:hid>', methods=['GET', 'PUT', 'DELETE'])
+def getHashtagId(hid):
+    if request.method == 'GET':
+        return HashtagHandler().getHashtagById(hid)
+    elif request.method == 'PUT':
+        return HashtagHandler().updateHashtag(hid, request.form)
+    elif request.method == 'DELETE':
+        return HashtagHandler().deleteHashtag(hid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 
 if __name__ == "__main__":
