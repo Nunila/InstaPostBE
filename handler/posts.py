@@ -32,23 +32,33 @@ class PostHandler:
         posts_List = dao.getAllPosts()
         return jsonify(posts_List)
 
+    def getPostById(self, postId):
+        dao = PostsDAO()
+        posts_List = dao.getPostById(postId)
+        return jsonify(posts_List)
+
     def getPostsByChatId(self, chatId):
         dao = PostsDAO()
         posts_List = dao.getPostsByChatId(chatId)
         return jsonify(posts_List)
 
+    def getNumOfPostsByDate(self, date):
+        dao = PostsDAO()
+        numOfPosts = dao.getNumOfPostsByDate(date)
+        return jsonify(numOfPosts)
+
     def insertPost(self, json):
         dao = PostsDAO()
-        newPost = dao.insert(json)
+        newPost = dao.insertPost(json)
         return jsonify(newPost)
 
-    def updateReaction(self, cid, form):
+    def updatePost(self, postId, form):
         dao = PostsDAO()
-        updatePost = dao.update(cid, form)
+        updatePost = dao.updatePost(postId, form)
         return jsonify(updatePost)
 
-    def deleteReaction(self, cid):
+    def deletePost(self, postId):
         dao = PostsDAO()
-        id = dao.delete(cid)
+        id = dao.deletePost(PostId)
         return jsonify(DeleteStatus="OK"), 200
 

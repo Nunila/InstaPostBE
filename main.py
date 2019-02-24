@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from handler.chats import ChatHandler
 from handler.reactions import ReactionHandler
 from handler.posts import PostHandler
+from handler.messages import MessageHandler
 # Import Cross-Origin Resource Sharing to enable
 # services on other ports on this machine or on other
 # machines to access this app
@@ -95,8 +96,47 @@ def getAllPosts():
     else:
         if not request.args:
             return PostHandler().getAllPosts()
-#         else:
-#             return ReactionHandler().searchReactions(request.args)
+
+@app.route('/InstaPost/posts/<int:postId>', methods=['GET', 'PUT', 'DELETE'])
+def getPostById(postId):
+    if request.method == 'GET':
+        return PostHandler().getPostById(postId)
+    elif request.method == 'PUT':
+        return PostHandler().updatePost(postId, request.form)
+    elif request.method == 'DELETE':
+        return PostHandler().deletePost(postId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+#Needs fixing, not working
+@app.route('/InstaPost/posts/<string:date>', methods=['GET'])
+def getNumOfPostsByDate(date):
+    if request.method == 'GET':
+        return PostHandler().getNumOfPostsByDate(date)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+#------------------------MESSAGES-------------------------------------------
+@app.route('/InstaPost/messages', methods=['GET', 'POST'])
+def getAllMessages():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return MessageHandler().insertMessages(request.json)
+    else:
+        if not request.args:
+            return MessageHandler().getAllMessages()
+
+@app.route('/InstaPost/messages/<int:messageId>', methods=['GET', 'PUT', 'DELETE'])
+def getMessageById(messageId):
+    if request.method == 'GET':
+        return MessageHandler().getMessageById(messageId)
+    elif request.method == 'PUT':
+        return MessageHandler().updateMessage(messageId, request.form)
+    elif request.method == 'DELETE':
+        return MessageHandler().deleteMessage(messageId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
