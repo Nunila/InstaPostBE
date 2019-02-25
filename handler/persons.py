@@ -8,7 +8,7 @@ class PersonsHandler:
         person_list = dao.getAllPersons()
         return jsonify(person_list)
 
-    def getPersonByID(self, perid):
+    def getPersonById(self, perid):
         dao = PersonDAO()
         person = dao.getPersonByID(perid)
         return jsonify(person)
