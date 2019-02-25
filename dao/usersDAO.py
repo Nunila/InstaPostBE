@@ -1,5 +1,5 @@
 from config import dbconfig
-import psycopg2
+#import psycopg2
 
 class UsersDAO:
 
