@@ -123,9 +123,22 @@ def getDislikesByDate(date):
         return ReactionHandler().getDislikesCountOnDate(date)
     else:
         return jsonify(Error="Method not allowed."), 405
-# @app.route('/PartApp/parts/countbypartid')
-# def getCountByPartId():
-#     return PartHandler().getCountByPartId()
+
+
+@app.route('/InstaPost/reactions/<int:postId>/likes', methods=['GET'])
+def getLikesOfPost(postId):
+    if request.method == 'GET':
+        return ReactionHandler().getLikesOfPost(postId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/reactions/<int:postId>/dislikes', methods=['GET'])
+def getDislikesOfPost(postId):
+    if request.method == 'GET':
+        return ReactionHandler().getDislikesOfPost(postId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 # --------------------------POSTS-----------------------------------------
 
@@ -166,6 +179,12 @@ def getHashtagId(hid):
         return HashtagHandler().deleteHashtag(hid)
     else:
         return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/hashtags/trending', methods=['GET'])
+def getTrendingHash():
+    if request.method == 'GET':
+        return HashtagHandler().getTrendingHash()
 
 
 if __name__ == "__main__":

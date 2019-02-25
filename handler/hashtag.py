@@ -19,6 +19,11 @@ class HashtagHandler:
         hashtag = dao.getHashById(hid)
         return jsonify(hashtag), 200
 
+    def getTrendingHash(self):
+        dao = HashtagsDAO()
+        hash = dao.getTrending()
+        return jsonify(Hashtag=hash), 200
+
     def insertHashtagJson(self, json):
         dao = HashtagsDAO()
         newhashtag = dao.insert(json)
@@ -29,8 +34,8 @@ class HashtagHandler:
         updatedhashtag = dao.update(hid, form)
         return jsonify(updatedhashtag), 200
 
-    def deleteHashtag(self,hid):
+    def deleteHashtag(self, hid):
         dao = HashtagsDAO()
         result = dao.delete(hid)
-        return jsonify(hDeleteStatus="OK"), 200
+        return jsonify(DeleteStatus="OK"), 200
 

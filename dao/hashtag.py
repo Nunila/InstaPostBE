@@ -18,6 +18,9 @@ class HashtagsDAO:
     def getHashByArgs(self, args):
         return [self.hashtagArray[1], self.hashtagArray[2]]
 
+    def getTrending(self):
+        return self.hashtagArray[0]['hashName']
+
     def insert(self, json):
         return self.hashtagArray[2]
 

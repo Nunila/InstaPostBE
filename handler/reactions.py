@@ -37,12 +37,22 @@ class ReactionHandler:
     def getLikesCountOnDate(self, date):
         dao = ReactionsDAO()
         count = dao.getLikesCountOnDate(date)
-        return jsonify(Count=count), 200
+        return jsonify(LikesOnDate=count), 200
 
     def getDislikesCountOnDate(self, date):
         dao = ReactionsDAO()
         count = dao.getDislikesCountOnDate(date)
-        return jsonify(Count=count), 200
+        return jsonify(DislikesOnDate=count), 200
+
+    def getLikesOfPost(self, postId):
+        dao = ReactionsDAO()
+        count = dao.getLikesOfPost(postId)
+        return jsonify(LikesOnPost=count)
+
+    def getDislikesOfPost(self, postId):
+        dao = ReactionsDAO()
+        count = dao.getDislikesOfPost(postId)
+        return jsonify(DislikesOnPost=count)
 
 
 

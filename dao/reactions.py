@@ -34,7 +34,11 @@ class ReactionsDAO:
     def getDislikesCountOnDate(self, date):
         return 149
 
+    def getLikesOfPost(self, postid):
+        return 15
 
+    def getDislikesOfPost(self, postid):
+        return 9
 
 
 
