@@ -43,9 +43,9 @@ class MessageHandler:
         numOfReplies = dao.getNumOfRepliesByDate(date)
         return jsonify(numOfReplies)
 
-    def getNumOfRepliesByDateAndUser(self, date, userId):
+    def getNumOfRepliesByDateAndPost(self, date, postId):
         dao = MessagesDAO()
-        numOfReplies = dao.getNumOfRepliesByDateAndUser(date, userId)
+        numOfReplies = dao.getNumOfRepliesByDateAndUser(date, postId)
         return jsonify(numOfReplies)
 
     def insertMessage(self, json):

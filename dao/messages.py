@@ -21,14 +21,14 @@ class MessagesDAO:
     def getNumOfRepliesByDate(self, date):
         return 100
 
-    def getNumOfRepliesByDateAndUser(self, date, userId):
+    def getNumOfRepliesByDateAndPost(self, date, postId):
         return 20
 
-    def insertMessage(self, messageId, messageDate, userId, chatId):
+    def insertMessage(self,json):
         return 'Succesfully inserted new post!'
 
-    def updateMessage(self, messageId):
+    def updateMessage(self, json):
         return self.messagesArray
 
-    def deleteMessage(self, messageId):
+    def deleteMessage(self, json):
         return 'Sucessfully deleted!'

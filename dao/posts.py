@@ -28,13 +28,13 @@ class PostsDAO:
     def getNumOfPostsByDate(self, date):
         return 100
 
-    def insertPost(self, photoId, postDate):
+    def insertPost(self, json):
         return 'Succesfully inserted new post!'
 
-    def updatePost(self, postId):
+    def updatePost(self, json):
         return self.postsArray[2]
 
-    def deletePost(self, postId):
+    def deletePost(self, json):
         return 'Sucessfully deleted!'
 
 
