@@ -4,11 +4,11 @@ import datetime
 
 class ChatsDAO:
 
-    chatArray = [{"chatId": 1, "chatName": 'DBProject', "creationDate": datetime.datetime.now(), "chatOwnerId": 4},
-                 {"chatId": 2, "chatName": 'Family', "creationDate": datetime.datetime.now(), "chatOwnerId": 5},
-                 {"chatId": 3, "chatName": 'Game of Thrones viewing party', "creationDate": datetime.datetime.now(), "chatOwnerId": 1},
-                 {"chatId": 4, "chatName": 'Capstone', "creationDate": datetime.datetime.now(), "chatOwnerId": 8},
-                 {"chatId": 5, "chatName": 'BestFriends', "creationDate": datetime.datetime.now(), "chatOwnerId": 5}]
+    chatArray = [{"chatId": 1, "chatName": 'DBProject', "creationDate": datetime.datetime.now()},
+                 {"chatId": 2, "chatName": 'Family', "creationDate": datetime.datetime.now()},
+                 {"chatId": 3, "chatName": 'Game of Thrones viewing party', "creationDate": datetime.datetime.now()},
+                 {"chatId": 4, "chatName": 'Capstone', "creationDate": datetime.datetime.now()},
+                 {"chatId": 5, "chatName": 'BestFriends', "creationDate": datetime.datetime.now()}]
 
     def getAllChats(self):
         return self.chatArray
