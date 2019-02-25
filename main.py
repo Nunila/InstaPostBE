@@ -65,7 +65,7 @@ def getAllPerson():
         if not request.args:
             return PersonsHandler().getAllPersons()
         else:
-            return PersonsHandler().getPersonByFullName(request.args[0],request.args[1])
+            return PersonsHandler().getPersonByArguments(request.args[0], request.args[1])
 
 
 @app.route('/InstaPost/person/<int:perid>', methods=['GET', 'PUT', 'DELETE'])

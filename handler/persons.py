@@ -13,17 +13,7 @@ class PersonsHandler:
         person = dao.getPersonByID(perid)
         return jsonify(person)
 
-    def getPersonByFName(self, pfname):
-        dao = PersonDAO()
-        person_list = dao.getPersonByFName(pfname)
-        return jsonify(person_list)
-
-    def getPersonByLName(self, plname):
-        dao = PersonDAO()
-        person_list = dao.getPersonByLName(plname)
-        return jsonify(person_list)
-
-    def getPersonByFullName(self, pfname, plname):
+    def getPersonByArguments(self, pfname, plname):
         dao = PersonDAO()
         person_list = dao.getPersonByFullName(pfname, plname)
         return jsonify(person_list)
