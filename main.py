@@ -1,10 +1,14 @@
 from flask import Flask, jsonify, request
-from handler.users import UsersHandler
-from handler.persons import PersonsHandler
 from flask_cors import CORS, cross_origin
+
+from handler.persons import PersonsHandler
+from handler.users import UsersHandler
 from handler.chats import ChatHandler
 from handler.reactions import ReactionHandler
 from handler.posts import PostHandler
+from handler.hashtag import HashtagHandler
+
+
 # Import Cross-Origin Resource Sharing to enable
 # services on other ports on this machine or on other
 # machines to access this app
@@ -82,10 +86,6 @@ def getPersonByEmail(permail):
     else:
         return jsonify(Error="Method not allowed."), 405
 
-# @app.route('/PartApp/parts/countbypartid')
-# def getCountByPartId():
-#     return PartHandler().getCountByPartId()
-
 # -----------------------------CHATS----------------------------------
 
 
@@ -147,6 +147,37 @@ def getReactionById(rid):
         return jsonify(Error="Method not allowed."), 405
 
 
+@app.route('/InstaPost/reactions/countlikes/<string:date>', methods=['GET'])
+def getLikesByDate(date):
+    if request.method == 'GET':
+        return ReactionHandler().getLikesCountOnDate(date)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/reactions/countdislikes/<string:date>', methods=['GET'])
+def getDislikesByDate(date):
+    if request.method == 'GET':
+        return ReactionHandler().getDislikesCountOnDate(date)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/reactions/<int:postId>/likes', methods=['GET'])
+def getLikesOfPost(postId):
+    if request.method == 'GET':
+        return ReactionHandler().getLikesOfPost(postId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/reactions/<int:postId>/dislikes', methods=['GET'])
+def getDislikesOfPost(postId):
+    if request.method == 'GET':
+        return ReactionHandler().getDislikesOfPost(postId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 # --------------------------POSTS-----------------------------------------
 
 
@@ -160,6 +191,38 @@ def getAllPosts():
             return PostHandler().getAllPosts()
 #         else:
 #             return ReactionHandler().searchReactions(request.args)
+
+
+# ---------------------------- HASHTAGS --------------------------------
+
+@app.route('/InstaPost/hashtags', methods=['GET', 'POST'])
+def getAllHashtags():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return HashtagHandler().insertHashtagJson(request.json)
+    else:
+        if not request.args:
+            return HashtagHandler().getAllHashtags()
+        else:
+            return HashtagHandler().searchHashtags(request.args)
+
+
+@app.route('/InstaPost/hashtags/<int:hid>', methods=['GET', 'PUT', 'DELETE'])
+def getHashtagId(hid):
+    if request.method == 'GET':
+        return HashtagHandler().getHashtagById(hid)
+    elif request.method == 'PUT':
+        return HashtagHandler().updateHashtag(hid, request.form)
+    elif request.method == 'DELETE':
+        return HashtagHandler().deleteHashtag(hid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/hashtags/trending', methods=['GET'])
+def getTrendingHash():
+    if request.method == 'GET':
+        return HashtagHandler().getTrendingHash()
 
 
 if __name__ == "__main__":
