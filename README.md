@@ -1,5 +1,5 @@
 # InstaPost
-Parts Demo App for Database access.
+Photo sharing through group chat App for Database access.
 
 This simple app shows the REST API for the backend of a database application using Flask. The application has 7 entities.
 1. Users - contains basic log in info of an app user.
