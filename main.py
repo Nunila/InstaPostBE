@@ -48,6 +48,44 @@ def getUsersById(uid):
         return jsonify(Error="Method not allowed."), 405
 
 
+# ===============================================PERSONS========================================================#
+
+
+@app.route('/InstaPost/person', methods=['GET', 'POST'])
+def getAllPerson():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return PersonsHandler().insertPersonJson(request.json)
+    else:
+        if not request.args:
+            return PersonsHandler().getAllPersons()
+        else:
+            return PersonsHandler().getPersonByFullName(request.args[0],request.args[1])
+
+
+@app.route('/InstaPost/person/<int:perid>', methods=['GET', 'PUT', 'DELETE'])
+def getPersonByID(perid):
+    if request.method == 'GET':
+        return PersonsHandler().getPersonById(perid)
+    elif request.method == 'PUT':
+        return PersonsHandler().updatePerson(perid, request.form)
+    elif request.method == 'DELETE':
+        return PersonsHandler().deletePerson(perid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/person/email', methods=['GET'])
+def getPersonByEmail(permail):
+    if request.method == 'GET':
+        return PersonsHandler().getPersonByEmail(permail)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+# @app.route('/PartApp/parts/countbypartid')
+# def getCountByPartId():
+#     return PartHandler().getCountByPartId()
+
 # -----------------------------CHATS----------------------------------
 
 
@@ -108,43 +146,6 @@ def getReactionById(rid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
-# ===============================================PERSONS========================================================#
-
-
-@app.route('/InstaPost/person', methods=['GET', 'POST'])
-def getAllPerson():
-    if request.method == 'POST':
-        print("REQUEST: ", request.json)
-        return PersonsHandler().insertPersonJson(request.json)
-    else:
-        if not request.args:
-            return PersonsHandler().getAllPersons()
-        else:
-            return PersonsHandler().getPersonByFullName(request.args[0],request.args[1])
-
-
-@app.route('/InstaPost/person/<int:perid>', methods=['GET', 'PUT', 'DELETE'])
-def getPersonByID(perid):
-    if request.method == 'GET':
-        return PersonsHandler().getPersonById(perid)
-    elif request.method == 'PUT':
-        return PersonsHandler().updatePerson(perid, request.form)
-    elif request.method == 'DELETE':
-        return PersonsHandler().deletePerson(perid)
-    else:
-        return jsonify(Error="Method not allowed."), 405
-
-
-@app.route('/InstaPost/person/email', methods=['GET'])
-def getPersonByEmail(permail):
-    if request.method == 'GET':
-        return PersonsHandler().getPersonByEmail(permail)
-    else:
-        return jsonify(Error="Method not allowed."), 405
-
-# @app.route('/PartApp/parts/countbypartid')
-# def getCountByPartId():
-#     return PartHandler().getCountByPartId()
 
 # --------------------------POSTS-----------------------------------------
 
