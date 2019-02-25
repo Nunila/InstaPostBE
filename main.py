@@ -121,6 +121,17 @@ def getChatByMemberId(uid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
+@app.route('/InstaPost/chats/<int:cid>/member/<int:personid>', methods=['POST', 'DELETE'])
+def addPersonToChat(cid, personid):
+    if request.method == 'POST':
+        return ChatHandler().addContactToChat(cid, personid)
+    elif request.method == 'DELETE':
+        return ChatHandler().deleteContactFromChat(cid, personid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
 # ---------------------------REACTIONS--------------------------------
 
 

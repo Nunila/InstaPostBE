@@ -25,11 +25,17 @@ class ChatsDAO:
     def insert(self, json):
         return self.chatArray[2]
 
+    def addContactToChat(self, cid, pid):
+        return "Contact added successfully to chat."
+
     def update(self, pid, form):
         return self.chatArray[4]
 
     def delete(self, pid):
         return pid
+
+    def deleteContactFromChat(self, cid, personid):
+        return
 
 
 
