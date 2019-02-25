@@ -10,6 +10,9 @@ class PostsDAO:
     def getAllPosts(self):
         return self.postsArray
 
+    def getPostById(self, postId):
+        return self.postsArray[0]
+
     def getPostsByUserId(self, userId):
         return self.postsArray[0]
 
@@ -19,13 +22,19 @@ class PostsDAO:
     def getPostsByDate(self, postDate):
         return self.postsArray[4]
 
-    def insertPost(self, photoId, postDate, userId, chatId):
+    def getNumOfPostsByDateAndUser(self, date, userId):
+        return 8
+
+    def getNumOfPostsByDate(self, date):
+        return 100
+
+    def insertPost(self, json):
         return 'Succesfully inserted new post!'
 
-    def updatePost(self, postId):
+    def updatePost(self, json):
         return self.postsArray[2]
 
-    def deletePost(self, postId):
+    def deletePost(self, json):
         return 'Sucessfully deleted!'
 
 

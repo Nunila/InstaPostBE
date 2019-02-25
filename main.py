@@ -1,10 +1,12 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
+
 from handler.users import UsersHandler
 from handler.chats import ChatHandler
 from handler.reactions import ReactionHandler
 from handler.posts import PostHandler
 from handler.hashtag import HashtagHandler
+from handler.messages import MessageHandler
 # Import Cross-Origin Resource Sharing to enable
 # services on other ports on this machine or on other
 # machines to access this app
@@ -151,8 +153,75 @@ def getAllPosts():
     else:
         if not request.args:
             return PostHandler().getAllPosts()
-#         else:
-#             return ReactionHandler().searchReactions(request.args)
+
+
+@app.route('/InstaPost/posts/<int:postId>', methods=['GET', 'PUT', 'DELETE'])
+def getPostById(postId):
+    if request.method == 'GET':
+        return PostHandler().getPostById(postId)
+    elif request.method == 'PUT':
+        return PostHandler().updatePost(postId, request.form)
+    elif request.method == 'DELETE':
+        return PostHandler().deletePost(postId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+# Needs fixing, not working
+@app.route('/InstaPost/posts/numberOfPosts/<string:date>', methods=['GET'])
+def getNumOfPostsByDate(date):
+    if request.method == 'GET':
+        return PostHandler().getNumOfPostsByDate(date)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/posts/numberOfPosts/<string:date>/<int:userId>', methods=['GET'])
+def getNumOfPostsByDateAndUser(date, userId):
+    if request.method == 'GET':
+        return PostHandler().getNumOfPostsByDateAndUser(date, userId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+# ------------------------MESSAGES-------------------------------------------
+
+
+@app.route('/InstaPost/messages', methods=['GET', 'POST'])
+def getAllMessages():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return MessageHandler().insertMessages(request.json)
+    else:
+        if not request.args:
+            return MessageHandler().getAllMessages()
+
+
+@app.route('/InstaPost/messages/<int:messageId>', methods=['GET', 'PUT', 'DELETE'])
+def getMessageById(messageId):
+    if request.method == 'GET':
+        return MessageHandler().getMessageById(messageId)
+    elif request.method == 'PUT':
+        return MessageHandler().updateMessage(messageId, request.form)
+    elif request.method == 'DELETE':
+        return MessageHandler().deleteMessage(messageId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/posts/numberOfReplies/<string:date>', methods=['GET'])
+def getNumOfRepliesByDate(date):
+    if request.method == 'GET':
+        return MessageHandler().getNumOfRepliesByDate(date)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/posts/numberOfReplies/<string:date>/<int:postId>', methods=['GET'])
+def getNumOfRepliesByDateAndPost(date, postId):
+    if request.method == 'GET':
+        return MessageHandler().getNumOfRepliesByDateAndPost(date, postId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 
 # ---------------------------- HASHTAGS --------------------------------
