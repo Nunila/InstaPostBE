@@ -44,7 +44,7 @@ def getAllUsers():
 @app.route('/InstaPost/users/<int:uid>', methods=['GET', 'PUT', 'DELETE'])
 def getUsersById(uid):
     if request.method == 'GET':
-        return UsersHandler().getUserById(uid)
+        return UsersHandler().getUserByID(uid)
     elif request.method == 'PUT':
         return UsersHandler().updateUser(uid, request.form)
     elif request.method == 'DELETE':
@@ -52,6 +52,12 @@ def getUsersById(uid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+@app.route('/InstaPost/users/mostactive', methods=['GET'])
+def getMostActiveUser():
+    if request.method == 'GET':
+        return UsersHandler().getMostActiveUser()
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 # ===============================================PERSONS========================================================#
 
@@ -80,10 +86,12 @@ def getPersonByID(perid):
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaPost/person/email', methods=['GET'])
-def getPersonByEmail(permail):
-    if request.method == 'GET':
-        return PersonsHandler().getPersonByEmail(permail)
+@app.route('/InstaPost/person/<int:ownerid>/contact/<int:perid>', methods=['POST', 'DELETE'])
+def Contact(ownerid, perid):
+    if request.method == 'POST':
+        return PersonsHandler().addConctact(ownerid, perid)
+    elif request.method == 'DELETE':
+        return PersonsHandler().deleteContact(ownerid, perid)
     else:
         return jsonify(Error="Method not allowed."), 405
 
