@@ -65,7 +65,7 @@ def getAllPerson():
         if not request.args:
             return PersonsHandler().getAllPersons()
         else:
-            return PersonsHandler().getPersonByFullName(request.args[0],request.args[1])
+            return PersonsHandler().getPersonByFullName(request.args)
 
 
 @app.route('/InstaPost/person/<int:perid>', methods=['GET', 'PUT', 'DELETE'])
@@ -215,7 +215,6 @@ def getPostById(postId):
         return jsonify(Error="Method not allowed."), 405
 
 
-# Needs fixing, not working
 @app.route('/InstaPost/posts/numberOfPosts/<string:date>', methods=['GET'])
 def getNumOfPostsByDate(date):
     if request.method == 'GET':
@@ -238,7 +237,7 @@ def getNumOfPostsByDateAndUser(date, userId):
 def getAllMessages():
     if request.method == 'POST':
         print("REQUEST: ", request.json)
-        return MessageHandler().insertMessages(request.json)
+        return MessageHandler().insertMessage(request.json)
     else:
         if not request.args:
             return MessageHandler().getAllMessages()
