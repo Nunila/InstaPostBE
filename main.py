@@ -267,7 +267,7 @@ def getMessageById(messageId):
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaPost/posts/numberOfReplies/<string:date>', methods=['GET'])
+@app.route('/InstaPost/messages/numberOfReplies/<string:date>', methods=['GET'])
 def getNumOfRepliesByDate(date):
     if request.method == 'GET':
         return MessageHandler().getNumOfRepliesByDate(date)
@@ -275,7 +275,7 @@ def getNumOfRepliesByDate(date):
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaPost/posts/numberOfReplies/<string:date>/<int:postId>', methods=['GET'])
+@app.route('/InstaPost/messages/numberOfReplies/<string:date>/<int:postId>', methods=['GET'])
 def getNumOfRepliesByDateAndPost(date, postId):
     if request.method == 'GET':
         return MessageHandler().getNumOfRepliesByDateAndPost(date, postId)

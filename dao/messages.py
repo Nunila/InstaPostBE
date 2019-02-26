@@ -27,7 +27,7 @@ class MessagesDAO:
     def insertMessage(self,json):
         return 'Succesfully inserted new message!'
 
-    def updateMessage(self, json):
+    def updateMessage(self, mid, form):
         return self.messagesArray
 
     def deleteMessage(self, json):
