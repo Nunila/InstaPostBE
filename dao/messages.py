@@ -25,7 +25,7 @@ class MessagesDAO:
         return 20
 
     def insertMessage(self,json):
-        return 'Succesfully inserted new post!'
+        return 'Succesfully inserted new message!'
 
     def updateMessage(self, json):
         return self.messagesArray

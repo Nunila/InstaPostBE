@@ -31,7 +31,7 @@ class PostsDAO:
     def insertPost(self, json):
         return 'Succesfully inserted new post!'
 
-    def updatePost(self, json):
+    def updatePost(self, pid, form):
         return self.postsArray[2]
 
     def deletePost(self, json):
