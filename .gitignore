@@ -1,4 +1,8 @@
 
-/__pycache__
+/__pycache__/
 /venv
-/.idea
+/.idea/
+/dao/__pycache__/
+/config/__pycache__/
+/handler/__pycache__/
+
