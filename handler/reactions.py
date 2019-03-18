@@ -4,44 +4,55 @@ from dao.reactions import ReactionsDAO
 
 class ReactionHandler:
 
-    def build_reaction_attributes(self, cid, cname, cowner, date):
-        result = {}
-        result['reactionId'] = cid
-        result['reactionName'] = cname
-        result['reactionOwnerId'] = cowner
-        result['creationDate'] = date
-        return result
-
-#-------------------------Modifications-----------------------------
     def getAllReactions(self):
         dao = ReactionsDAO()
         reactions_list = dao.getAllReactions()
-        return jsonify(reactions_list)
+        return jsonify(reactions_list), 200
 
     def getReactionById(self, cid):
         dao = ReactionsDAO()
         reaction = dao.getReactionById(cid)
-        return jsonify(reaction)
+        return jsonify(reaction), 200
 
     def searchReactions(self, args):
         dao = ReactionsDAO()
         reaction_list = dao.getReactionsByArgs(args)
-        return jsonify(reaction_list)
+        return jsonify(reaction_list), 200
 
     def insertReactionJson(self, json):
         dao = ReactionsDAO()
         newreaction = dao.insert(json)
-        return jsonify(newreaction)
+        return jsonify(newreaction), 200
 
     def updateReaction(self, cid, form):
         dao = ReactionsDAO()
         updatedreaction = dao.update(cid, form)
-        return jsonify(updatedreaction)
+        return jsonify(updatedreaction), 200
 
     def deleteReaction(self, cid):
         dao = ReactionsDAO()
         id = dao.delete(cid)
-        return jsonify(DeleteStatus = "OK"), 200
+        return jsonify(DeleteStatus="OK"), 200
+
+    def getLikesCountOnDate(self, date):
+        dao = ReactionsDAO()
+        count = dao.getLikesCountOnDate(date)
+        return jsonify(LikesOnDate=count), 200
+
+    def getDislikesCountOnDate(self, date):
+        dao = ReactionsDAO()
+        count = dao.getDislikesCountOnDate(date)
+        return jsonify(DislikesOnDate=count), 200
+
+    def getLikesOfPost(self, postId):
+        dao = ReactionsDAO()
+        count = dao.getLikesOfPost(postId)
+        return jsonify(LikesOnPost=count)
+
+    def getDislikesOfPost(self, postId):
+        dao = ReactionsDAO()
+        count = dao.getDislikesOfPost(postId)
+        return jsonify(DislikesOnPost=count)
 
 
 

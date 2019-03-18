@@ -1,5 +1,5 @@
 from config import dbconfig
-import psycopg2
+#import psycopg2
 
 class UsersDAO:
 
@@ -20,6 +20,9 @@ class UsersDAO:
 
     def getUserByUName(self, uname):
         return self.userArray[1]
+
+    def getMostActiveUser(self):
+        return self.userArray[0]
 
     def insert(self, json):
         return self.userArray[1]

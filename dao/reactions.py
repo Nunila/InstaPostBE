@@ -28,7 +28,17 @@ class ReactionsDAO:
     def delete(self, pid):
         return pid
 
+    def getLikesCountOnDate(self, date):
+        return 541
 
+    def getDislikesCountOnDate(self, date):
+        return 149
+
+    def getLikesOfPost(self, postid):
+        return 15
+
+    def getDislikesOfPost(self, postid):
+        return 9
 
 
 
