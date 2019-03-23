@@ -29,7 +29,6 @@ class ChatsDAO:
             result.append(row)
 
         return result
-        #return self.chatArray
 
     def getChatById(self, pid):
         return self.chatArray[0]

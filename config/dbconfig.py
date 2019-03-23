@@ -4,6 +4,5 @@
 pg_config = {
     'dbname': 'instapostdb',
     'user': 'instapost',
-    'passwd': 'instapost',
-    'host': 'localhost'
+    'passwd': 'instapost'
 }
