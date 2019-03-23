@@ -224,6 +224,26 @@ def getPostById(postId):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+@app.route('/InstaPost/posts/chat/<int:chatId>', methods=['GET'])
+def getPostsByChatId(chatId):
+    if request.method == 'GET':
+        return PostHandler().getPostsByChatId(chatId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPost/posts/user/<int:userId>', methods=['GET'])
+def getPostsByUserId(userId):
+    if request.method == 'GET':
+        return PostHandler().getPostsByUserId(userId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPost/posts/postDate/<string:postDate>', methods=['GET'])
+def getPostsByDate(postDate):
+    if request.method == 'GET':
+        return PostHandler().getPostsByDate(postDate)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 @app.route('/InstaPost/posts/numberOfPosts/<string:date>', methods=['GET'])
 def getNumOfPostsByDate(date):
@@ -263,6 +283,35 @@ def getMessageById(messageId):
         return MessageHandler().updateMessage(messageId, request.form)
     elif request.method == 'DELETE':
         return MessageHandler().deleteMessage(messageId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPost/messages/post/<int:postId>', methods=['GET', 'PUT', 'DELETE'])
+def getMessageByPostId(postId):
+    if request.method == 'GET':
+        return MessageHandler().getMessagesByPostId(postId)
+    elif request.method == 'PUT':
+        return MessageHandler().updateMessage(postId, request.form)
+    elif request.method == 'DELETE':
+        return MessageHandler().deleteMessage(postId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPost/messages/user/<int:userId>', methods=['GET', 'PUT', 'DELETE'])
+def getMessageByUserId(userId):
+    if request.method == 'GET':
+        return MessageHandler().getMessagesByUserId(userId)
+    elif request.method == 'PUT':
+        return MessageHandler().updateMessage(userId, request.form)
+    elif request.method == 'DELETE':
+        return MessageHandler().deleteMessage(userId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPost/messages/messageDate/<string:messageDate>', methods=['GET'])
+def getMessageByDate(messageDate):
+    if request.method == 'GET':
+        return MessageHandler().getMessagesByUserId(messageDate)
     else:
         return jsonify(Error="Method not allowed."), 405
 

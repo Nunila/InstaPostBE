@@ -8,14 +8,18 @@ class PostHandler:
     def buildPostDict(self, row):
         result = {}
         result['postId'] = row[0]
-        result['photoId'] = row[1]
-        result['postDate'] = row[2]
+        result['chatId'] = row[1]
+        result['userId'] = row[2]
+        result['photourl'] = row[3]
+        result['postDate'] = row[4]
         return result
 
-    def buildPostAttributes(self, postId, photoId, postDate):
+    def buildPostAttributes(self, postId, chatId, userId, photourl, postDate):
         result = {}
         result['postId'] = postId
-        result['photoId'] = photoId
+        result['chatId'] = chatId
+        result['userId'] = userId
+        result['photourl'] = photourl
         result['postDate'] = postDate
         return result
 
@@ -24,17 +28,52 @@ class PostHandler:
     def getAllPosts(self):
         dao = PostsDAO()
         posts_List = dao.getAllPosts()
-        return jsonify(posts_List)
+        result_list = []
+        for row in posts_List:
+            result = self.buildPostDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
 
     def getPostById(self, postId):
         dao = PostsDAO()
         posts_List = dao.getPostById(postId)
-        return jsonify(posts_List)
+        result_list = []
+        for row in posts_List:
+            result = self.buildPostDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
 
     def getPostsByChatId(self, chatId):
         dao = PostsDAO()
         posts_List = dao.getPostsByChatId(chatId)
-        return jsonify(posts_List)
+        result_list = []
+        for row in posts_List:
+            result = self.buildPostDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
+
+    def getPostsByUserId(self, userId):
+        dao = PostsDAO()
+        posts_List = dao.getPostsByUserId(userId)
+        result_list = []
+        for row in posts_List:
+            result = self.buildPostDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
+
+    def getPostsByDate(self, postDate):
+        dao = PostsDAO()
+        posts_List = dao.getPostsByDate(postDate)
+        result_list = []
+        for row in posts_List:
+            result = self.buildPostDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
 
     def getNumOfPostsByDate(self, date):
         dao = PostsDAO()
