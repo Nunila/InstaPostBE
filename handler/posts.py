@@ -24,7 +24,7 @@ class PostHandler:
     def getAllPosts(self):
         dao = PostsDAO()
         posts_List = dao.getAllPosts()
-        return jsonify(posts_List)
+        return jsonify(posts_List), 200
 
     def getPostById(self, postId):
         dao = PostsDAO()
