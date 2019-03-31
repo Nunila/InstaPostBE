@@ -35,6 +35,7 @@ class PostHandler:
 
         return jsonify(result_list)
 
+
     def getPostById(self, postId):
         dao = PostsDAO()
         posts_List = dao.getPostById(postId)

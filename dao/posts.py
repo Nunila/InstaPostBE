@@ -19,7 +19,7 @@ class PostsDAO:
 
     def getAllPosts(self):
         cursor = self.conn.cursor()
-        query = "select postId, chatId, userId, photourl, postDate from post;"
+        query = "select * from post;"
         cursor.execute(query)
         result = []
         for row in cursor:
