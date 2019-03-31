@@ -2,7 +2,7 @@
 /__pycache__/
 /venv
 /.idea/
-/dao/__pycache__/
-/config/__pycache__/
-/handler/__pycache__/
+dao/__pycache__/
+config/__pycache__/
+handler/__pycache__/
 
