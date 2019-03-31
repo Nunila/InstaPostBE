@@ -71,7 +71,7 @@ def getAllPerson():
         if not request.args:
             return PersonsHandler().getAllPersons()
         else:
-            return PersonsHandler().getPersonByArguments(request.args[0], request.args[1])
+            return PersonsHandler().getPersonByArguments(request.args)
 
 
 @app.route('/InstaPost/person/<int:perid>', methods=['GET', 'PUT', 'DELETE'])
@@ -128,6 +128,17 @@ def getChatByMemberId(uid):
         return ChatHandler().getChatsByMemberId(uid)
     else:
         return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/chats/<int:cid>/member/<int:personid>', methods=['POST', 'DELETE'])
+def addPersonToChat(cid, personid):
+    if request.method == 'POST':
+        return ChatHandler().addContactToChat(cid, personid)
+    elif request.method == 'DELETE':
+        return ChatHandler().deleteContactFromChat(cid, personid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 
 # ---------------------------REACTIONS--------------------------------
 
@@ -198,6 +209,8 @@ def getAllPosts():
     else:
         if not request.args:
             return PostHandler().getAllPosts()
+        else:
+            return jsonify(Result="Search result")
 
 
 @app.route('/InstaPost/posts/<int:postId>', methods=['GET', 'PUT', 'DELETE'])
@@ -212,7 +225,6 @@ def getPostById(postId):
         return jsonify(Error="Method not allowed."), 405
 
 
-# Needs fixing, not working
 @app.route('/InstaPost/posts/numberOfPosts/<string:date>', methods=['GET'])
 def getNumOfPostsByDate(date):
     if request.method == 'GET':
@@ -235,10 +247,12 @@ def getNumOfPostsByDateAndUser(date, userId):
 def getAllMessages():
     if request.method == 'POST':
         print("REQUEST: ", request.json)
-        return MessageHandler().insertMessages(request.json)
+        return MessageHandler().insertMessage(request.json)
     else:
         if not request.args:
             return MessageHandler().getAllMessages()
+        else:
+            return jsonify(Result="Search result")
 
 
 @app.route('/InstaPost/messages/<int:messageId>', methods=['GET', 'PUT', 'DELETE'])
@@ -253,7 +267,7 @@ def getMessageById(messageId):
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaPost/posts/numberOfReplies/<string:date>', methods=['GET'])
+@app.route('/InstaPost/messages/numberOfReplies/<string:date>', methods=['GET'])
 def getNumOfRepliesByDate(date):
     if request.method == 'GET':
         return MessageHandler().getNumOfRepliesByDate(date)
@@ -261,7 +275,7 @@ def getNumOfRepliesByDate(date):
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaPost/posts/numberOfReplies/<string:date>/<int:postId>', methods=['GET'])
+@app.route('/InstaPost/messages/numberOfReplies/<string:date>/<int:postId>', methods=['GET'])
 def getNumOfRepliesByDateAndPost(date, postId):
     if request.method == 'GET':
         return MessageHandler().getNumOfRepliesByDateAndPost(date, postId)

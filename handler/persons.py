@@ -13,9 +13,9 @@ class PersonsHandler:
         person = dao.getPersonByID(perid)
         return jsonify(person), 200
 
-    def getPersonByArguments(self, pfname, plname):
+    def getPersonByArguments(self, args):
         dao = PersonDAO()
-        person_list = dao.getPersonByFullName(pfname, plname)
+        person_list = dao.getPersonByFullName(args)
         return jsonify(person_list), 200
 
     def addConctact(self, ownerid, perid):
