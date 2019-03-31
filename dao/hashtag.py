@@ -1,5 +1,6 @@
 import datetime
-
+from config import dbconfig
+import psycopg2
 
 class HashtagsDAO:
 
@@ -9,23 +10,57 @@ class HashtagsDAO:
                     {"hashtagId": 4, "hashName": '#takemeback', "date": datetime.datetime.now()},
                     {"hashtagId": 5, "hashName": '#blessed', "date": datetime.datetime.now()}]
 
-    def getAllHashtags(self):
-        return self.hashtagArray
+    def _init_(self):
+        connectionURL="dbname=%s user=%s password=%s" % (dbconfig['dbname'],
+                                                         dbconfig['user'],
+                                                         dbconfig['passwd'])
 
-    def getHashById(self, pid):
-        return self.hashtagArray[0]
+        self.conn = psycopg2._connect(connectionURL)
+
+    def getAllHashtags(self):
+        cursor = self.conn.cursor()
+        query = "select * from Hashtag;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getHashById(self, hid):
+        cursor = self.conn.cursor()
+        query = "select * from Hashtag where HashtagId = %s;"
+        cursor.execute(query, (hid,))
+        result = cursor.fetchone()
+        return result
 
     def getHashByArgs(self, args):
         return [self.hashtagArray[1], self.hashtagArray[2]]
 
     def getTrending(self):
-        return self.hashtagArray[0]['hashName']
+        cursor = self.conn.cursor()
+        query = "select * from Hashtag;"
+        cursor.execute(query)
+        result = cursor.fetchone()
+        return result
 
-    def insert(self, json):
-        return self.hashtagArray[2]
+    def insert(self, hname):
+        cursor = self.conn.cursor()
+        query = "insert into Hashtag(hashName, date) values (%s, %s) returning personId;"
+        cursor.execute(query, (hname, datetime.datetime.now(),))
+        hid = cursor.fetchone()[0]
+        self.conn.commit()
+        return hid
 
-    def update(self, pid, form):
-        return self.hashtagArray[4]
+    def update(self, hid, hname):
+        cursor = self.conn.cursor()
+        query = "update Hashtag set hname = %s where hashtagId = %s;"
+        cursor.execute(query, (hname, hid,))
+        self.conn.commit()
+        return hid
 
-    def delete(self, pid):
-        return pid
+    def delete(self, hid):
+        cursor = self.conn.cursor()
+        query = "delete from Hashtag where hashtagId = %s;"
+        cursor.execute(query, (hid,))
+        self.conn.commit()
+        return hid
