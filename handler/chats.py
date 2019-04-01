@@ -4,6 +4,13 @@ from dao.chats import ChatsDAO
 
 class ChatHandler:
 
+    def buildChatDict(self, row):
+        result = {}
+        result['chatId'] = row[0]
+        result['chatName'] = row[1]
+        result['creationDate'] = row[2]
+        return result
+
     def build_chat_attributes(self, cid, cname, date):
         result = {}
         result['chatId'] = cid
@@ -11,15 +18,38 @@ class ChatHandler:
         result['creationDate'] = date
         return result
 
+#--------------------Operations-----------------------------------------
+
     def getAllChats(self):
         dao = ChatsDAO()
-        chats_list = dao.getAllChats()
-        return jsonify(chats_list), 200
+        chats_List = dao.getAllChats()
+        result_list = []
+        for row in chats_List:
+            result = self.buildChatDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
 
     def getChatById(self, cid):
         dao = ChatsDAO()
-        chat = dao.getChatById(cid)
-        return jsonify(chat), 200
+        row = dao.getChatById(cid)
+        if not row:
+            return jsonify(Error="Part Not Found"), 404
+        else:
+            part = self.buildChatDict(row)
+
+        return jsonify(Chat=part)
+
+    def getAllPostsOfSpecificChat(self, cid):
+        dao = ChatsDAO()
+        chats_List = dao.getAllChats()
+        result_list = []
+        for row in chats_List:
+            result = self.buildChatDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
+
 
     def searchChats(self, args):
         dao = ChatsDAO()

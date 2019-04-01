@@ -8,6 +8,8 @@ from handler.reactions import ReactionHandler
 from handler.posts import PostHandler
 from handler.hashtag import HashtagHandler
 from handler.messages import MessageHandler
+from handler.contact import ContactHandler
+from handler.participates import ParticipatesHandler
 
 
 # Import Cross-Origin Resource Sharing to enable
@@ -52,10 +54,19 @@ def getUsersById(uid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 @app.route('/InstaPost/users/mostactive', methods=['GET'])
 def getMostActiveUser():
     if request.method == 'GET':
         return UsersHandler().getMostActiveUser()
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/users/chat/<int:cid>', methods=['GET'])
+def getUsersInSpecificChat(cid):
+    if request.method == 'GET':
+        return ParticipatesHandler().getUsersInSpecificChat(cid)
     else:
         return jsonify(Error="Method not allowed."), 405
 
@@ -86,12 +97,10 @@ def getPersonByID(perid):
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaPost/person/<int:ownerid>/contact/<int:perid>', methods=['POST', 'DELETE'])
-def Contact(ownerid, perid):
-    if request.method == 'POST':
-        return PersonsHandler().addConctact(ownerid, perid)
-    elif request.method == 'DELETE':
-        return PersonsHandler().deleteContact(ownerid, perid)
+@app.route('/InstaPost/person/<int:ownerid>/contacts', methods=['GET'])
+def getContactsOfPerson(ownerid):
+    if request.method == 'GET':
+        return ContactHandler().getContactsOfPerson(ownerid)
     else:
         return jsonify(Error="Method not allowed."), 405
 
