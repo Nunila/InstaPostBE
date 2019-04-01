@@ -70,6 +70,14 @@ def getUsersInSpecificChat(cid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
+@app.route('/InstaPost/users/chatowner/<int:cid>', methods=['GET'])
+def getOwnerInSpecificChat(cid):
+    if request.method == 'GET':
+        return ParticipatesHandler().getOwnerInSpecificChat(cid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 # ===============================================PERSONS========================================================#
 
 

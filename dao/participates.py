@@ -40,3 +40,13 @@ class ParticipatesDAO:
             result.append(row)
 
         return result
+
+    def getOwnerInSpecificChat(self, chatid):
+        cursor = self.conn.cursor()
+        query = "select firstname, lastname, phonenumber, email, birthday, username " \
+                "from (participates as PP natural inner join users natural inner join " \
+                "person natural inner join chat)" \
+                "where PP.role='owner' and PP.chatid=%s;"
+        cursor.execute(query, (chatid,))
+        result = cursor.fetchone()
+        return result

@@ -34,3 +34,13 @@ class ParticipatesHandler:
             result_list.append(result)
 
         return jsonify(result_list)
+
+    def getOwnerInSpecificChat(self, chatid):
+        dao = ParticipatesDAO()
+        row = dao.getOwnerInSpecificChat(chatid)
+        if not row:
+            return jsonify(Error="Chat Not Found"), 404
+        else:
+            user = self.buildUserDict(row)
+
+        return jsonify(User=user)
