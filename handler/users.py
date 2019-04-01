@@ -1,7 +1,13 @@
 from flask import jsonify
-from dao.usersDAO import UsersDAO
+from dao.users import UsersDAO
 
 class UsersHandler:
+
+    def buildUserAttributes(self, row):
+        result = {}
+        result['userId'] = row[0]
+        result['userName'] = row[1]
+        return result
 
     def getAllUsers(self):
         dao = UsersDAO()
@@ -23,7 +29,7 @@ class UsersHandler:
         most_active = dao.getMostActiveUser()
         return jsonify(most_active), 200
 
-    def insertUserJson(self, json):
+    def insertUser(self, json):
         dao = UsersDAO()
         new_user = dao.insert(json)
         return jsonify(new_user), 200

@@ -25,14 +25,15 @@ class UsersDAO:
 
     def getUserByID(self, uid):
         cursor = self.conn.cursor()
-        query = "select userId, username from Users where userId = %s;"
+        query = "select userId, username, personId, firstName, lastName, phoneNumber, email, birthday from Users natural inner join Person where userid = %s;"
         cursor.execute(query, (uid,))
         result = cursor.fetchone()
         return result
 
     def getUserByUName(self, uname):
         cursor = self.conn.cursor()
-        query = "select userId, username from Users where username = %s;"
+        query = "select * from (select userId, username, personId, firstName, lastName, phoneNumber, email, birthday" \
+                "from Users natural inner join Person where Person.userid = Users.userid) as foo where foo.userName = %s;"
         cursor.execute(query, (uname,))
         result = cursor.fetchone()
         return result

@@ -28,13 +28,17 @@ class HashtagsDAO:
 
     def getHashById(self, hid):
         cursor = self.conn.cursor()
-        query = "select * from Hashtag where HashtagId = %s;"
+        query = "select * from Hashtag where hashtagId = %s;"
         cursor.execute(query, (hid,))
         result = cursor.fetchone()
         return result
 
-    def getHashByArgs(self, args):
-        return [self.hashtagArray[1], self.hashtagArray[2]]
+    def getHashByName(self, hname):
+        cursor = self.conn.cursor()
+        query = "select * from Hashtag where hashName = %s;"
+        cursor.execute(query, (hname,))
+        result = cursor.fetchone()
+        return result
 
     def getTrending(self):
         cursor = self.conn.cursor()
@@ -45,7 +49,7 @@ class HashtagsDAO:
 
     def insert(self, hname):
         cursor = self.conn.cursor()
-        query = "insert into Hashtag(hashName, date) values (%s, %s) returning personId;"
+        query = "insert into Hashtag(hashName, date) values (%s, %s) returning hashtagId;"
         cursor.execute(query, (hname, datetime.datetime.now(),))
         hid = cursor.fetchone()[0]
         self.conn.commit()

@@ -15,6 +15,7 @@ class PersonDAO:
 
         self.conn = psycopg2._connect(connectionURL)
 
+
     def getAllPersons(self):
         cursor = self.conn.cursor()
         query = "select * from Person;"
@@ -53,6 +54,15 @@ class PersonDAO:
         cursor = self.conn.cursor()
         query = "select * from Person where firstName = %s and lastName = %s;"
         cursor.execute(query, (perfname, perlname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getUsernameByPersonId(self, perid):
+        cursor = self.conn.cursor()
+        query = "select userId, userName from Person natural inner join Users where personId = %s;"
+        cursor.execute(query, (perid,))
         result = []
         for row in cursor:
             result.append(row)
