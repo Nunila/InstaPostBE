@@ -1,8 +1,17 @@
 
 import datetime
-
+from config.dbconfig import pg_config
+import psycopg2
 
 class ReactionsDAO:
+
+    def __init__(self):
+        connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
+                                                            pg_config['user'],
+                                                            pg_config['passwd'],
+                                                            )
+
+        self.conn = psycopg2._connect(connection_url)
 
     reactionArray = [{"reactionId": 1, "type": 'like', "date": datetime.datetime.now()},
                  {"reactionId": 2, "type": 'dislike', "date": datetime.datetime.now()},
@@ -11,10 +20,22 @@ class ReactionsDAO:
                  {"reactionId": 5, "type": 'like', "date": datetime.datetime.now()}]
 
     def getAllReactions(self):
-        return self.reactionArray
+        cursor = self.conn.cursor()
+        query = "select * from chat;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
-    def getReactionById(self, pid):
-        return self.reactionArray[0]
+
+    def getReactionById(self, cid):
+        cursor = self.conn.cursor()
+        query = "select * from chat where chatId = %s;"
+        cursor.execute(query, (cid,))
+        result = cursor.fetchone()
+        return result
+
 
     def getReactionsByArgs(self, args):
         return [self.reactionArray[1], self.reactionArray[2]]

@@ -8,6 +8,8 @@ from handler.reactions import ReactionHandler
 from handler.posts import PostHandler
 from handler.hashtag import HashtagHandler
 from handler.messages import MessageHandler
+from handler.contact import ContactHandler
+from handler.participates import ParticipatesHandler
 
 
 # Import Cross-Origin Resource Sharing to enable
@@ -52,10 +54,27 @@ def getUsersById(uid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 @app.route('/InstaPost/users/mostactive', methods=['GET'])
 def getMostActiveUser():
     if request.method == 'GET':
         return UsersHandler().getMostActiveUser()
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/users/chat/<int:cid>', methods=['GET'])
+def getUsersInSpecificChat(cid):
+    if request.method == 'GET':
+        return ParticipatesHandler().getUsersInSpecificChat(cid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/users/chatowner/<int:cid>', methods=['GET'])
+def getOwnerInSpecificChat(cid):
+    if request.method == 'GET':
+        return ParticipatesHandler().getOwnerInSpecificChat(cid)
     else:
         return jsonify(Error="Method not allowed."), 405
 
@@ -86,12 +105,10 @@ def getPersonByID(perid):
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaPost/person/<int:ownerid>/contact/<int:perid>', methods=['POST', 'DELETE'])
-def Contact(ownerid, perid):
-    if request.method == 'POST':
-        return PersonsHandler().addConctact(ownerid, perid)
-    elif request.method == 'DELETE':
-        return PersonsHandler().deleteContact(ownerid, perid)
+@app.route('/InstaPost/person/<int:ownerid>/contacts', methods=['GET'])
+def getContactsOfPerson(ownerid):
+    if request.method == 'GET':
+        return ContactHandler().getContactsOfPerson(ownerid)
     else:
         return jsonify(Error="Method not allowed."), 405
 
@@ -200,7 +217,7 @@ def getDislikesOfPost(postId):
 
 # --------------------------POSTS-----------------------------------------
 
-
+@cross_origin()
 @app.route('/InstaPost/posts', methods=['GET', 'POST'])
 def getAllPosts():
     if request.method == 'POST':
@@ -224,6 +241,26 @@ def getPostById(postId):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+@app.route('/InstaPost/posts/chat/<int:chatId>', methods=['GET'])
+def getPostsByChatId(chatId):
+    if request.method == 'GET':
+        return PostHandler().getPostsByChatId(chatId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPost/posts/user/<int:userId>', methods=['GET'])
+def getPostsByUserId(userId):
+    if request.method == 'GET':
+        return PostHandler().getPostsByUserId(userId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPost/posts/postDate/<string:postDate>', methods=['GET'])
+def getPostsByDate(postDate):
+    if request.method == 'GET':
+        return PostHandler().getPostsByDate(postDate)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 @app.route('/InstaPost/posts/numberOfPosts/<string:date>', methods=['GET'])
 def getNumOfPostsByDate(date):
@@ -263,6 +300,35 @@ def getMessageById(messageId):
         return MessageHandler().updateMessage(messageId, request.form)
     elif request.method == 'DELETE':
         return MessageHandler().deleteMessage(messageId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPost/messages/post/<int:postId>', methods=['GET', 'PUT', 'DELETE'])
+def getMessageByPostId(postId):
+    if request.method == 'GET':
+        return MessageHandler().getMessagesByPostId(postId)
+    elif request.method == 'PUT':
+        return MessageHandler().updateMessage(postId, request.form)
+    elif request.method == 'DELETE':
+        return MessageHandler().deleteMessage(postId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPost/messages/user/<int:userId>', methods=['GET', 'PUT', 'DELETE'])
+def getMessageByUserId(userId):
+    if request.method == 'GET':
+        return MessageHandler().getMessagesByUserId(userId)
+    elif request.method == 'PUT':
+        return MessageHandler().updateMessage(userId, request.form)
+    elif request.method == 'DELETE':
+        return MessageHandler().deleteMessage(userId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPost/messages/messageDate/<string:messageDate>', methods=['GET'])
+def getMessageByDate(messageDate):
+    if request.method == 'GET':
+        return MessageHandler().getMessagesByUserId(messageDate)
     else:
         return jsonify(Error="Method not allowed."), 405
 

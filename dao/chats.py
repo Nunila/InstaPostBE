@@ -1,8 +1,18 @@
 
 import datetime
+from config.dbconfig import pg_config
+import psycopg2
 
 
 class ChatsDAO:
+
+    def __init__(self):
+        connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
+                                                            pg_config['user'],
+                                                            pg_config['passwd'],
+                                                            )
+
+        self.conn = psycopg2._connect(connection_url)
 
     chatArray = [{"chatId": 1, "chatName": 'DBProject', "creationDate": datetime.datetime.now()},
                  {"chatId": 2, "chatName": 'Family', "creationDate": datetime.datetime.now()},
@@ -11,10 +21,20 @@ class ChatsDAO:
                  {"chatId": 5, "chatName": 'BestFriends', "creationDate": datetime.datetime.now()}]
 
     def getAllChats(self):
-        return self.chatArray
+        cursor = self.conn.cursor()
+        query = "select * from chat;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
-    def getChatById(self, pid):
-        return self.chatArray[0]
+    def getChatById(self, cid):
+        cursor = self.conn.cursor()
+        query = "select * from chat where chatId = %s;"
+        cursor.execute(query, (cid,))
+        result = cursor.fetchone()
+        return result
 
     def getChatsByArgs(self, args):
         return [self.chatArray[1], self.chatArray[2]]

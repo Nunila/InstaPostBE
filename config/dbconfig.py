@@ -1,7 +1,8 @@
+
 #Databse configuration information
 
 pg_config = {
-    'user' : 'instapost',
-    'passwd' : 'instapost',
-    'dbname' : 'instapostdb'
+    'dbname': 'instapostdb',
+    'user': 'instapost',
+    'passwd': 'instapost'
 }
