@@ -169,7 +169,7 @@ def getAllReactions():
         return ReactionHandler().insertReactionJson(request.json)
     else:
         if not request.args:
-            return ReactionHandler().getAllReactions()
+            return ReactionHandler().getAllReactionsForMessages()
         else:
             return ReactionHandler().searchReactions(request.args)
 
