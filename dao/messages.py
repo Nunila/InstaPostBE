@@ -61,17 +61,21 @@ class MessagesDAO:
         return result
 
     def getMessagesByChatId(self, chatId):
-        # cursor = self.conn.cursor()
-        # query = "select messageId, postId, userId, content, messageDate, type from message" \
-        #         "natural join Caption" \
-        #         "natural join Reply" \
-        #         "natural join Post where chatId = %d;"
-        # cursor.execute(query, (chatId,))
-        # result = []
-        # for row in cursor:
-        #     result.append(row)
-        # return result
-        return 1
+        cursor = self.conn.cursor()
+        query = "(select messageId, post.postId, message.userId, content, messageDate, type from message " \
+                "natural join caption " \
+                "inner join post on caption.postId = post.postId " \
+                "where chatId=%s) " \
+                "union " \
+                "(select messageId, post.postId, message.userId, content, messageDate, type from message " \
+                "natural join reply " \
+                "inner join post on reply.postId = post.postId " \
+                "where chatId=%s);"
+        cursor.execute(query, (chatId, chatId))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
     def getNumOfRepliesByDate(self, date):
         return 100
