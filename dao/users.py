@@ -16,7 +16,7 @@ class UsersDAO:
 
     def getAllUsers(self):
         cursor = self.conn.cursor()
-        query = "select userId, username from Users;"
+        query = "select userId, username, personId, firstName, lastName, phoneNumber, email, birthday from Users natural inner join Person;"
         cursor.execute(query)
         result = []
         for row in cursor:
