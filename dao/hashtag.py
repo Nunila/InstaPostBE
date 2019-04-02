@@ -19,7 +19,7 @@ class HashtagsDAO:
 
     def getAllHashtags(self):
         cursor = self.conn.cursor()
-        query = "select * from Hashtag;" 
+        query = "select * from Hashtag;"
         cursor.execute(query)
         result = []
         for row in cursor:
