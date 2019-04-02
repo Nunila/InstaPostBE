@@ -24,7 +24,7 @@ class UsersHandler:
         for row in user_list:
             element = self.buildUserAttributes(row)
             results.append(element)
-        return jsonify(Users= user_list), 200
+        return jsonify(Users= results), 200
 
     def getUserByID(self, uid):
         dao = UsersDAO()

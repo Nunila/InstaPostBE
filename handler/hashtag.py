@@ -4,20 +4,39 @@ from dao.hashtag import HashtagsDAO
 
 class HashtagHandler:
 
+    def buildHashtagAttributes(self, row):
+        result = {}
+        result['hashtagId'] = row[0]
+        result['hashName'] = row[1]
+        result['date'] = row[2]
+        return result
+
     def getAllHashtags(self):
         dao = HashtagsDAO()
         hashtags_list = dao.getAllHashtags()
-        return jsonify(hashtags_list), 200
+        results = []
+        for row in hashtags_list:
+            element = self.buildHashtagAttributes(row)
+            results.append(element)
+        return jsonify(Hashtag= results), 200
 
-    def searchHashtags(self, args):
+    def searchHashtags(self, hname):
         dao = HashtagsDAO()
-        hashtags_list = dao.getHashByArgs(args)
-        return jsonify(hashtags_list), 200
+        result = dao.getHashByName(hname)
+        if not result:
+            return jsonify(Error = 'Hashtag not found.'), 404
+        else:
+            hashtag = self.buildHashtagAttributes(result)
+            return jsonify(Hashtag= hashtag), 200
 
     def getHashtagById(self, hid):
         dao = HashtagsDAO()
-        hashtag = dao.getHashById(hid)
-        return jsonify(hashtag), 200
+        result = dao.getHashById(hid)
+        if not result:
+            return jsonify(Error = 'Hashtag not found.'), 404
+        else:
+            hashtag = self.buildHashtagAttributes(result)
+            return jsonify(Hashtag= hashtag), 200
 
     def getTrendingHash(self):
         dao = HashtagsDAO()
