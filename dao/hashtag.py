@@ -1,5 +1,5 @@
 import datetime
-from config import dbconfig
+from config.dbconfig import pg_config
 import psycopg2
 
 class HashtagsDAO:
@@ -11,9 +11,9 @@ class HashtagsDAO:
                     {"hashtagId": 5, "hashName": '#blessed', "date": datetime.datetime.now()}]
 
     def _init_(self):
-        connectionURL="dbname=%s user=%s password=%s" % (dbconfig['dbname'],
-                                                         dbconfig['user'],
-                                                         dbconfig['passwd'])
+        connectionURL="dbname=%s user=%s password=%s" % (pg_config['dbname'],
+                                                         pg_config['user'],
+                                                         pg_config['passwd'])
 
         self.conn = psycopg2._connect(connectionURL)
 
