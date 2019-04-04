@@ -243,12 +243,14 @@ def getPostById(postId):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 @app.route('/InstaPost/posts/chat/<int:chatId>', methods=['GET'])
 def getPostsByChatId(chatId):
     if request.method == 'GET':
         return PostHandler().getPostsByChatId(chatId)
     else:
         return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaPost/posts/user/<int:userId>', methods=['GET'])
 def getPostsByUserId(userId):
@@ -257,12 +259,22 @@ def getPostsByUserId(userId):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
+@app.route('/InstaPost/posts/numberOfPostsPerDay', methods=['GET'])
+def getNumOfPostsPerDate():
+    if request.method == 'GET':
+        return PostHandler().getNumberOfPostsPerDay()
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
 @app.route('/InstaPost/posts/postDate/<string:postDate>', methods=['GET'])
 def getPostsByDate(postDate):
     if request.method == 'GET':
         return PostHandler().getPostsByDate(postDate)
     else:
         return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaPost/posts/numberOfPosts/<string:date>', methods=['GET'])
 def getNumOfPostsByDate(date):

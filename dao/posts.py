@@ -65,6 +65,18 @@ class PostsDAO:
 
         return result
 
+    def getNumberOfPostsPerDay(self):
+        cursor = self.conn.cursor()
+        query = "select date(postdate), count(*) as postsPerDay " \
+                "from posts " \
+                "group by postdate;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+
+        return result
+
     def getNumOfPostsByDateAndUser(self, date, userId):
         return 8
 
