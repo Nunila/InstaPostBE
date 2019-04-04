@@ -40,8 +40,12 @@ class HashtagHandler:
 
     def getTrendingHash(self):
         dao = HashtagsDAO()
-        hash = dao.getTrending()
-        return jsonify(Hashtag=hash), 200
+        hashtags_list = dao.getTrending()
+        results = []
+        for row in hashtags_list:
+            element = self.buildHashtagAttributes(row)
+            results.append(element)
+        return jsonify(Hashtag=results), 200
 
     def insertHashtagJson(self, json):
         dao = HashtagsDAO()

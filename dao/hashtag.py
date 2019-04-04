@@ -1,8 +1,17 @@
 import datetime
-from config import dbconfig
+from config.dbconfig import pg_config
 import psycopg2
 
+
 class HashtagsDAO:
+
+    def __init__(self):
+        connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
+                                                            pg_config['user'],
+                                                            pg_config['passwd'],
+                                                            )
+
+        self.conn = psycopg2._connect(connection_url)
 
     hashtagArray = [{"hashtagId": 1, "hashName": '#TeamRubio', "date": datetime.datetime.now()},
                     {"hashtagId": 2, "hashName": '#GoTS8', "date": datetime.datetime.now()},
@@ -10,12 +19,6 @@ class HashtagsDAO:
                     {"hashtagId": 4, "hashName": '#takemeback', "date": datetime.datetime.now()},
                     {"hashtagId": 5, "hashName": '#blessed', "date": datetime.datetime.now()}]
 
-    def _init_(self):
-        connectionURL="dbname=%s user=%s password=%s" % (dbconfig['dbname'],
-                                                         dbconfig['user'],
-                                                         dbconfig['passwd'])
-
-        self.conn = psycopg2._connect(connectionURL)
 
     def getAllHashtags(self):
         cursor = self.conn.cursor()
@@ -35,14 +38,18 @@ class HashtagsDAO:
 
     def getHashByName(self, hname):
         cursor = self.conn.cursor()
-        query = "select * from Hashtag where hashName = %s;"
+        query = "select * from Hashtag where hashname = %s;"
         cursor.execute(query, (hname,))
         result = cursor.fetchone()
         return result
 
     def getTrending(self):
         cursor = self.conn.cursor()
-        query = "select * from Hashtag;"
+        query = "select hashname, count(*) as countPerDay " \
+                "from hashtag " \
+                "WHERE date(datetime) = date(Now()) " \
+                "group by hashname " \
+                "order by count(*) desc;"
         cursor.execute(query)
         result = cursor.fetchone()
         return result
@@ -51,9 +58,10 @@ class HashtagsDAO:
         cursor = self.conn.cursor()
         query = "insert into Hashtag(hashName, date) values (%s, %s) returning hashtagId;"
         cursor.execute(query, (hname, datetime.datetime.now(),))
-        hid = cursor.fetchone()[0]
-        self.conn.commit()
-        return hid
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
     def update(self, hid, hname):
         cursor = self.conn.cursor()
