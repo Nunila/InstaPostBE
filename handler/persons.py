@@ -1,7 +1,17 @@
 from flask import jsonify
-from dao.personDAO import PersonDAO
+from dao.person import PersonDAO
 
 class PersonsHandler:
+
+    def buildPersonAttributes(self, row):
+        result = {}
+        result['personId'] = row[0]
+        result['firstName'] = row[1]
+        result['lastName'] = row[2]
+        result['phoneNumber'] = row[3]
+        result['email'] = row[4]
+        result['birthday'] = row[5]
+        return result
 
     def getAllPersons(self):
         dao = PersonDAO()

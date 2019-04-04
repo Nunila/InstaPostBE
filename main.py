@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
-
 from handler.persons import PersonsHandler
 from handler.users import UsersHandler
 from handler.chats import ChatHandler
@@ -37,11 +36,14 @@ def getAllUsers():
         print("REQUEST: ", request.json)
         return UsersHandler().insertUserJson(request.json)
     else:
-        if not request.args:
-            return UsersHandler().getAllUsers()
-        else:
-            return UsersHandler().getUserByUName(request.args)
+        return UsersHandler().getAllUsers()
 
+@app.route('/InstaPost/users/<string:uname>', methods=['GET'])
+def getUsersByUname(uname):
+    if request.method == 'GET':
+        return UsersHandler().getUserByUName(uname)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 @app.route('/InstaPost/users/<int:uid>', methods=['GET', 'PUT', 'DELETE'])
 def getUsersById(uid):
