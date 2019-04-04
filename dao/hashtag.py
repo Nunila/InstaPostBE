@@ -51,7 +51,9 @@ class HashtagsDAO:
                 "group by hashname " \
                 "order by count(*) desc;"
         cursor.execute(query)
-        result = cursor.fetchone()
+        result = []
+        for row in cursor:
+            result.append(row)
         return result
 
     def insert(self, hname):

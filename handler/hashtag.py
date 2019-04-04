@@ -11,6 +11,13 @@ class HashtagHandler:
         result['date'] = row[2]
         return result
 
+    def buildHashtagForTrending(self, row, index):
+        print("row: ", row)
+        result = {}
+        result['hashtag'] = row[0]
+        result['position'] = index
+        return result
+
     def getAllHashtags(self):
         dao = HashtagsDAO()
         hashtags_list = dao.getAllHashtags()
@@ -42,8 +49,10 @@ class HashtagHandler:
         dao = HashtagsDAO()
         hashtags_list = dao.getTrending()
         results = []
+        index = 1
         for row in hashtags_list:
-            element = self.buildHashtagAttributes(row)
+            element = self.buildHashtagForTrending(row, index)
+            index += 1
             results.append(element)
         return jsonify(Hashtag=results), 200
 
