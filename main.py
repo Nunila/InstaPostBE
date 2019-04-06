@@ -169,9 +169,16 @@ def getAllReactions():
         return ReactionHandler().insertReactionJson(request.json)
     else:
         if not request.args:
-            return ReactionHandler().getAllReactionsForMessages()
+            return ReactionHandler().getAllReactions()
         else:
             return ReactionHandler().searchReactions(request.args)
+
+@app.route('/InstaPost/reactions', method=['GET'])
+def getReactionsPerMessage():
+    if request.method == 'GET':
+        return ReactionHandler().getAllReactionsForMessages()
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 
 @app.route('/InstaPost/reactions/<int:rid>', methods=['GET', 'PUT', 'DELETE'])
