@@ -5,9 +5,6 @@ from collections import defaultdict
 
 class ReactionHandler:
 
-    def buildReactionDict(self, row):
-        result = {}
-
     def buildReactionDictionary(self, tabla):
         print(tabla)
         result = defaultdict(list)
@@ -22,7 +19,7 @@ class ReactionHandler:
         return result
 
     def buildReactionAttribute(self, row):
-        result = {}
+        result = []
         result['reactionId'] = row[0]
         result['userId'] = row[1]
         result['postId'] = row[2]
@@ -30,78 +27,6 @@ class ReactionHandler:
         result['type'] = row[4]
         return result
 
-#------------------Operations---------------------------------------------------------------------
-
-    def getAllReactions(self):
-        dao = ReactionsDAO()
-        reactions_List = dao.getAllReactions()
-        result_list = []
-        for row in reactions_List:
-            result = self.buildReactionDict(row)
-            result_list.append(result)
-
-        return jsonify(Message=result_list), 200
-
-    def getReactionById(self, reactionId):
-        dao = ReactionsDAO()
-        reactions_List = dao.getReactionById(reactionId)
-        result_list = []
-        for row in reactions_List:
-            result = self.buildReactionDict(row)
-            result_list.append(result)
-
-        return jsonify(Message=result_list), 200
-
-    def getReactionsByPostId(self, postId):
-        dao = ReactionsDAO()
-        reactions_List = dao.getReactionsByPostId(postId)
-        result_list = []
-        for row in reactions_List:
-            result = self.buildReactionDict(row)
-            result_list.append(result)
-
-        return jsonify(Message=result_list), 200
-
-    def getReactionsByUserId(self, userId):
-        dao = ReactionsDAO()
-        reactions_List = dao.getReactionsByUserId(userId)
-        result_list = []
-        for row in reactions_List:
-            result = self.buildReactionDict(row)
-            result_list.append(result)
-
-        return jsonify(Message=result_list), 200
-
-    def getReactionsByMessageId(self, messageId):
-        dao = ReactionsDAO()
-        reactions_List = dao.getReactionsByMessageId(messageId)
-        result_list = []
-        for row in reactions_List:
-            result = self.buildReactionDict(row)
-            result_list.append(result)
-
-        return jsonify(Message=result_list), 200
-
-    def getLikesCountByMessageId(self, messageId):
-        dao = ReactionsDAO()
-        count = dao.getLikesCountByMessageId(messageId)
-        return jsonify(count), 200
-
-    def getDislikesCountByMessageId(self, messageId):
-        dao = ReactionsDAO()
-        count = dao.getDislikesCountByMessageId(messageId)
-        return jsonify(count), 200
-
-
-    def getDislikesUsers(self):
-        dao = ReactionsDAO()
-        reactions_List = dao.getDislikesUsers()
-        result_list = []
-        for row in reactions_List:
-            result_list.append(row)
-
-        return jsonify(Message=result_list), 200
-=======
     def getAllReactions(self):
         dao = ReactionsDAO()
         reaction_list = dao.getAllReactions()
@@ -116,16 +41,11 @@ class ReactionHandler:
         reaction_list = dao.reactionsPerMessage()
         results = self.buildReactionDictionary(reaction_list)
         return jsonify(results), 200
->>>>>>> nunila-dev
 
-    def getLikesUsers(self):
+    def getReactionById(self, cid):
         dao = ReactionsDAO()
-        reactions_List = dao.getLikesUsers()
-        result_list = []
-        for row in reactions_List:
-            result_list.append(row)
-
-        return jsonify(Message=result_list), 200
+        reaction = dao.getReactionById(cid)
+        return jsonify(reaction), 200
 
     def searchReactions(self, args):
         dao = ReactionsDAO()
@@ -166,11 +86,3 @@ class ReactionHandler:
         dao = ReactionsDAO()
         count = dao.getDislikesOfPost(postId)
         return jsonify(DislikesOnPost=count)
-
-
-
-
-
-
-
-

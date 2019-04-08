@@ -38,12 +38,14 @@ def getAllUsers():
     else:
         return UsersHandler().getAllUsers()
 
+
 @app.route('/InstaPost/users/<string:uname>', methods=['GET'])
 def getUsersByUname(uname):
     if request.method == 'GET':
         return UsersHandler().getUserByUName(uname)
     else:
         return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaPost/users/<int:uid>', methods=['GET', 'PUT', 'DELETE'])
 def getUsersById(uid):
@@ -64,7 +66,7 @@ def getMostActiveUser():
     else:
         return jsonify(Error="Method not allowed."), 405
 
-<<<<<<< HEAD
+
 @app.route('/InstaPost/users/likes', methods=['GET'])
 def getLikesUsers():
     if request.method == 'GET':
@@ -72,11 +74,12 @@ def getLikesUsers():
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 @app.route('/InstaPost/users/dislikes', methods=['GET'])
 def getDislikesUsers():
     if request.method == 'GET':
         return ReactionHandler().getDislikesUsers()
-=======
+
 
 @app.route('/InstaPost/users/chat/<int:cid>', methods=['GET'])
 def getUsersInSpecificChat(cid):
@@ -90,7 +93,6 @@ def getUsersInSpecificChat(cid):
 def getOwnerInSpecificChat(cid):
     if request.method == 'GET':
         return ParticipatesHandler().getOwnerInSpecificChat(cid)
->>>>>>> nunila-dev
     else:
         return jsonify(Error="Method not allowed."), 405
 

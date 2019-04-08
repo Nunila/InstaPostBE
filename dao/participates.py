@@ -1,19 +1,15 @@
-<<<<<<< HEAD
 from flask import jsonify
 import datetime
-=======
 from config.dbconfig import pg_config
 import psycopg2
->>>>>>> nunila-dev
 
 
 class ParticipatesDAO:
 
-<<<<<<< HEAD
     def getAllParticipates(self):
         cursor = self.conn.cursor()
+
         query = "select participationId, userId, chatId, role from Participates;"
-=======
     def __init__(self):
         connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
                                                             pg_config['user'],
@@ -31,12 +27,10 @@ class ParticipatesDAO:
     def getAllPosts(self):
         cursor = self.conn.cursor()
         query = "select * from post;"
->>>>>>> nunila-dev
         cursor.execute(query)
         result = []
         for row in cursor:
             result.append(row)
-<<<<<<< HEAD
         return result
 
     def getParticipatesByUserId(self, userId):
@@ -75,7 +69,6 @@ class ParticipatesDAO:
         result = []
         for row in cursor:
             result.append(row)
-=======
 
         return result
 
@@ -100,5 +93,4 @@ class ParticipatesDAO:
                 "where PP.role='owner' and PP.chatid=%s;"
         cursor.execute(query, (chatid,))
         result = cursor.fetchone()
->>>>>>> nunila-dev
         return result
