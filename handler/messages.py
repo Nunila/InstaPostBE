@@ -46,7 +46,7 @@ class MessageHandler:
             result = self.builMessageDict(row)
             result_list.append(result)
 
-        return jsonify(Message=result_list)
+        return jsonify(result_list)
 
     def getMessageById(self, messageId):
         dao = MessagesDAO()
@@ -56,7 +56,7 @@ class MessageHandler:
             result = self.builMessageDict(row)
             result_list.append(result)
 
-        return jsonify(Message=result_list)
+        return jsonify(result_list)
 
     def getMessagesByPostId(self, postId):
         dao = MessagesDAO()
@@ -66,7 +66,7 @@ class MessageHandler:
             result = self.builMessageDict(row)
             result_list.append(result)
 
-        return jsonify(Message=result_list)
+        return jsonify(result_list)
 
     def getMessagesByUserId(self, userId):
         dao = MessagesDAO()
@@ -76,7 +76,7 @@ class MessageHandler:
             result = self.builMessageDict(row)
             result_list.append(result)
 
-        return jsonify(Message=result_list)
+        return jsonify(result_list)
 
     def getMessagesByDate(self, messageDate):
         dao = MessagesDAO()
@@ -86,7 +86,7 @@ class MessageHandler:
             result = self.builMessageDict(row)
             result_list.append(result)
 
-        return jsonify(Message=result_list)
+        return jsonify(result_list)
 
     def getMessagesByChatId(self, chatId):
         dao = MessagesDAO()
@@ -96,7 +96,9 @@ class MessageHandler:
             result = self.builMessageDict(row)
             result_list.append(result)
 
-        return jsonify(Message=result_list)
+        return jsonify(result_list)
+
+#----------------------------Replies--------------------------------------------------
 
     def getAllReplies(self):
         dao = MessagesDAO()
@@ -106,7 +108,17 @@ class MessageHandler:
             result = self.buildRepliesDict(row)
             result_list.append(result)
 
-        return jsonify(Message=result_list)
+        return jsonify(result_list)
+
+    def getRepliesByPostId(self, postId):
+        dao = MessagesDAO()
+        messages_List = dao.getRepliesByPostId(postId)
+        result_list = []
+        for row in messages_List:
+            result = self.buildRepliesDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
 
 
     def getNumOfRepliesByDate(self, date):

@@ -60,6 +60,15 @@ class MessagesDAO:
             result.append(row)
         return result
 
+    def getRepliesByPostId(self, postId):
+        cursor = self.conn.cursor()
+        query = "select messageid, postid, userid, content, messagedate from reply natural inner join message where postId=%s;"
+        cursor.execute(query, (postId,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
     def getMessagesByDate(self, messageDate):
         cursor = self.conn.cursor()
         query = "select messageId, postId, userId, content, messageDate, type from message where messageDate = %s;"

@@ -350,10 +350,17 @@ def getMessagesByChatId(chatId):
     else:
         return jsonify(Error="Method not allowed."), 405
 
-@app.route('/InstaPost/messages/replies', methods=['GET'])
+@app.route('/InstaPost/messages/allreplies', methods=['GET'])
 def getAllReplies():
     if request.method == 'GET':
         return MessageHandler().getAllReplies()
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPost/messages/repliesbypostid/<int:postId>', methods=['GET'])
+def getRepliesByPostId(postId):
+    if request.method == 'GET':
+        return MessageHandler().getRepliesByPostId(postId)
     else:
         return jsonify(Error="Method not allowed."), 405
 
