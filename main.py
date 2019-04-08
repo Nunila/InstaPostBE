@@ -174,6 +174,14 @@ def getAllReactions():
             return ReactionHandler().searchReactions(request.args)
 
 
+@app.route('/InstaPost/reactionsPerMessage', methods=['GET'])
+def getReactionsPerMessage():
+    if request.method == 'GET':
+        return ReactionHandler().getAllReactionsForMessages()
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
 @app.route('/InstaPost/reactions/<int:rid>', methods=['GET', 'PUT', 'DELETE'])
 def getReactionById(rid):
     if request.method == 'GET':
@@ -218,6 +226,7 @@ def getDislikesOfPost(postId):
         return jsonify(Error="Method not allowed."), 405
 
 # --------------------------POSTS-----------------------------------------
+
 
 @cross_origin()
 @app.route('/InstaPost/posts', methods=['GET', 'POST'])

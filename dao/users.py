@@ -1,4 +1,4 @@
-from config import dbconfig
+from config.dbconfig import pg_config
 import psycopg2
 
 class UsersDAO:
@@ -6,13 +6,13 @@ class UsersDAO:
     userArray = [{"userId": 1, "userName": 'Homero123', "password": 'dotdashdot'},
                  {"userId": 2, "userName": 'Salchicha2', "password": 'bootwoot9'}]
 
-    def _init_(self):
+    def __init__(self):
+        connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
+                                                            pg_config['user'],
+                                                            pg_config['passwd'],
+                                                            )
 
-        connectionURL="dbname=%s user=%s password=%s" % (dbconfig['dbname'],
-                                                         dbconfig['user'],
-                                                         dbconfig['passwd'])
-
-        self.conn = psycopg2._connect(connectionURL)
+        self.conn = psycopg2._connect(connection_url)
 
     def getAllUsers(self):
         cursor = self.conn.cursor()

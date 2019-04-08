@@ -37,6 +37,16 @@ class ReactionsDAO:
         return result
 
 
+    def reactionsPerMessage(self):
+        cursor = self.conn.cursor()
+        query = "select postid, messageid, type, count(foo.type) from (select * from reaction) as foo group by messageid," \
+                " postid, type order by messageid asc, postid asc;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
     def getReactionsByArgs(self, args):
         return [self.reactionArray[1], self.reactionArray[2]]
 
