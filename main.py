@@ -173,7 +173,8 @@ def getAllReactions():
         else:
             return ReactionHandler().searchReactions(request.args)
 
-@app.route('/InstaPost/reactions', method=['GET'])
+
+@app.route('/InstaPost/reactionsPerMessage', methods=['GET'])
 def getReactionsPerMessage():
     if request.method == 'GET':
         return ReactionHandler().getAllReactionsForMessages()
@@ -226,6 +227,7 @@ def getDislikesOfPost(postId):
 
 # --------------------------POSTS-----------------------------------------
 
+
 @cross_origin()
 @app.route('/InstaPost/posts', methods=['GET', 'POST'])
 def getAllPosts():
@@ -250,12 +252,14 @@ def getPostById(postId):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 @app.route('/InstaPost/posts/chat/<int:chatId>', methods=['GET'])
 def getPostsByChatId(chatId):
     if request.method == 'GET':
         return PostHandler().getPostsByChatId(chatId)
     else:
         return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaPost/posts/user/<int:userId>', methods=['GET'])
 def getPostsByUserId(userId):
@@ -264,12 +268,14 @@ def getPostsByUserId(userId):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 @app.route('/InstaPost/posts/postDate/<string:postDate>', methods=['GET'])
 def getPostsByDate(postDate):
     if request.method == 'GET':
         return PostHandler().getPostsByDate(postDate)
     else:
         return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaPost/posts/numberOfPosts/<string:date>', methods=['GET'])
 def getNumOfPostsByDate(date):

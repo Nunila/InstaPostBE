@@ -2,17 +2,19 @@ from flask import jsonify
 from dao.reactions import ReactionsDAO
 from collections import defaultdict
 
+
 class ReactionHandler:
 
     def buildReactionDictionary(self, tabla):
+        print(tabla)
         result = defaultdict(list)
-
         for row in tabla:
-            valores = []
+            valores = {}
             valores['messageId'] = row[1]
             valores['type'] = row[2]
             valores['count'] = row[3]
-            result[row[0]].append(valores)
+            index = row[0]
+            result[index].append(valores)
 
         return result
 
