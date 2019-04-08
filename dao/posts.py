@@ -19,7 +19,7 @@ class PostsDAO:
 
     def getAllPosts(self):
         cursor = self.conn.cursor()
-        query = "select * from post;"
+        query = "select * from posts;"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -59,6 +59,18 @@ class PostsDAO:
         cursor = self.conn.cursor()
         query = "select postId, chatId, userId, photourl, postDate from posts where postDate = %s;"
         cursor.execute(query, (postDate,))
+        result = []
+        for row in cursor:
+            result.append(row)
+
+        return result
+
+    def getNumberOfPostsPerDay(self):
+        cursor = self.conn.cursor()
+        query = "select date(postdate), count(*) as postsPerDay " \
+                "from posts " \
+                "group by postdate;"
+        cursor.execute(query)
         result = []
         for row in cursor:
             result.append(row)

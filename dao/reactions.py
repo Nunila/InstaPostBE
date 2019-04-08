@@ -1,7 +1,8 @@
 from config.dbconfig import pg_config
 import psycopg2
 import datetime
-
+from config.dbconfig import pg_config
+import psycopg2
 
 class ReactionsDAO:
 
@@ -95,6 +96,28 @@ class ReactionsDAO:
 
         return result
 
+
+    def getReactionById(self, cid):
+        cursor = self.conn.cursor()
+        query = "select * from chat where chatId = %s;"
+        cursor.execute(query, (cid,))
+        result = cursor.fetchone()
+        return result
+
+
+    def reactionsPerMessage(self):
+        cursor = self.conn.cursor()
+        query = "select postid, messageid, type, count(foo.type) from (select * from reaction) as foo group by messageid," \
+                " postid, type order by messageid asc, postid asc;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getReactionsByArgs(self, args):
+        return [self.reactionArray[1], self.reactionArray[2]]
+
     def getLikesCountOnDate(self, date):
         return 541
 
@@ -106,9 +129,6 @@ class ReactionsDAO:
 
     def getDislikesOfPost(self, postid):
         return 9
-
-    def getReactionsByArgs(self, args):
-        return [self.reactionArray[1], self.reactionArray[2]]
 
     def insert(self, json):
         return self.reactionArray[2]

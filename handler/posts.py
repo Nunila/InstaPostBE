@@ -4,7 +4,6 @@ from dao.posts import PostsDAO
 
 class PostHandler:
 
-
     def buildPostDict(self, row):
         result = {}
         result['postId'] = row[0]
@@ -12,6 +11,12 @@ class PostHandler:
         result['userId'] = row[2]
         result['photourl'] = row[3]
         result['postDate'] = row[4]
+        return result
+
+    def buildPostPerDayDict(self, row):
+        result = {}
+        result['day'] = row[0]
+        result['total'] = row[1]
         return result
 
     def buildPostAttributes(self, postId, chatId, userId, photourl, postDate):
@@ -72,6 +77,16 @@ class PostHandler:
         result_list = []
         for row in posts_List:
             result = self.buildPostDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
+
+    def getNumberOfPostsPerDay(self):
+        dao = PostsDAO()
+        posts_List = dao.getNumberOfPostsPerDay()
+        result_list = []
+        for row in posts_List:
+            result = self.buildPostPerDayDict(row)
             result_list.append(result)
 
         return jsonify(result_list)

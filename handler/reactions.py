@@ -1,10 +1,27 @@
 from flask import jsonify
 from dao.reactions import ReactionsDAO
+from collections import defaultdict
 
 
 class ReactionHandler:
 
     def buildReactionDict(self, row):
+        result = {}
+
+    def buildReactionDictionary(self, tabla):
+        print(tabla)
+        result = defaultdict(list)
+        for row in tabla:
+            valores = {}
+            valores['messageId'] = row[1]
+            valores['type'] = row[2]
+            valores['count'] = row[3]
+            index = row[0]
+            result[index].append(valores)
+
+        return result
+
+    def buildReactionAttribute(self, row):
         result = {}
         result['reactionId'] = row[0]
         result['userId'] = row[1]
@@ -84,6 +101,22 @@ class ReactionHandler:
             result_list.append(row)
 
         return jsonify(Message=result_list), 200
+=======
+    def getAllReactions(self):
+        dao = ReactionsDAO()
+        reaction_list = dao.getAllReactions()
+        results = []
+        for row in reaction_list:
+            element = self.buildReactionAttributes(row)
+            results.append(element)
+        return jsonify(Reaction=results), 200
+
+    def getAllReactionsForMessages(self):
+        dao = ReactionsDAO()
+        reaction_list = dao.reactionsPerMessage()
+        results = self.buildReactionDictionary(reaction_list)
+        return jsonify(results), 200
+>>>>>>> nunila-dev
 
     def getLikesUsers(self):
         dao = ReactionsDAO()
