@@ -1,5 +1,6 @@
 from flask import jsonify
 from dao.messages import MessagesDAO
+import datetime
 
 
 class MessageHandler:
@@ -21,7 +22,8 @@ class MessageHandler:
         result['postId'] = row[1]
         result['userId'] = row[2]
         result['content'] = row[3]
-        result['messageDate'] = row[4]
+        result['messageDate'] = row[4].strftime('%b/%d/%Y %H:%M%p')
+        result['username'] = row[5]
         return result
 
 
