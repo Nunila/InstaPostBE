@@ -27,11 +27,14 @@ class ChatsDAO:
         result = []
         for row in cursor:
             result.append(row)
-
         return result
 
-    def getChatById(self, pid):
-        return self.chatArray[0]
+    def getChatById(self, cid):
+        cursor = self.conn.cursor()
+        query = "select * from chat where chatId = %s;"
+        cursor.execute(query, (cid,))
+        result = cursor.fetchone()
+        return result
 
     def getChatsByArgs(self, args):
         return [self.chatArray[1], self.chatArray[2]]
