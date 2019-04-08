@@ -1,16 +1,16 @@
 create table Users(
-userId serial primary key,
-username varchar(20),
-password varchar(200));
+	userId serial primary key,
+	username varchar(20),
+	password varchar(200));
 
 create table Person(
-personId serial primary key,
-firstName varchar(200),
-lastName varchar(200),
-phoneNumber varchar(200),
-email varchar(200),
-birthday date,
-userId integer references Users(userId));
+	personId serial primary key,
+	firstName varchar(200),
+	lastName varchar(200),
+	phoneNumber varchar(200),
+	email varchar(200),
+	birthday date,
+	userId integer references Users(userId));
 
 create table Contacts(
 	ownerId integer references Person(personId),
@@ -51,20 +51,20 @@ create table Reaction(
 create table Participates(
 	userId integer references Users(userId),
 	chatId integer references Chat(chatId),
-primary key (userId, chatId),
-role varchar(20));
+	primary key (userId, chatId),
+	role varchar(20));
 
 create table Mentioned(
 	hashtagId integer references Hashtag(hashtagId),
 	messageId integer references Message(messageId),
-primary key (hashtagId, messageId));
+	primary key (hashtagId, messageId));
 
 CREATE TABLE Caption(
 	postId integer references Post(postId) NOT NULL,
 	messageId integer references Message(messageId) NOT NULL,
-primary key (postId, messageId));
+	primary key (postId, messageId));
 
 CREATE TABLE Reply(
 	postId integer references Post(postId) NOT NULL,
 	messageId integer references Message(messageId) NOT NULL,
-primary key (postId, messageId));
+	primary key (postId, messageId));
