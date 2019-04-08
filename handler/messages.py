@@ -109,7 +109,7 @@ class MessageHandler:
         for row in messages_List:
             result = self.buildRepliesDict(row)
             result_list.append(result)
-
+            print(row)
         return jsonify(result_list)
 
     def getRepliesByPostId(self, postId):

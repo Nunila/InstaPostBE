@@ -23,7 +23,7 @@ class ReactionHandler:
             result = self.buildReactionDict(row)
             result_list.append(result)
 
-        return jsonify(Message=result_list), 200
+        return jsonify(result_list), 200
 
     def getReactionById(self, reactionId):
         dao = ReactionsDAO()
@@ -33,7 +33,7 @@ class ReactionHandler:
             result = self.buildReactionDict(row)
             result_list.append(result)
 
-        return jsonify(Message=result_list), 200
+        return jsonify(Messaresult_list), 200
 
     def getReactionsByPostId(self, postId):
         dao = ReactionsDAO()
