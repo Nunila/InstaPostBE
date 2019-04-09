@@ -107,8 +107,13 @@ class ReactionsDAO:
 
     def reactionsPerMessage(self):
         cursor = self.conn.cursor()
-        query = "select postid, messageid, type, count(foo.type) from (select * from reaction) as foo group by messageid," \
-                " postid, type order by messageid asc, postid asc;"
+        # query = "select postid, messageid, type, count(foo.type) from (select * from reaction) as foo group by messageid," \
+        #         " postid, type order by messageid asc, postid asc;"
+        query = "select likes.messageid, likes.likecount, dislikes.dislikecount from " \
+                "(select messageid, count(r.type) as likecount from reaction as r where type = 'LIKE' group by messageid) as likes " \
+                "full outer join " \
+                "(select messageid, count(r.type) as dislikecount from reaction as r where type = 'DISLIKE' group by messageid) as dislikes " \
+                "on likes.messageId = dislikes.messageId order by messageid;"
         cursor.execute(query)
         result = []
         for row in cursor:
