@@ -1,16 +1,16 @@
 create table Users(
-  userId serial primary key,
-  username varchar(20),
-  password varchar(200));
+	userId serial primary key,
+	username varchar(20),
+	password varchar(200));
 
 create table Person(
-  personId serial primary key,
-  firstName varchar(200),
-  lastName varchar(200),
-  phoneNumber varchar(200),
-  email varchar(200),
-  birthday date,
-  userId integer references Users(userId));
+	personId serial primary key,
+	firstName varchar(200),
+	lastName varchar(200),
+	phoneNumber varchar(200),
+	email varchar(200),
+	birthday date,
+	userId integer references Users(userId));
 
 create table Contacts(
 	ownerId integer references Person(personId),
@@ -26,6 +26,7 @@ create table Post(
 	postId serial primary key,
 	chatId integer references Chat(chatId) NOT NULL,
 	userId integer references Users(userId) NOT NULL,
+    	messageId integer references Message(messageId) NOT NULL,
 	photourl varchar(200),
 	postDate timestamp);
 
@@ -36,11 +37,9 @@ create table Hashtag(
 
 create table Message(
 	messageId serial primary key,
-	postId integer references Post(postId) 	NOT NULL,
-	userId integer references Users(userId) 	NOT NULL,
+	userId integer references Users(userId) NOT NULL,
 	content varchar(500),
-	messageDate date,
-	type varchar(20));
+	messageDate date);
 
 create table Reaction(
 	reactionId serial primary key,
@@ -50,11 +49,17 @@ create table Reaction(
 	type  varchar(20));
 
 create table Participates(
-	participationId serial primary key,
 	userId integer references Users(userId),
-	chatId integer references Chat(chatId));
+	chatId integer references Chat(chatId),
+	primary key (userId, chatId),
+	role varchar(20));
 
 create table Mentioned(
-	menditonedId serial primary key,
 	hashtagId integer references Hashtag(hashtagId),
-	messageId integer references Message(messageId));
+	messageId integer references Message(messageId),
+	primary key (hashtagId, messageId));
+
+CREATE TABLE Reply(
+	postId integer references Post(postId) NOT NULL,
+	messageId integer references Message(messageId) NOT NULL,
+	primary key (postId, messageId));

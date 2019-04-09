@@ -19,7 +19,8 @@ class PostsDAO:
 
     def getAllPosts(self):
         cursor = self.conn.cursor()
-        query = "select * from posts;"
+        query = "select postid, userid, messageid, chatid, photourl, postdate, content, username " \
+                "from post natural inner join message natural inner join users;"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -29,7 +30,7 @@ class PostsDAO:
 
     def getPostById(self, postId):
         cursor = self.conn.cursor()
-        query = "select postId, chatId, userId, photourl, postDate from posts where postId = %s;"
+        query = "select postId, chatId, userId, photourl, postDate from post where postId = %s;"
         cursor.execute(query, (postId,))
         result = cursor.fetchone()
 
@@ -37,7 +38,7 @@ class PostsDAO:
 
     def getPostsByUserId(self, userId):
         cursor = self.conn.cursor()
-        query = "select postId, chatId, userId, photourl, postDate from posts where userId = %s;"
+        query = "select postId, chatId, userId, photourl, postDate from post where userId = %s;"
         cursor.execute(query, (userId,))
         result = []
         for row in cursor:
@@ -47,7 +48,7 @@ class PostsDAO:
 
     def getPostsByChatId(self, chatId):
         cursor = self.conn.cursor()
-        query = "select postId, chatId, userId, photourl, postDate from posts where chatId = %s;"
+        query = "select postId, chatId, userId, photourl, postDate from post where chatId = %s;"
         cursor.execute(query, (chatId,))
         result = []
         for row in cursor:
@@ -57,8 +58,20 @@ class PostsDAO:
 
     def getPostsByDate(self, postDate):
         cursor = self.conn.cursor()
-        query = "select postId, chatId, userId, photourl, postDate from posts where postDate = %s;"
+        query = "select postId, chatId, userId, photourl, postDate from post where postDate = %s;"
         cursor.execute(query, (postDate,))
+        result = []
+        for row in cursor:
+            result.append(row)
+
+        return result
+
+    def getNumberOfPostsPerDay(self):
+        cursor = self.conn.cursor()
+        query = "select date(postdate), count(*) as postsPerDay " \
+                "from post " \
+                "group by postdate;"
+        cursor.execute(query)
         result = []
         for row in cursor:
             result.append(row)

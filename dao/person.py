@@ -1,5 +1,6 @@
-from config import dbconfig
 import psycopg2
+from config.dbconfig import pg_config
+
 
 class PersonDAO:
 
@@ -8,12 +9,13 @@ class PersonDAO:
                    {"contactID": 2, "firstName": "JoJo", "lastName": "Jojo", "phone": "123454290",
                     "email": "jojoreference@gmail.com", "birthday": "01/01/1968"}]
 
-    def _init_(self):
-        connectionURL="dbname=%s user=%s password=%s" % (dbconfig['dbname'],
-                                                         dbconfig['user'],
-                                                         dbconfig['passwd'])
+    def __init__(self):
+        connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
+                                                            pg_config['user'],
+                                                            pg_config['passwd'],
+                                                            )
 
-        self.conn = psycopg2._connect(connectionURL)
+        self.conn = psycopg2._connect(connection_url)
 
 
     def getAllPersons(self):

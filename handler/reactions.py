@@ -1,13 +1,50 @@
 from flask import jsonify
 from dao.reactions import ReactionsDAO
+from collections import defaultdict
 
 
 class ReactionHandler:
 
+    def buildReactionDictionary(self, row):
+        result = {}
+        result['messageId'] = row[0]
+        result['likes'] = row[1]
+        result['dislikes'] = row[2]
+        if result['likes'] is None:
+            result['likes'] = 0
+        if result['dislikes'] is None:
+            result['dislikes'] = 0
+
+        return result
+
+    def buildReactionAttribute(self, row):
+        result = []
+        result['reactionId'] = row[0]
+        result['userId'] = row[1]
+        result['postId'] = row[2]
+        result['messageId'] = row[3]
+        result['type'] = row[4]
+        return result
+
     def getAllReactions(self):
         dao = ReactionsDAO()
-        reactions_list = dao.getAllReactions()
-        return jsonify(reactions_list), 200
+        reaction_list = dao.getAllReactions()
+        results = []
+        for row in reaction_list:
+            element = self.buildReactionAttributes(row)
+            results.append(element)
+        return jsonify(Reaction=results), 200
+
+    def getAllReactionsForMessages(self):
+        dao = ReactionsDAO()
+        reaction_list = dao.reactionsPerMessage()
+        # results = self.buildReactionDictionary(reaction_list)
+        # return jsonify(results), 200
+        results = []
+        for row in reaction_list:
+            element = self.buildReactionDictionary(row)
+            results.append(element)
+        return jsonify(results), 200
 
     def getReactionById(self, cid):
         dao = ReactionsDAO()
@@ -53,11 +90,3 @@ class ReactionHandler:
         dao = ReactionsDAO()
         count = dao.getDislikesOfPost(postId)
         return jsonify(DislikesOnPost=count)
-
-
-
-
-
-
-
-

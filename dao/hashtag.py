@@ -19,7 +19,6 @@ class HashtagsDAO:
                     {"hashtagId": 4, "hashName": '#takemeback', "date": datetime.datetime.now()},
                     {"hashtagId": 5, "hashName": '#blessed', "date": datetime.datetime.now()}]
 
-
     def getAllHashtags(self):
         cursor = self.conn.cursor()
         query = "select * from Hashtag;"
