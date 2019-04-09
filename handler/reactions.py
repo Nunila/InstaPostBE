@@ -5,16 +5,15 @@ from collections import defaultdict
 
 class ReactionHandler:
 
-    def buildReactionDictionary(self, tabla):
-        print(tabla)
-        result = defaultdict(list)
-        for row in tabla:
-            valores = {}
-            valores['messageId'] = row[1]
-            valores['type'] = row[2]
-            valores['count'] = row[3]
-            index = row[0]
-            result[index].append(valores)
+    def buildReactionDictionary(self, row):
+        result = {}
+        result['messageId'] = row[0]
+        result['likes'] = row[1]
+        result['dislikes'] = row[2]
+        if result['likes'] is None:
+            result['likes'] = 0
+        if result['dislikes'] is None:
+            result['dislikes'] = 0
 
         return result
 
@@ -39,7 +38,12 @@ class ReactionHandler:
     def getAllReactionsForMessages(self):
         dao = ReactionsDAO()
         reaction_list = dao.reactionsPerMessage()
-        results = self.buildReactionDictionary(reaction_list)
+        # results = self.buildReactionDictionary(reaction_list)
+        # return jsonify(results), 200
+        results = []
+        for row in reaction_list:
+            element = self.buildReactionDictionary(row)
+            results.append(element)
         return jsonify(results), 200
 
     def getReactionById(self, cid):

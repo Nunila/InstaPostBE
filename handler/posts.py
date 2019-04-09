@@ -7,10 +7,14 @@ class PostHandler:
     def buildPostDict(self, row):
         result = {}
         result['postId'] = row[0]
-        result['chatId'] = row[1]
-        result['userId'] = row[2]
-        result['photourl'] = row[3]
-        result['postDate'] = row[4]
+        result['userId'] = row[1]
+        result['messageId'] = row[2]
+        result['chatId'] = row[3]
+        result['photourl'] = row[4]
+        result['postDate'] = row[5]
+        result['content'] = row[6]
+        result['username'] = row[7]
+
         return result
 
     def buildPostPerDayDict(self, row):

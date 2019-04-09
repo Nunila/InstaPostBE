@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS, cross_origin
 from handler.persons import PersonsHandler
 from handler.users import UsersHandler
@@ -26,6 +26,13 @@ CORS(app)
 @cross_origin()
 def greeting():
     return 'Hello, this is the InstaPost DB App!'
+
+
+@app.route('/InstaPost/images/<string:filename>', methods=['GET'])
+def getImage(filename):
+    if request.method == 'GET':
+        return send_from_directory('images', filename)
+
 
 # =========================================USERS============================================#
 

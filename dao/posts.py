@@ -19,7 +19,8 @@ class PostsDAO:
 
     def getAllPosts(self):
         cursor = self.conn.cursor()
-        query = "select * from post;"
+        query = "select postid, userid, messageid, chatid, photourl, postdate, content, username " \
+                "from post natural inner join message natural inner join users;"
         cursor.execute(query)
         result = []
         for row in cursor:
