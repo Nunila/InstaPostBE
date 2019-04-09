@@ -32,7 +32,7 @@ class UsersDAO:
 
     def getUserByUName(self, uname):
         cursor = self.conn.cursor()
-        query = "select * from (select userId, username, personId, firstName, lastName, phoneNumber, email, birthday" \
+        query = "select * from (select userId, username, personId, firstName, lastName, phoneNumber, email, birthday " \
                 "from Users natural inner join Person where Person.userid = Users.userid) as foo where foo.userName = %s;"
         cursor.execute(query, (uname,))
         result = cursor.fetchone()

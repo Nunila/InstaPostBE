@@ -74,7 +74,7 @@ class ParticipatesDAO:
 
     def getUsersInSpecificChat(self, chatid):
         cursor = self.conn.cursor()
-        query = "select firstname, lastname, phonenumber, email, birthday, username " \
+        query = "select firstname, lastname, phonenumber, email, birthday, username, userid " \
                 "from (participates as PP natural inner join users natural inner join " \
                 "person natural inner join chat)" \
                 "where PP.chatid=%s;"
@@ -87,7 +87,7 @@ class ParticipatesDAO:
 
     def getOwnerInSpecificChat(self, chatid):
         cursor = self.conn.cursor()
-        query = "select firstname, lastname, phonenumber, email, birthday, username " \
+        query = "select firstname, lastname, phonenumber, email, birthday, username, userid " \
                 "from (participates as PP natural inner join users natural inner join " \
                 "person natural inner join chat)" \
                 "where PP.role='owner' and PP.chatid=%s;"

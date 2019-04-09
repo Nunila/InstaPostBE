@@ -22,7 +22,8 @@ class ChatsDAO:
 
     def getAllChats(self):
         cursor = self.conn.cursor()
-        query = "select * from chat;"
+        query = "select chatid, chatname, creationdate, userid from chat natural inner join participates " \
+                "where role='owner';"
         cursor.execute(query)
         result = []
         for row in cursor:

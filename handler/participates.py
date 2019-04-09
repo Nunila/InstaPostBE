@@ -12,6 +12,7 @@ class ParticipatesHandler:
         result['email'] = row[3]
         result['birthday'] = row[4]
         result['username'] = row[5]
+        result['userId'] = row[6]
         return result
 
     def buildParticipatesAttributes(self, postId, chatId, userId, photourl, postDate):
@@ -28,10 +29,13 @@ class ParticipatesHandler:
     def getUsersInSpecificChat(self, chatid):
         dao = ParticipatesDAO()
         user_List = dao.getUsersInSpecificChat(chatid)
-        result_list = []
-        for row in user_List:
-            result = self.buildUserDict(row)
-            result_list.append(result)
+        if not user_List:
+            return jsonify(Error="Chat Not Found"), 404
+        else:
+            result_list = []
+            for row in user_List:
+                result = self.buildUserDict(row)
+                result_list.append(result)
 
         return jsonify(result_list)
 

@@ -9,6 +9,7 @@ class ChatHandler:
         result['chatId'] = row[0]
         result['chatName'] = row[1]
         result['creationDate'] = row[2]
+        result['ownerId'] = row[3]
         return result
 
     def build_chat_attributes(self, cid, cname, date):

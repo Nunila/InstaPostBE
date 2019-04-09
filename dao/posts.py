@@ -30,7 +30,8 @@ class PostsDAO:
 
     def getPostById(self, postId):
         cursor = self.conn.cursor()
-        query = "select postId, chatId, userId, photourl, postDate from post where postId = %s;"
+        query = "select postId, chatId, userId, photourl, messageId, content, postDate " \
+                "from post natural inner join message where postId = %s;"
         cursor.execute(query, (postId,))
         result = cursor.fetchone()
 
@@ -38,7 +39,8 @@ class PostsDAO:
 
     def getPostsByUserId(self, userId):
         cursor = self.conn.cursor()
-        query = "select postId, chatId, userId, photourl, postDate from post where userId = %s;"
+        query = "select postId, chatId, userId, photourl, messageId, content, postDate " \
+                "from post natural inner join message where userId = %s;"
         cursor.execute(query, (userId,))
         result = []
         for row in cursor:
@@ -48,7 +50,8 @@ class PostsDAO:
 
     def getPostsByChatId(self, chatId):
         cursor = self.conn.cursor()
-        query = "select postId, chatId, userId, photourl, postDate from post where chatId = %s;"
+        query = "select postId, chatId, userId, photourl, messageId, content, postDate " \
+                "from post natural inner join message where chatId = %s;"
         cursor.execute(query, (chatId,))
         result = []
         for row in cursor:
@@ -58,7 +61,8 @@ class PostsDAO:
 
     def getPostsByDate(self, postDate):
         cursor = self.conn.cursor()
-        query = "select postId, chatId, userId, photourl, postDate from post where postDate = %s;"
+        query = "select postId, chatId, userId, photourl, messageId, content, postDate " \
+                "from post natural inner join message where postDate = %s;"
         cursor.execute(query, (postDate,))
         result = []
         for row in cursor:

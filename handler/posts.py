@@ -17,6 +17,18 @@ class PostHandler:
 
         return result
 
+    def buildPostDict2(self, row):
+        result = {}
+        result['postId'] = row[0]
+        result['chatId'] = row[1]
+        result['userId'] = row[2]
+        result['photourl'] = row[3]
+        result['messageId'] = row[4]
+        result['content']= row[5]
+        result['postDate'] = row[6]
+
+        return result
+
     def buildPostPerDayDict(self, row):
         result = {}
         result['day'] = row[0]
@@ -50,7 +62,7 @@ class PostHandler:
         posts_List = dao.getPostById(postId)
         result_list = []
         for row in posts_List:
-            result = self.buildPostDict(row)
+            result = self.buildPostDict2(row)
             result_list.append(result)
 
         return jsonify(result_list)
@@ -60,7 +72,7 @@ class PostHandler:
         posts_List = dao.getPostsByChatId(chatId)
         result_list = []
         for row in posts_List:
-            result = self.buildPostDict(row)
+            result = self.buildPostDict2(row)
             result_list.append(result)
 
         return jsonify(result_list)
@@ -70,7 +82,7 @@ class PostHandler:
         posts_List = dao.getPostsByUserId(userId)
         result_list = []
         for row in posts_List:
-            result = self.buildPostDict(row)
+            result = self.buildPostDict2(row)
             result_list.append(result)
 
         return jsonify(result_list)
@@ -80,7 +92,7 @@ class PostHandler:
         posts_List = dao.getPostsByDate(postDate)
         result_list = []
         for row in posts_List:
-            result = self.buildPostDict(row)
+            result = self.buildPostDict2(row)
             result_list.append(result)
 
         return jsonify(result_list)
