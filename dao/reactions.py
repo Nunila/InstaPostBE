@@ -94,7 +94,7 @@ class ReactionsDAO:
         cursor = self.conn.cursor()
         query = "select userid, username, firstname, lastname, reactiondate from reaction natural inner join users natural inner join person " \
                 "where messageid=%s and type='DISLIKE';"
-        cursor.execute(query,(messageId))
+        cursor.execute(query,(messageId,))
         result = []
         for row in cursor:
             result.append(row)
