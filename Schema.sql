@@ -39,7 +39,7 @@ create table Message(
 	messageId serial primary key,
 	userId integer references Users(userId) NOT NULL,
 	content varchar(500),
-	messageDate date);
+	messageDate timestamp);
 
 create table Reaction(
 	reactionId serial primary key,
