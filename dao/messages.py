@@ -53,7 +53,7 @@ class MessagesDAO:
 
     def getAllReplies(self):
         cursor = self.conn.cursor()
-        query = "select messageid, postid, userid, content, messagedate from reply natural inner join message;"
+        query = "select messageid, postid, userid, content, messagedate, username from reply natural inner join message;"
         cursor.execute(query,)
         result = []
         for row in cursor:
