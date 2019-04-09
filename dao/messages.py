@@ -17,7 +17,7 @@ class MessagesDAO:
 
     def getAllMessages(self):
         cursor = self.conn.cursor()
-        query = "select messageId, postId, userId, content, messageDate, type from message;"
+        query = "select messageId, userId, content, messageDate from message;"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -26,7 +26,7 @@ class MessagesDAO:
 
     def getMessageById(self, messageId):
         cursor = self.conn.cursor()
-        query = "select messageId, postId, userId, content, messageDate, type from message where messageId = %s;"
+        query = "select messageId, userId, content, messageDate from message where messageId = %s;"
         cursor.execute(query, (messageId,))
         result = []
         for row in cursor:
@@ -35,7 +35,7 @@ class MessagesDAO:
 
     def getMessagesByPostId(self, postId):
         cursor = self.conn.cursor()
-        query = "select messageId, postId, userId, content, messageDate, type from message where postId = %s;"
+        query = "select messageId, userId, content, messageDate from message where postId = %s;"
         cursor.execute(query, (postId,))
         result = []
         for row in cursor:
@@ -44,7 +44,7 @@ class MessagesDAO:
 
     def getMessagesByUserId(self, userId):
         cursor = self.conn.cursor()
-        query = "select messageId, postId, userId, content, messageDate, type from message where userId = %s;"
+        query = "select messageId, userId, content, messageDate from message where userId = %s;"
         cursor.execute(query, (userId,))
         result = []
         for row in cursor:
@@ -53,7 +53,7 @@ class MessagesDAO:
 
     def getAllReplies(self):
         cursor = self.conn.cursor()
-        query = "select messageid, postid, userid, content, messagedate, username from reply natural inner join message natural inner join users;"
+        query = "select messageid, postId, userid, content, messagedate, username from reply natural inner join message natural inner join users;"
         cursor.execute(query,)
         result = []
         for row in cursor:
@@ -62,7 +62,7 @@ class MessagesDAO:
 
     def getRepliesByPostId(self, postId):
         cursor = self.conn.cursor()
-        query = "select messageid, postid, userid, content, messagedate, username from reply natural inner join message natural inner join users where postId=%s;"
+        query = "select messageid, postId, userid, content, messagedate, username from reply natural inner join message natural inner join users where postId=%s;"
         cursor.execute(query, (postId,))
         result = []
         for row in cursor:
@@ -71,7 +71,7 @@ class MessagesDAO:
 
     def getMessagesByDate(self, messageDate):
         cursor = self.conn.cursor()
-        query = "select messageId, postId, userId, content, messageDate, type from message where messageDate = %s;"
+        query = "select messageId, userId, content, messageDate, type from message where messageDate = %s;"
         cursor.execute(query, (messageDate,))
         result = []
         for row in cursor:
@@ -80,12 +80,12 @@ class MessagesDAO:
 
     def getMessagesByChatId(self, chatId):
         cursor = self.conn.cursor()
-        query = "(select messageId, post.postId, message.userId, content, messageDate, type from message " \
+        query = "(select messageId, message.userId, content, messageDate from message " \
                 "natural join caption " \
                 "inner join post on caption.postId = post.postId " \
                 "where chatId=%s) " \
                 "union " \
-                "(select messageId, post.postId, message.userId, content, messageDate, type from message " \
+                "(select messageId, message.userId, content, messageDate from message " \
                 "natural join reply " \
                 "inner join post on reply.postId = post.postId " \
                 "where chatId=%s);"

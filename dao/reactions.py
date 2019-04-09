@@ -62,38 +62,42 @@ class ReactionsDAO:
 
     def getLikesCountByMessageId(self, messageId):
         cursor = self.conn.cursor()
-        query = "select count(reactionId) from Reaction where messageId=%s and type='LIKE';"
+        query = "select messageId, count(reactionId) from Reaction where messageId=%s and type='LIKE' group by messageId;"
         cursor.execute(query, (messageId,))
         result = cursor.fetchone()
-
+        print(result)
+        if result is None:
+            result=(messageId, 0)
         return result
 
     def getDislikesCountByMessageId(self, messageId):
         cursor = self.conn.cursor()
-        query = "select count(reactionId) from Reaction where messageId=%s and type='DISLIKE';"
+        query = "select messageId, count(reactionId) from Reaction where messageId=%s and type='DISLIKE' group by messageId;"
         cursor.execute(query, (messageId,))
         result = cursor.fetchone()
-
+        print(result)
+        if result is None:
+            result=(messageId, 0)
         return result
 
-    def getLikesUsers(self):
+    def getUsersWhoLikesByMessageId(self, messageId):
         cursor = self.conn.cursor()
-        query = "select userId, username from Reaction natural inner join Users where type='LIKE';"
-        cursor.execute(query,)
+        query = "select userid, username, firstname, lastname, reactiondate from reaction natural inner join users natural inner join person " \
+                "where messageid=%s and type='LIKE';"
+        cursor.execute(query, (messageId,))
         result = []
         for row in cursor:
             result.append(row)
-
         return result
 
-    def getDislikesUsers(self):
+    def getUsersWhoDislikesByMessageId(self, messageId):
         cursor = self.conn.cursor()
-        query = "select userId, username from Reaction natural inner join Users where type='DISLIKE';"
-        cursor.execute(query,)
+        query = "select userid, username, firstname, lastname, reactiondate from reaction natural inner join users natural inner join person " \
+                "where messageid=%s and type='DISLIKE';"
+        cursor.execute(query,(messageId))
         result = []
         for row in cursor:
             result.append(row)
-
         return result
 
 

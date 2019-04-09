@@ -9,11 +9,9 @@ class MessageHandler:
     def builMessageDict(self, row):
         result = {}
         result['messageId'] = row[0]
-        result['postId'] = row[1]
-        result['userId'] = row[2]
-        result['content'] = row[3]
-        result['messageDate'] = row[4]
-        result['type'] = row[5]
+        result['userId'] = row[1]
+        result['content'] = row[2]
+        result['messageDate'] = row[3]
         return result
 
     def buildRepliesDict(self, row):
@@ -22,20 +20,17 @@ class MessageHandler:
         result['postId'] = row[1]
         result['userId'] = row[2]
         result['content'] = row[3]
-        result['messageDate'] = row[4].strftime('%b/%d/%Y %H:%M%p')
+        result['messageDate'] = row[4]
         result['username'] = row[5]
         return result
 
 
-
-    def builMessageAttributes(self, messageId, postId, userId, content, messageDate, type):
+    def builMessageAttributes(self, messageId, userId, content, messageDate, type):
         result = {}
         result['messageId'] = messageId
-        result['postId'] = postId
         result['userId'] = userId
         result['content'] = content
         result['messageDate'] = messageDate
-        result['type'] = type
         return result
 
 #---------------Operations---------------------------------------------------------

@@ -262,6 +262,20 @@ def getDislikesCountOfMessage(messageId):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+@app.route('/InstaPost/reactions/userswholike/message/<int:messageId>', methods=['GET'])
+def getUsersWhoLikeByMessageId(messageId):
+    if request.method == 'GET':
+        return ReactionHandler().getUsersWhoLikesByMessageId(messageId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPost/reactions/userswhodislike/message/<int:messageId>', methods=['GET'])
+def getUsersWhoDislikeByMessageId(messageId):
+    if request.method == 'GET':
+        return ReactionHandler().getUsersWhoDislikesByMessageId(messageId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 # --------------------------POSTS-----------------------------------------
 
 
