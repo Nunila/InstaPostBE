@@ -46,7 +46,8 @@ create table Reaction(
 	userId integer references Users(userId) NOT NULL,
 	postId integer references Post(postId) NOT NULL,
 	messageId integer references Message(messageId),
-	type  varchar(20));
+	type  varchar(20)
+	reactionDate timestamp);
 
 create table Participates(
 	userId integer references Users(userId),
