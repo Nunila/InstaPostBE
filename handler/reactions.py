@@ -96,9 +96,9 @@ class ReactionHandler:
             results.append(result)
         return jsonify(results), 200
 
-    def getUsersWhoDisikesByMessageId(self, messageId):
+    def getUsersWhoDislikesByMessageId(self, messageId):
         dao = ReactionsDAO()
-        reaction_list = dao.getUsersWhoLikesByMessageId(messageId)
+        reaction_list = dao.getUsersWhoDislikesByMessageId(messageId)
         results = []
         for row in reaction_list:
             result = self.buildUserReactionDictionary(row)

@@ -270,7 +270,7 @@ def getUsersWhoLikeByMessageId(messageId):
         return jsonify(Error="Method not allowed."), 405
 
 @app.route('/InstaPost/reactions/userswhodislike/message/<int:messageId>', methods=['GET'])
-def getUsersWhoDislikeByMessageId(messageId):
+def getUsersWhoDislikesByMessageId(messageId):
     if request.method == 'GET':
         return ReactionHandler().getUsersWhoDislikesByMessageId(messageId)
     else:
