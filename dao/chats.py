@@ -37,6 +37,16 @@ class ChatsDAO:
         result = cursor.fetchone()
         return result
 
+    def getChatsByParticipatingId(self, uid):
+        cursor = self.conn.cursor()
+        query = "select chatid, chatname, creationdate, userid from chat natural inner join participates " \
+                "where userid= %s;"
+        cursor.execute(query, (uid,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
     def getChatsByArgs(self, args):
         return [self.chatArray[1], self.chatArray[2]]
 

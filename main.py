@@ -164,10 +164,10 @@ def getChatById(cid):
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaPost/chats/<int:uid>/member', methods=['GET'])
-def getChatByMemberId(uid):
+@app.route('/InstaPost/chats/member/<int:uid>', methods=['GET'])
+def getChatByParticipatingId(uid):
     if request.method == 'GET':
-        return ChatHandler().getChatsByMemberId(uid)
+        return ChatHandler().getChatsByParticipatingId(uid)
     else:
         return jsonify(Error="Method not allowed."), 405
 
