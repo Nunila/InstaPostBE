@@ -1,1 +1,1 @@
-web: gunicorn main:instapostdb
+web: gunicorn main:app
