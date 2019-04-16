@@ -46,21 +46,21 @@ create table Reaction(
 	userId integer references Users(userId) NOT NULL,
 	postId integer references Post(postId) NOT NULL,
 	messageId integer references Message(messageId),
-	type  varchar(20)
+	type  varchar(20),
 	reactionDate timestamp);
 
 create table Participates(
 	userId integer references Users(userId),
 	chatId integer references Chat(chatId),
-primary key (userId, chatId),
-role varchar(20));
+	primary key (userId, chatId),
+	role varchar(20));
 
 create table Mentioned(
 	hashtagId integer references Hashtag(hashtagId),
 	messageId integer references Message(messageId),
-primary key (hashtagId, messageId));
+	primary key (hashtagId, messageId));
 
 CREATE TABLE Reply(
 	postId integer references Post(postId) NOT NULL,
 	messageId integer references Message(messageId) NOT NULL,
-primary key (postId, messageId));
+	primary key (postId, messageId));
