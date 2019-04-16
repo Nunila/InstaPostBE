@@ -9,7 +9,7 @@ class PostsDAO:
          #                                                   pg_config['user'],
           #                                                  pg_config['passwd'],
            #                                                 )
-        DB_URL = os.environ(pg_config['dburl'])
+        DB_URL = os.environ.get(pg_config['dburl'])
         self.conn = psycopg2.connect(DB_URL, sslmode='require')
 
     postsArray = [{"postId": 1, "photoId": '345C6', "postDate": '2/21/2019 12:00:00'},
