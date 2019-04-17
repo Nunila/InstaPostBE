@@ -10,10 +10,11 @@ class PersonDAO:
                     "email": "jojoreference@gmail.com", "birthday": "01/01/1968"}]
 
     def __init__(self):
-        connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
-                                                            pg_config['user'],
-                                                            pg_config['passwd'],
-                                                            )
+        connection_url = "dbname=%s user=%s password=%s host=%s" % (pg_config['dbname'],
+                                                                           pg_config['user'],
+                                                                           pg_config['passwd'],
+                                                                           pg_config['host']
+                                                                           )
 
         self.conn = psycopg2._connect(connection_url)
 
