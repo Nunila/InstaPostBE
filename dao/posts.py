@@ -5,12 +5,12 @@ import os
 class PostsDAO:
 
     def __init__(self):
-        #connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
-         #                                                   pg_config['user'],
-          #                                                  pg_config['passwd'],
-           #                                                 )
-        DB_URL = os.environ.get(pg_config['dburl'])
-        self.conn = psycopg2.connect(DB_URL, sslmode='require')
+        connection_url = "dbname=%s user=%s password=%s host=%s port=%" % (pg_config['dbname'],
+                                                                           pg_config['user'],
+                                                                           pg_config['passwd'],
+                                                                           pg_config['host'],
+                                                                           pg_config['port'])
+        self.conn = psycopg2.connect(connection_url)
 
     postsArray = [{"postId": 1, "photoId": '345C6', "postDate": '2/21/2019 12:00:00'},
                   {"postId": 2, "photoId": '265A2', "postDate": '2/14/2018 15:00:00'},
