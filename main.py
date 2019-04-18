@@ -181,6 +181,13 @@ def addPersonToChat(cid, personid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+# ---------------------------PARTICIPATES--------------------------------
+
+@app.route('/InstaPost/participates', methods=['POST'])
+def addParticipatesRelationship():
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ParticipatesHandler().insertNewChatJson(request.json)
 
 # ---------------------------REACTIONS--------------------------------
 

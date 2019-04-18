@@ -67,9 +67,17 @@ class ChatHandler:
         return jsonify(chat_list), 200
 
     def insertChatJson(self, json):
-        dao = ChatsDAO()
-        newchat = dao.insert(json)
-        return jsonify(newchat), 200
+        chatname = json['chatName']
+        creationDate = json['creationDate']
+
+        if chatname and creationDate:
+            dao = ChatsDAO()
+            chatid = dao.insert(chatname, creationDate)
+            result = self.build_chat_attributes(chatid, chatname, creationDate)
+            return jsonify(result), 201
+        else:
+
+            return jsonify(Error="Unexpected attributes in post request"), 400
 
     def addContactToChat(self, cid, personid):
         dao = ChatsDAO()

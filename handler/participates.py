@@ -48,3 +48,20 @@ class ParticipatesHandler:
             user = self.buildUserDict(row)
 
         return jsonify(User=user)
+
+    def insertNewChatJson(self, json):
+        owner = json['ownerId']
+        members = json['members']
+        chatId = json['chatId']
+
+        if owner and members and chatId:
+            dao = ParticipatesDAO()
+            dao.insert(chatId, owner, 'owner')
+            for member in members:
+                dao.insert(chatId, member, 'member')
+
+                # result = self.build_chat_attributes(chatid, chatname, creationDate)
+            return jsonify(json), 201
+        else:
+
+            return jsonify(Error="Unexpected attributes in post request"), 400

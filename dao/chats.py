@@ -53,8 +53,14 @@ class ChatsDAO:
     def getChatsByMemberId(self, uid):
         return [self.chatArray[3], self.chatArray[4]]
 
-    def insert(self, json):
-        return self.chatArray[2]
+    def insert(self, chatname, creationdate):
+        cursor = self.conn.cursor()
+        query = "insert into chat(chatName, creationDate) values (%s, %s) returning chatid;"
+        cursor.execute(query, (chatname, creationdate,))
+        pid = cursor.fetchone()[0]
+        self.conn.commit()
+
+        return pid
 
     def addContactToChat(self, cid, pid):
         return "Contact added successfully to chat."
