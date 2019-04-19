@@ -38,14 +38,30 @@ class ChatsDAO:
         result = cursor.fetchone()
         return result
 
+    def getChatsByParticipatingId(self, uid):
+        cursor = self.conn.cursor()
+        query = "select chatid, chatname, creationdate, userid, role from chat natural inner join participates " \
+                "where userid= %s;"
+        cursor.execute(query, (uid,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
     def getChatsByArgs(self, args):
         return [self.chatArray[1], self.chatArray[2]]
 
     def getChatsByMemberId(self, uid):
         return [self.chatArray[3], self.chatArray[4]]
 
-    def insert(self, json):
-        return self.chatArray[2]
+    def insert(self, chatname, creationdate):
+        cursor = self.conn.cursor()
+        query = "insert into chat(chatName, creationDate) values (%s, %s) returning chatid;"
+        cursor.execute(query, (chatname, creationdate,))
+        pid = cursor.fetchone()[0]
+        self.conn.commit()
+
+        return pid
 
     def addContactToChat(self, cid, pid):
         return "Contact added successfully to chat."
@@ -53,8 +69,17 @@ class ChatsDAO:
     def update(self, pid, form):
         return self.chatArray[4]
 
-    def delete(self, pid):
-        return pid
+    def delete(self, cid):
+        cursor = self.conn.cursor()
+        query = "delete from participates where chatid = %s"
+        cursor.execute(query, (cid,))
+        self.conn.commit()
+
+        query = "delete from chat where chatid = %s;"
+        cursor.execute(query, (cid,))
+        self.conn.commit()
+
+        return cid
 
     def deleteContactFromChat(self, cid, personid):
         return

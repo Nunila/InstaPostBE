@@ -20,7 +20,7 @@ class ContactDAO:
 
     def getContactsOfPerson(self, pid):
         cursor = self.conn.cursor()
-        query = "select firstname, lastname, phonenumber, email, birthday, username " \
+        query = "select firstname, lastname, phonenumber, email, birthday, username, userid, personid " \
                 "from users as U natural inner join " \
                 "(contacts as C inner join Person as P on P.personid = C.contactid ) " \
                 "where C.ownerid = %s;"

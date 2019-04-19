@@ -1,5 +1,6 @@
 from flask import jsonify
 from dao.chats import ChatsDAO
+from handler.participates import ParticipatesHandler
 
 
 class ChatHandler:
@@ -10,6 +11,17 @@ class ChatHandler:
         result['chatName'] = row[1]
         result['creationDate'] = row[2]
         result['ownerId'] = row[3]
+        return result
+
+    def buildChatWithRoleDict(self, row):
+        result = {}
+        result['chatId'] = row[0]
+        result['chatName'] = row[1]
+        result['creationDate'] = row[2]
+        if row[4] == 'owner':
+            result['ownerId'] = row[3]
+        else:
+            result['ownerId'] = 0
         return result
 
     def build_chat_attributes(self, cid, cname, date):
@@ -51,21 +63,35 @@ class ChatHandler:
 
         return jsonify(result_list)
 
+    def getChatsByParticipatingId(self, uid):
+        dao = ChatsDAO()
+        chats_List = dao.getChatsByParticipatingId(uid)
+        result_list = []
+        for row in chats_List:
+            result = self.buildChatWithRoleDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
 
     def searchChats(self, args):
         dao = ChatsDAO()
         chat_list = dao.getChatsByArgs(args)
         return jsonify(chat_list), 200
 
-    def getChatsByMemberId(self, uid):
-        dao = ChatsDAO()
-        chat_list = dao.getChatsByMemberId(uid)
-        return jsonify(chat_list), 200
-
     def insertChatJson(self, json):
-        dao = ChatsDAO()
-        newchat = dao.insert(json)
-        return jsonify(newchat), 200
+        chatname = json['chatName']
+        creationDate = json['creationDate']
+
+        if chatname and creationDate:
+            dao = ChatsDAO()
+            chatid = dao.insert(chatname, creationDate)
+            result = self.build_chat_attributes(chatid, chatname, creationDate)
+            ParticipatesHandler().insertNewChatJson(chatid, json)
+
+            return jsonify(result), 201
+        else:
+
+            return jsonify(Error="Unexpected attributes in post request"), 400
 
     def addContactToChat(self, cid, personid):
         dao = ChatsDAO()
@@ -79,8 +105,13 @@ class ChatHandler:
 
     def deleteChat(self, cid):
         dao = ChatsDAO()
-        id = dao.delete(cid)
-        return jsonify(DeleteStatus = "OK"), 200
+        if not dao.getChatById(cid):
+            return jsonify(Error="Part not found."), 404
+        else:
+            dao.delete(cid)
+
+        return jsonify(DeleteStatus="OK"), 200
+
 
     def deleteContactFromChat(self, cid, personid):
         dao = ChatsDAO()
