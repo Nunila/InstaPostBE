@@ -1,5 +1,6 @@
 from flask import jsonify
 from dao.chats import ChatsDAO
+from handler.participates import ParticipatesHandler
 
 
 class ChatHandler:
@@ -10,6 +11,17 @@ class ChatHandler:
         result['chatName'] = row[1]
         result['creationDate'] = row[2]
         result['ownerId'] = row[3]
+        return result
+
+    def buildChatWithRoleDict(self, row):
+        result = {}
+        result['chatId'] = row[0]
+        result['chatName'] = row[1]
+        result['creationDate'] = row[2]
+        if row[4] == 'owner':
+            result['ownerId'] = row[3]
+        else:
+            result['ownerId'] = 0
         return result
 
     def build_chat_attributes(self, cid, cname, date):
@@ -56,7 +68,7 @@ class ChatHandler:
         chats_List = dao.getChatsByParticipatingId(uid)
         result_list = []
         for row in chats_List:
-            result = self.buildChatDict(row)
+            result = self.buildChatWithRoleDict(row)
             result_list.append(result)
 
         return jsonify(result_list)
@@ -74,6 +86,8 @@ class ChatHandler:
             dao = ChatsDAO()
             chatid = dao.insert(chatname, creationDate)
             result = self.build_chat_attributes(chatid, chatname, creationDate)
+            ParticipatesHandler().insertNewChatJson(chatid, json)
+
             return jsonify(result), 201
         else:
 
@@ -91,8 +105,13 @@ class ChatHandler:
 
     def deleteChat(self, cid):
         dao = ChatsDAO()
-        id = dao.delete(cid)
-        return jsonify(DeleteStatus = "OK"), 200
+        if not dao.getChatById(cid):
+            return jsonify(Error="Part not found."), 404
+        else:
+            dao.delete(cid)
+
+        return jsonify(DeleteStatus="OK"), 200
+
 
     def deleteContactFromChat(self, cid, personid):
         dao = ChatsDAO()

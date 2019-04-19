@@ -49,10 +49,9 @@ class ParticipatesHandler:
 
         return jsonify(User=user)
 
-    def insertNewChatJson(self, json):
+    def insertNewChatJson(self, chatId, json):
         owner = json['ownerId']
         members = json['members']
-        chatId = json['chatId']
 
         if owner and members and chatId:
             dao = ParticipatesDAO()
