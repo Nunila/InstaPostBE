@@ -11,6 +11,7 @@ class PersonsHandler:
         result['phoneNumber'] = row[3]
         result['email'] = row[4]
         result['birthday'] = row[5]
+        result['userId'] = row[6]
         return result
 
     def getAllPersons(self):
@@ -25,8 +26,21 @@ class PersonsHandler:
 
     def getPersonByArguments(self, args):
         dao = PersonDAO()
-        person_list = dao.getPersonByFullName(args)
-        return jsonify(person_list), 200
+        email = args.get("email")
+        phone = args.get("phonenumber")
+
+        if (len(args) == 1) and phone:
+            row = dao.getPersonByPhoneNumber(phone)
+        elif (len(args) == 1) and email:
+            row = dao.getPersonByEmail(email)
+        else:
+            return jsonify(Error="Malformed query string"), 400
+
+        if not row:
+            return jsonify(Error="Person Not Found"), 404
+        else:
+            person = self.buildPersonAttributes(row)
+            return jsonify(person), 200
 
     def addConctact(self, ownerid, perid):
         dao = PersonDAO()
