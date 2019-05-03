@@ -29,3 +29,19 @@ class ContactDAO:
         for row in cursor:
             result.append(row)
         return result
+
+    def insert(self, ownerid, contactid):
+        cursor = self.conn.cursor()
+        query = "insert into contacts(ownerId, contactId) values (%s, %s);"
+        cursor.execute(query, (ownerid, contactid,))
+        self.conn.commit()
+
+        return
+
+    def delete(self, ownerid, contactid):
+        cursor = self.conn.cursor()
+        query = "delete from contacts where ownerId = %s and contactId = %s"
+        cursor.execute(query, (ownerid, contactid,))
+        self.conn.commit()
+
+        return contactid

@@ -29,3 +29,32 @@ class ContactHandler:
             result_list.append(result)
 
         return jsonify(result_list), 200
+
+    def addContact(self, pid, json):
+        contactid = json['personId']
+        ownerid = pid
+
+        if ownerid and contactid:
+            dao = ContactDAO()
+            dao.insert(ownerid, contactid)
+            # result = self.build_chat_attributes(chatid, chatname, creationDate)
+            # ParticipatesHandler().insertNewChatJson(chatid, json)
+
+            return jsonify(json), 201
+        else:
+
+            return jsonify(Error="Unexpected attributes in post request"), 400
+
+    def deleteContact(self, ownerid, json):
+        contactid = json['contactId']
+
+        if ownerid and contactid:
+            dao = ContactDAO()
+            dao.delete(ownerid, contactid)
+            # result = self.build_chat_attributes(chatid, chatname, creationDate)
+            # ParticipatesHandler().insertNewChatJson(chatid, json)
+
+            return jsonify(json), 201
+        else:
+
+            return jsonify(Error="Unexpected attributes in delete request"), 400
