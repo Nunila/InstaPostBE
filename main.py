@@ -138,15 +138,20 @@ def getContactsOfPerson(ownerid):
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaPost/person/contact/<int:ownerid>', methods=['POST', 'DELETE'])
+@app.route('/InstaPost/person/contact/<int:ownerid>', methods=['POST'])
 def addContact(ownerid):
     if request.method == 'POST':
         return ContactHandler().addContact(ownerid, request.json)
-    elif request.method == 'DELETE':
-        return ContactHandler().deleteContact(ownerid, request.json)
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
+@app.route('/InstaPost/person/contact/<int:ownerid>/delete/<int:contactid>', methods=['DELETE'])
+def deleteContact(ownerid, contactid):
+    if request.method == 'DELETE':
+        return ContactHandler().deleteContact(ownerid, contactid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 
 

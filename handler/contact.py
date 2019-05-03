@@ -45,8 +45,7 @@ class ContactHandler:
 
             return jsonify(Error="Unexpected attributes in post request"), 400
 
-    def deleteContact(self, ownerid, json):
-        contactid = json['contactId']
+    def deleteContact(self, ownerid, contactid):
 
         if ownerid and contactid:
             dao = ContactDAO()
@@ -54,7 +53,7 @@ class ContactHandler:
             # result = self.build_chat_attributes(chatid, chatname, creationDate)
             # ParticipatesHandler().insertNewChatJson(chatid, json)
 
-            return jsonify(json), 201
+            return jsonify(contactid), 201
         else:
 
             return jsonify(Error="Unexpected attributes in delete request"), 400
