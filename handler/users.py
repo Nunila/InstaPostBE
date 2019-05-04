@@ -68,7 +68,7 @@ class UsersHandler:
             user = self.buildLoginCredentials(result)
             pid = PersonDAO().getPersonByUserId(user['userId'])
             if not pid:
-                return jsonify(Error='No Person data for this user.'), 405
+                user['personId'] = 0
             else:
                 user['personId'] = pid
 
