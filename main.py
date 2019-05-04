@@ -145,6 +145,24 @@ def getContactsOfPerson(ownerid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
+@app.route('/InstaPost/person/contact/<int:ownerid>', methods=['POST'])
+def addContact(ownerid):
+    if request.method == 'POST':
+        return ContactHandler().addContact(ownerid, request.json)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/person/contact/<int:ownerid>/delete/<int:contactid>', methods=['DELETE'])
+def deleteContact(ownerid, contactid):
+    if request.method == 'DELETE':
+        return ContactHandler().deleteContact(ownerid, contactid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+
 # -----------------------------------CHATS------------------------------------------
 
 
@@ -172,10 +190,10 @@ def getChatById(cid):
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaPost/chats/<int:uid>/member', methods=['GET'])
-def getChatByMemberId(uid):
+@app.route('/InstaPost/chats/member/<int:uid>', methods=['GET'])
+def getChatByParticipatingId(uid):
     if request.method == 'GET':
-        return ChatHandler().getChatsByMemberId(uid)
+        return ChatHandler().getChatsByParticipatingId(uid)
     else:
         return jsonify(Error="Method not allowed."), 405
 
@@ -428,12 +446,14 @@ def getAllReplies():
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 @app.route('/InstaPost/messages/repliesbypostid/<int:postId>', methods=['GET'])
 def getRepliesByPostId(postId):
     if request.method == 'GET':
         return MessageHandler().getRepliesByPostId(postId)
     else:
         return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaPost/messages/numberOfReplies/<string:date>', methods=['GET'])
 def getNumOfRepliesByDate(date):

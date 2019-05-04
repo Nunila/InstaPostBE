@@ -95,3 +95,11 @@ class ParticipatesDAO:
         cursor.execute(query, (chatid,))
         result = cursor.fetchone()
         return result
+
+    def insert(self, chatId, memberid, role):
+        cursor = self.conn.cursor()
+        query = "insert into participates(chatId, userId, role) values (%s, %s, %s);"
+        cursor.execute(query, (chatId, memberid, role,))
+        self.conn.commit()
+        return 'success'
+

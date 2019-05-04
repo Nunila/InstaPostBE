@@ -78,6 +78,7 @@ class PostsDAO:
                 "group by postdate;"
         cursor.execute(query)
         result = []
+
         for row in cursor:
             result.append(row)
 

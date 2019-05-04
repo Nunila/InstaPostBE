@@ -28,6 +28,20 @@ class PersonDAO:
             result.append(row)
         return result
 
+    def getPersonByEmail(self, peremail):
+        cursor = self.conn.cursor()
+        query = "select * from Person where email = %s;"
+        cursor.execute(query, (peremail,))
+        result = cursor.fetchone()
+        return result
+
+    def getPersonByPhoneNumber(self, perphone):
+        cursor = self.conn.cursor()
+        query = "select * from Person where phonenumber = %s;"
+        cursor.execute(query, (perphone,))
+        result = cursor.fetchone()
+        return result
+
     def getPersonByID(self, perid):
         cursor = self.conn.cursor()
         query = "select * from Person where personId = %s;"
