@@ -41,7 +41,7 @@ def getImage(filename):
 def getAllUsers():
     if request.method == 'POST':
         print("REQUEST: ", request.json)
-        return UsersHandler().insertUserJson(request.json)
+        return UsersHandler().insertUser(request.json)
     else:
         return UsersHandler().getAllUsers()
 
@@ -103,6 +103,14 @@ def getOwnerInSpecificChat(cid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+@app.route('/InstaPost/users/login/<string:username>/<string:password>', methods=['POST'])
+def userLogin(username, password):
+    if request.method == 'POST':
+        return UsersHandler().userLogin(username, password)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
 # ===============================================PERSONS========================================================#
 
 
@@ -110,7 +118,7 @@ def getOwnerInSpecificChat(cid):
 def getAllPerson():
     if request.method == 'POST':
         print("REQUEST: ", request.json)
-        return PersonsHandler().insertPersonJson(request.json)
+        return PersonsHandler().insertPerson(request.json)
     else:
         if not request.args:
             return PersonsHandler().getAllPersons()
@@ -476,4 +484,4 @@ def getTrendingHash():
 
 
 if __name__ == "__main__":
-    app.run(port=5000, host='0.0.0.0', debug=True)
+    app.run(port=5000, host='127.0.0.1', debug=True)

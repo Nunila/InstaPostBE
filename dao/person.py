@@ -71,10 +71,12 @@ class PersonDAO:
             result.append(row)
         return result
 
-    def insert(self, fname, lname, pnum, email, bday):
+    def insert(self, json):
+        fname = json['firstName'], lname = json['lastName'], pnum = json['phoneNum']
+        email = json['email'], bday = json['birthday'], userId = json['userId']
         cursor = self.conn.cursor()
-        query = "insert into Person(firstName, lastName, phoneNumber, email, birthday) values (%s, %s, %s, %s, %s) returning personId;"
-        cursor.execute(query, (fname, lname, pnum, email, bday,))
+        query = "insert into Person(firstName, lastName, phoneNumber, email, birthday, userId) values (%s, %s, %s, %s, %s, %s) returning personId;"
+        cursor.execute(query, (fname, lname, pnum, email, bday, userId,))
         perid = cursor.fetchone()[0]
         self.conn.commit()
         return perid
