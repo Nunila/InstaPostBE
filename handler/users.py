@@ -60,11 +60,12 @@ class UsersHandler:
     def userLogin(self, username, password):
         dao = UsersDAO()
         result = dao.getUserLogin(username, password)
+        print(result)
         if not result:
             return jsonify(Error='Invalid Credentials.'), 405
         else:
             user = self.buildLoginCredentials(result)
-            return jsonify(Users= user), 200
+            return jsonify(user), 200
 
     def insertUser(self, json):
         dao = UsersDAO()
