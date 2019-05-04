@@ -62,6 +62,7 @@ class PersonDAO:
             result.append(row)
         return result
 
+
     def getUsernameByPersonId(self, perid):
         cursor = self.conn.cursor()
         query = "select userId, userName from Person natural inner join Users where personId = %s;"
@@ -69,6 +70,13 @@ class PersonDAO:
         result = []
         for row in cursor:
             result.append(row)
+        return result
+
+    def getPersonByUserId(self, uid):
+        cursor = self.conn.cursor()
+        query = "select personId from Person where userId = %s;"
+        cursor.execute(query, (uid,))
+        result = cursor.fetchone()
         return result
 
     def insert(self, json):
