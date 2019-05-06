@@ -132,7 +132,7 @@ def getPersonByID(perid):
     if request.method == 'GET':
         return PersonsHandler().getPersonById(perid)
     elif request.method == 'PUT':
-        return PersonsHandler().updatePerson(perid, request.form)
+        return PersonsHandler().updatePerson(perid, request.json)
     elif request.method == 'DELETE':
         return PersonsHandler().deletePerson(perid)
     else:

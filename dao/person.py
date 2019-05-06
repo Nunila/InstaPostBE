@@ -118,9 +118,9 @@ class PersonDAO:
         self.conn.commit()
         return pid
 
-    def update(self, perid, fname, lname, pnum, email, bday):
+    def update(self, userId, perid, fname, lname, pnum, email, bday):
         cursor = self.conn.cursor()
-        query = "update Person set firstName = %s, lastName = %s, phoneNumber=%s, email-%s, birthday=%s where personId = %s;"
+        query = "update Person set firstName = %s, lastName = %s, phoneNumber=%s, email=%s, birthday=%s where personId = %s;"
         cursor.execute(query, (fname, lname, pnum, email, bday, perid,))
         self.conn.commit()
         return perid

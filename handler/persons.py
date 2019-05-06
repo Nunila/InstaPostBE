@@ -38,6 +38,19 @@ class PersonsHandler:
         result['userId'] = userId
         return result
 
+    def buildPersonAndUserDict(self, userId, pid, firstname, lastname, phonenumber, email, birthday, username, password):
+        result = {}
+        result['personId'] = pid
+        result['firstName'] = firstname
+        result['lastName'] = lastname
+        result['phonenumber'] = phonenumber
+        result['email'] = email
+        result['birthday'] = birthday
+        result['userId'] = userId
+        result['username'] = username
+        result['password'] = password
+        return result
+
     def getAllPersons(self):
         dao = PersonDAO()
         person_list = dao.getAllPersons()
@@ -109,10 +122,24 @@ class PersonsHandler:
         #
         #     return jsonify(Error="Unexpected attributes in post request"), 400
 
-    def updatePerson(self, perid, form):
+    def updatePerson(self, personId, json):
+        print(json)
         dao = PersonDAO()
-        updated_person = dao.update(perid, form)
-        return jsonify(updated_person), 200
+        if not dao.getPersonAndUserByID(personId):
+            return jsonify(Error="Person not found."), 404
+        else:
+            firstname = json['firstName']
+            lastname = json['lastName']
+            phonenumber = json['phoneNumber']
+            email = json['email']
+            birthday = json['birthday']
+            userId = json['userId']
+            username = json['username']
+            password = json['password']
+
+            dao.update(userId, personId, firstname, lastname, phonenumber, email, birthday)
+            person = self.buildPersonAndUserDict(userId, personId, firstname, lastname, phonenumber, email, birthday, username, password)
+            return jsonify(person), 200
 
     def deletePerson(self, perid):
         dao = PersonDAO()
