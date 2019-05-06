@@ -25,9 +25,10 @@ class MessageHandler:
         return result
 
 
-    def builMessageAttributes(self, messageId, userId, content, messageDate, type):
+    def builMessageAttributes(self, messageId, postId, userId, content, messageDate):
         result = {}
         result['messageId'] = messageId
+        result['postId'] = postId
         result['userId'] = userId
         result['content'] = content
         result['messageDate'] = messageDate
@@ -142,4 +143,19 @@ class MessageHandler:
         dao = MessagesDAO()
         id = dao.deleteMessage(messageId)
         return jsonify(DeleteStatus="OK"), 200
+
+    def insertReplyJson(self, json):
+        postId = json['postId']
+        userId = json['userId']
+        content = json['content']
+        messageDate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        if postId and userId and content and messageDate:
+            dao = MessagesDAO()
+            messageId = dao.insertMessage(userId, content, messageDate)
+            result = self.builMessageAttributes(messageId, postId, userId, content, messageDate)
+            notification = dao.insertReply(postId, messageId)
+            print(notification)
+            return jsonify(result), 201
+        else:
+            return jsonify(Error="Unexpected attributes in post request"), 400
 
