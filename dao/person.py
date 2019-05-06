@@ -51,7 +51,7 @@ class PersonDAO:
 
     def getPersonAndUserByID(self, perid):
         cursor = self.conn.cursor()
-        query = "select personId, firstName, lastName, phoneNumber, email, birthday, userId, username, password from Person natural inner join Users where personId = %s;"
+        query = "select personId, firstName, lastName, phonenumber, email, birthday, userId, username, password from Person natural inner join Users where personId = %s;"
         cursor.execute(query, (perid,))
         result = cursor.fetchone()
         return result
@@ -104,7 +104,7 @@ class PersonDAO:
         fname = json['firstName'], lname = json['lastName'], pnum = json['phoneNum']
         email = json['email'], bday = json['birthday'], userId = json['userId']
         cursor = self.conn.cursor()
-        query = "insert into Person(firstName, lastName, phoneNumber, email, birthday, userId) values (%s, %s, %s, %s, %s, %s) returning personId;"
+        query = "insert into Person(firstName, lastName, phonenumber, email, birthday, userId) values (%s, %s, %s, %s, %s, %s) returning personId;"
         cursor.execute(query, (fname, lname, pnum, email, bday, userId,))
         perid = cursor.fetchone()[0]
         self.conn.commit()
@@ -112,7 +112,7 @@ class PersonDAO:
 
     def insert(self, userId, firstname, lastname, phonenumber,email, birthday):
         cursor = self.conn.cursor()
-        query = "insert into Person(firstName, lastName, phoneNumber, email, birthday, userId) values (%s, %s, %s, %s, %s, %s) returning personId;"
+        query = "insert into Person(firstName, lastName, phonenumber, email, birthday, userId) values (%s, %s, %s, %s, %s, %s) returning personId;"
         cursor.execute(query, (firstname, lastname, phonenumber, email, birthday, userId,))
         pid = cursor.fetchone()[0]
         self.conn.commit()
@@ -120,7 +120,7 @@ class PersonDAO:
 
     def update(self, userId, perid, fname, lname, pnum, email, bday):
         cursor = self.conn.cursor()
-        query = "update Person set firstName = %s, lastName = %s, phoneNumber=%s, email=%s, birthday=%s where personId = %s;"
+        query = "update Person set firstName = %s, lastName = %s, phonenumber=%s, email=%s, birthday=%s where personId = %s;"
         cursor.execute(query, (fname, lname, pnum, email, bday, perid,))
         self.conn.commit()
         return perid
