@@ -103,6 +103,7 @@ def getOwnerInSpecificChat(cid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 @app.route('/InstaPost/users/login/<string:username>/<string:password>', methods=['POST'])
 def userLogin(username, password):
     if request.method == 'POST':
@@ -136,6 +137,12 @@ def getPersonByID(perid):
         return PersonsHandler().deletePerson(perid)
     else:
         return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/person/<int:perid>/complete', methods=['GET'])
+def getPersonandUserByID(perid):
+    if request.method == 'GET':
+        return PersonsHandler().getPersonAndUserById(perid)
 
 
 @app.route('/InstaPost/person/<int:ownerid>/contacts', methods=['GET'])
@@ -274,12 +281,14 @@ def getDislikesOfPost(postId):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 @app.route('/InstaPost/reactions/likescount/message/<int:messageId>', methods=['GET'])
 def getLikesCountOfMessage(messageId):
     if request.method == 'GET':
         return ReactionHandler().getLikesCountByMessageId(messageId)
     else:
         return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaPost/reactions/dislikescount/message/<int:messageId>', methods=['GET'])
 def getDislikesCountOfMessage(messageId):
@@ -288,12 +297,14 @@ def getDislikesCountOfMessage(messageId):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 @app.route('/InstaPost/reactions/userswholike/message/<int:messageId>', methods=['GET'])
 def getUsersWhoLikeByMessageId(messageId):
     if request.method == 'GET':
         return ReactionHandler().getUsersWhoLikesByMessageId(messageId)
     else:
         return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaPost/reactions/userswhodislike/message/<int:messageId>', methods=['GET'])
 def getUsersWhoDislikesByMessageId(messageId):
