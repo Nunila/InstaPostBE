@@ -39,10 +39,19 @@ class UsersDAO:
         result = cursor.fetchone()
         return result
 
+    def getUserLogin(self, username, password):
+        cursor = self.conn.cursor()
+        query = "select * from Users where username = %s and password = %s;"
+        cursor.execute(query, (username, password,))
+        result = cursor.fetchone()
+        return result
+
     def getMostActiveUser(self):
         return self.userArray[0]
 
-    def insert(self, username, password):
+    def insert(self, json):
+        username = json[0]
+        password = json[1]
         cursor = self.conn.cursor()
         query = "insert into Users(username, password) values (%s, %s) returning userId;"
         cursor.execute(query, (username, password,))

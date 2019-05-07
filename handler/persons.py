@@ -8,9 +8,47 @@ class PersonsHandler:
         result['personId'] = row[0]
         result['firstName'] = row[1]
         result['lastName'] = row[2]
-        result['phoneNumber'] = row[3]
+        result['phonenumber'] = row[3]
         result['email'] = row[4]
         result['birthday'] = row[5]
+        result['userId'] = row[6]
+        return result
+
+    def buildPersonAndUserAttributes(self, row):
+        result = {}
+        result['personId'] = row[0]
+        result['firstName'] = row[1]
+        result['lastName'] = row[2]
+        result['phonenumber'] = row[3]
+        result['email'] = row[4]
+        result['birthday'] = row[5]
+        result['userId'] = row[6]
+        result['username'] = row[7]
+        result['password'] = row[8]
+        return result
+
+    def buildPersonDict(self, userId, pid, firstname, lastname, phonenumber,email, birthday):
+        result = {}
+        result['personId'] = pid
+        result['firstName'] = firstname
+        result['lastName'] = lastname
+        result['phonenumber'] = phonenumber
+        result['email'] = email
+        result['birthday'] = birthday
+        result['userId'] = userId
+        return result
+
+    def buildPersonAndUserDict(self, userId, pid, firstname, lastname, phonenumber, email, birthday, username, password):
+        result = {}
+        result['personId'] = pid
+        result['firstName'] = firstname
+        result['lastName'] = lastname
+        result['phonenumber'] = phonenumber
+        result['email'] = email
+        result['birthday'] = birthday
+        result['userId'] = userId
+        result['username'] = username
+        result['password'] = password
         return result
 
     def getAllPersons(self):
@@ -20,13 +58,41 @@ class PersonsHandler:
 
     def getPersonById(self, perid):
         dao = PersonDAO()
-        person = dao.getPersonByID(perid)
+        row = dao.getPersonByID(perid)
+        if not row:
+            return jsonify(Error="Person Not Found"), 404
+        else:
+            person = self.buildPersonAttributes(row)
+
+        return jsonify(person), 200
+
+    def getPersonAndUserById(self, perid):
+        dao = PersonDAO()
+        row = dao.getPersonAndUserByID(perid)
+        if not row:
+            return jsonify(Error="Person Not Found"), 404
+        else:
+            person = self.buildPersonAndUserAttributes(row)
+
         return jsonify(person), 200
 
     def getPersonByArguments(self, args):
         dao = PersonDAO()
-        person_list = dao.getPersonByFullName(args)
-        return jsonify(person_list), 200
+        email = args.get("email")
+        phone = args.get("phonenumber")
+
+        if (len(args) == 1) and phone:
+            row = dao.getPersonByPhoneNumber(phone)
+        elif (len(args) == 1) and email:
+            row = dao.getPersonByEmail(email)
+        else:
+            return jsonify(Error="Malformed query string"), 400
+
+        if not row:
+            return jsonify(Error="Person Not Found"), 404
+        else:
+            person = self.buildPersonAttributes(row)
+            return jsonify(person), 200
 
     def addConctact(self, ownerid, perid):
         dao = PersonDAO()
@@ -38,15 +104,42 @@ class PersonsHandler:
         status = dao.deleteContact(ownerid, perid)
         return jsonify(DeleteStatus=status), 200
 
-    def insertPersonJson(self, json):
-        dao = PersonDAO()
-        new_person = dao.insert(json)
-        return jsonify(new_person), 200
+    def insertPerson(self, json):
+        firstname = json['firstName']
+        lastname = json['lastName']
+        phonenumber = json['phonenumber']
+        email = json['email']
+        birthday = json['birthday']
+        userId = json['userId']
 
-    def updatePerson(self, perid, form):
+        # if userId and firstname and lastname and phonenumber and email and birthday:
         dao = PersonDAO()
-        updated_person = dao.update(perid, form)
-        return jsonify(updated_person), 200
+        pid = dao.insert(userId, firstname, lastname, phonenumber,email, birthday)
+        result = self.buildPersonDict(userId, pid, firstname, lastname, phonenumber, email, birthday)
+
+        return jsonify(result), 201
+        # else:
+        #
+        #     return jsonify(Error="Unexpected attributes in post request"), 400
+
+    def updatePerson(self, personId, json):
+        print(json)
+        dao = PersonDAO()
+        if not dao.getPersonAndUserByID(personId):
+            return jsonify(Error="Person not found."), 404
+        else:
+            firstname = json['firstName']
+            lastname = json['lastName']
+            phonenumber = json['phonenumber']
+            email = json['email']
+            birthday = json['birthday']
+            userId = json['userId']
+            username = json['username']
+            password = json['password']
+
+            dao.update(userId, personId, firstname, lastname, phonenumber, email, birthday)
+            person = self.buildPersonAndUserDict(userId, personId, firstname, lastname, phonenumber, email, birthday, username, password)
+            return jsonify(person), 200
 
     def deletePerson(self, perid):
         dao = PersonDAO()
