@@ -47,7 +47,7 @@ class ChatHandler:
         dao = ChatsDAO()
         row = dao.getChatById(cid)
         if not row:
-            return jsonify(Error="Part Not Found"), 404
+            return jsonify(Error="Chat Not Found"), 404
         else:
             part = self.buildChatDict(row)
 

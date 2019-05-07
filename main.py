@@ -169,7 +169,6 @@ def deleteContact(ownerid, contactid):
         return jsonify(Error="Method not allowed."), 405
 
 
-
 # -----------------------------------CHATS------------------------------------------
 
 
