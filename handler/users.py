@@ -1,5 +1,6 @@
 from flask import jsonify
 from dao.users import UsersDAO
+from dao.person import PersonDAO
 
 class UsersHandler:
 
@@ -15,6 +16,13 @@ class UsersHandler:
         result['phoneNumber'] = row[5]
         result['email'] = row[6]
         result['birthday'] = row[7]
+        return result
+#*
+# MADE FOR LOG IN PURPOSES#
+    def buildLoginCredentials(self, row):
+        result = {}
+        result['userId'] = row[0]
+        result['userName'] = row[1]
         return result
 
     def getAllUsers(self):
@@ -48,6 +56,23 @@ class UsersHandler:
         dao = UsersDAO()
         most_active = dao.getMostActiveUser()
         return jsonify(most_active), 200
+#*
+# MADE FOR LOG IN PURPOSES#
+    def userLogin(self, username, password):
+        dao = UsersDAO()
+        result = dao.getUserLogin(username, password)
+        print(result)
+        if not result:
+            return jsonify(Error='Invalid Credentials.'), 405
+        else:
+            user = self.buildLoginCredentials(result)
+            pid = PersonDAO().getPersonByUserId(user['userId'])
+            if not pid:
+                user['personId'] = 0
+            else:
+                user['personId'] = pid
+
+        return jsonify(user), 200
 
     def insertUser(self, json):
         dao = UsersDAO()
