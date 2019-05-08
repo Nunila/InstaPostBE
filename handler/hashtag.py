@@ -1,10 +1,10 @@
 from flask import jsonify
 from dao.hashtag import HashtagsDAO
-
+import datetime
 
 class HashtagHandler:
 
-    def buildHashtagAttributes(self, row):
+    def buildHashtagDict(self, row):
         result = {}
         result['hashtagId'] = row[0]
         result['hashName'] = row[1]
@@ -17,6 +17,15 @@ class HashtagHandler:
         result['hashtag'] = row[0]
         result['position'] = index
         return result
+
+    def buildHashtagAttributes(self, hashtagId, hashName, datetime):
+        result = {}
+        result['hashtagId'] = hashtagId
+        result['hashName'] = hashName
+        result['datetime'] = datetime
+        return result
+
+#----------------Operations-----------------
 
     def getAllHashtags(self):
         dao = HashtagsDAO()
@@ -57,9 +66,55 @@ class HashtagHandler:
         return jsonify(Hashtag=results), 200
 
     def insertHashtagJson(self, json):
-        dao = HashtagsDAO()
-        newhashtag = dao.insert(json)
-        return jsonify(newhashtag), 200
+        hashtagsList = json.loads(json)
+        for row in hashtagsList:
+            hashName = row['hashName']
+            timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            messageId = row['messageId']
+
+            if hashName and timestamp:
+                dao = HashtagsDAO()
+                searchResult = dao.getHashByName(hashName)
+                resultList = []
+                if searchResult is None:
+                    hashtagId = dao.insert(hashName, timestamp)
+                    result = self.buildHashtagAttributes(hashtagId, hashName, timestamp)
+                    notification = dao.insertMentioned(hashtagId, messageId)
+                    resultList.append(result)
+                    print(notification)
+                else:
+                    resulthashId = searchResult[0]
+                    notification = dao.insertMentioned(resulthashId, messageId)
+                    result = self.buildHashtagAttributes(resulthashId, hashName, timestamp)
+                    resultList.append(result)
+                    print(notification)
+                return jsonify(resultList), 200
+            else:
+                return jsonify(Error="Unexpected attributes in post request"), 400
+
+    def insertHashtagArray(self, list, messageId):
+        for hashName in list:
+            timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+            if hashName and timestamp:
+                dao = HashtagsDAO()
+                searchResult = dao.getHashByName(hashName)
+                resultList = []
+                if searchResult is None:
+                    hashtagId = dao.insert(hashName, timestamp)
+                    result = self.buildHashtagAttributes(hashtagId, hashName, timestamp)
+                    notification = dao.insertMentioned(hashtagId, messageId)
+                    resultList.append(result)
+                    print(notification)
+                else:
+                    resulthashId = searchResult[0]
+                    notification = dao.insertMentioned(resulthashId, messageId)
+                    result = self.buildHashtagAttributes(resulthashId, hashName, timestamp)
+                    resultList.append(result)
+                    print(notification)
+                return jsonify(resultList), 200
+            else:
+                return jsonify(Error="Unexpected attributes in post request"), 400
 
     def updateHashtag(self,hid, form):
         dao = HashtagsDAO()
@@ -70,4 +125,12 @@ class HashtagHandler:
         dao = HashtagsDAO()
         result = dao.delete(hid)
         return jsonify(DeleteStatus="OK"), 200
+
+    def getHashtagsFromString(self, content):
+        list = []
+        if content is not None:
+            list = {tag.strip("#") for tag in content.split() if tag.startswith("#")}
+
+        return list
+
 

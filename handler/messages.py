@@ -1,5 +1,6 @@
 from flask import jsonify
 from dao.messages import MessagesDAO
+from handler.hashtag import HashtagHandler
 import datetime
 
 
@@ -155,6 +156,12 @@ class MessageHandler:
             result = self.builMessageAttributes(messageId, postId, userId, content, messageDate)
             notification = dao.insertReply(postId, messageId)
             print(notification)
+
+            hashHandler = HashtagHandler()
+            hashresult = hashHandler.getHashtagsFromString(content)
+            if hashresult is not None:
+                hashHandler.insertHashtagArray(hashresult, messageId)
+
             return jsonify(result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
