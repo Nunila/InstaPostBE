@@ -15,6 +15,7 @@ class HashtagHandler:
         print("row: ", row)
         result = {}
         result['hashtag'] = row[0]
+        result['countOnDay'] = row[1]
         result['position'] = index
         return result
 
@@ -63,7 +64,7 @@ class HashtagHandler:
             element = self.buildHashtagForTrending(row, index)
             index += 1
             results.append(element)
-        return jsonify(Hashtag=results), 200
+        return jsonify(results), 200
 
     def insertHashtagJson(self, json):
         hashtagsList = json.loads(json)

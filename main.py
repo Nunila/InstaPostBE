@@ -412,6 +412,7 @@ def getMessagesById(messageId):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 @app.route('/InstaPost/messages/post/<int:postId>', methods=['GET', 'PUT', 'DELETE'])
 def getMessagesByPostId(postId):
     if request.method == 'GET':
@@ -422,6 +423,7 @@ def getMessagesByPostId(postId):
         return MessageHandler().deleteMessage(postId)
     else:
         return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaPost/messages/user/<int:userId>', methods=['GET', 'PUT', 'DELETE'])
 def getMessagesByUserId(userId):
@@ -434,6 +436,7 @@ def getMessagesByUserId(userId):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 @app.route('/InstaPost/messages/messageDate/<string:messageDate>', methods=['GET'])
 def getMessagesByDate(messageDate):
     if request.method == 'GET':
@@ -441,12 +444,14 @@ def getMessagesByDate(messageDate):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
 @app.route('/InstaPost/messages/chatId/<int:chatId>', methods=['GET'])
 def getMessagesByChatId(chatId):
     if request.method == 'GET':
         return MessageHandler().getMessagesByChatId(chatId)
     else:
         return jsonify(Error="Method not allowed."), 405
+
 
 @app.route('/InstaPost/messages/allreplies', methods=['GET', 'POST'])
 def getAllReplies():
