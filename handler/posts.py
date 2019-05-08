@@ -1,5 +1,7 @@
 from flask import jsonify
 from dao.posts import PostsDAO
+from handler.messages import MessageHandler
+import datetime
 
 
 class PostHandler:
@@ -35,11 +37,12 @@ class PostHandler:
         result['total'] = row[1]
         return result
 
-    def buildPostAttributes(self, postId, chatId, userId, photourl, postDate):
+    def buildPostAttributes(self, postId, chatId, userId, messageId, photourl, postDate):
         result = {}
         result['postId'] = postId
         result['chatId'] = chatId
         result['userId'] = userId
+        result['messageId'] = messageId
         result['photourl'] = photourl
         result['postDate'] = postDate
         return result
@@ -118,9 +121,19 @@ class PostHandler:
         return jsonify(numOfPosts)
 
     def insertPost(self, json):
-        dao = PostsDAO()
-        newPost = dao.insertPost(json)
-        return jsonify(newPost)
+        chatId = json['chatId']
+        userId = json['userId']
+        messageHandler = MessageHandler()
+        messageId = messageHandler.insertMessage(json)[0]
+        photourl = json['src']
+        postDate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        if chatId and userId and messageId and photourl and postDate:
+            dao = PostsDAO()
+            postId = dao.insertPost(chatId, userId, messageId, photourl, postDate)
+            result = self.buildPostAttributes(postId, chatId, userId, messageId, photourl, postDate)
+            return jsonify(result), 201
+        else:
+            return jsonify(Error="Unexpected attributes in post request"), 400
 
     def updatePost(self, postId, form):
         dao = PostsDAO()

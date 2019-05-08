@@ -26,10 +26,18 @@ class MessageHandler:
         return result
 
 
-    def builMessageAttributes(self, messageId, postId, userId, content, messageDate):
+    def buildReplyAttributes(self, messageId, postId, userId, content, messageDate):
         result = {}
         result['messageId'] = messageId
         result['postId'] = postId
+        result['userId'] = userId
+        result['content'] = content
+        result['messageDate'] = messageDate
+        return result
+
+    def buildMessageAttributes(self, messageId, userId, content, messageDate):
+        result = {}
+        result['messageId'] = messageId
         result['userId'] = userId
         result['content'] = content
         result['messageDate'] = messageDate
@@ -131,9 +139,22 @@ class MessageHandler:
         return jsonify(numOfReplies)
 
     def insertMessage(self, json):
-        dao = MessagesDAO()
-        newMessage = dao.insertMessage(json)
-        return jsonify(newMessage)
+        userId = json['userId']
+        content = json['content']
+        messageDate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        if userId and content and messageDate:
+            dao = MessagesDAO()
+            messageId = dao.insertMessage(userId, content, messageDate)
+            result = self.buildMessageAttributes(messageId, userId, content, messageDate)
+
+            hashHandler = HashtagHandler()
+            hashResult = hashHandler.getHashtagsFromString(content)
+            if(hashResult) is not None:
+                hashHandler.insertHashtagArray(hashResult, messageId)
+            #print("Result: ", jsonify(result))
+            return messageId, 201
+        else:
+            return jsonify(Error="Unexpected attributes in post request"), 400
 
     def updateMessage(self, messageId, form):
         dao = MessagesDAO()
@@ -153,7 +174,7 @@ class MessageHandler:
         if postId and userId and content and messageDate:
             dao = MessagesDAO()
             messageId = dao.insertMessage(userId, content, messageDate)
-            result = self.builMessageAttributes(messageId, postId, userId, content, messageDate)
+            result = self.buildReplyAttributes(messageId, postId, userId, content, messageDate)
             notification = dao.insertReply(postId, messageId)
             print(notification)
 
@@ -165,4 +186,5 @@ class MessageHandler:
             return jsonify(result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
+
 

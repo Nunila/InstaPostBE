@@ -93,13 +93,14 @@ class HashtagHandler:
                 return jsonify(Error="Unexpected attributes in post request"), 400
 
     def insertHashtagArray(self, list, messageId):
+        resultList = []
         for hashName in list:
             timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
             if hashName and timestamp:
                 dao = HashtagsDAO()
                 searchResult = dao.getHashByName(hashName)
-                resultList = []
+
                 if searchResult is None:
                     hashtagId = dao.insert(hashName, timestamp)
                     result = self.buildHashtagAttributes(hashtagId, hashName, timestamp)
@@ -112,9 +113,9 @@ class HashtagHandler:
                     result = self.buildHashtagAttributes(resulthashId, hashName, timestamp)
                     resultList.append(result)
                     print(notification)
-                return jsonify(resultList), 200
             else:
                 return jsonify(Error="Unexpected attributes in post request"), 400
+        return jsonify(resultList), 200
 
     def updateHashtag(self,hid, form):
         dao = HashtagsDAO()
@@ -130,6 +131,7 @@ class HashtagHandler:
         list = []
         if content is not None:
             list = {tag.strip("#") for tag in content.split() if tag.startswith("#")}
+            print("List: ", list)
 
         return list
 

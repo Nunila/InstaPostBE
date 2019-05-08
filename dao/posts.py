@@ -90,8 +90,13 @@ class PostsDAO:
     def getNumOfPostsByDate(self, date):
         return 100
 
-    def insertPost(self, json):
-        return 'Succesfully inserted new post!'
+    def insertPost(self, chatId, userId, messageId, photourl, postDate):
+        cursor = self.conn.cursor()
+        query = "insert into post (chatId, userId, messageId, photourl, postDate) values (%s, %s, %s, %s, %s) returning postId;"
+        cursor.execute(query, (chatId, userId, messageId, photourl, postDate))
+        postId = cursor.fetchone()[0]
+        self.conn.commit()
+        return postId
 
     def updatePost(self, pid, form):
         return self.postsArray[2]

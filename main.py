@@ -315,7 +315,6 @@ def getUsersWhoDislikesByMessageId(messageId):
 # --------------------------POSTS-----------------------------------------
 
 
-@cross_origin()
 @app.route('/InstaPost/posts', methods=['GET', 'POST'])
 def getAllPosts():
     if request.method == 'POST':
