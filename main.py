@@ -312,6 +312,22 @@ def getUsersWhoDislikesByMessageId(messageId):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+
+@app.route('/InstaPost/reactions/likesPerDay', methods=['GET'])
+def getLikesPerDay():
+    if request.method == 'GET':
+        return ReactionHandler().getLikesPerDay()
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/reactions/dislikesPerDay', methods=['GET'])
+def getDislikesPerDay():
+    if request.method == 'GET':
+        return ReactionHandler().getDislikesPerDay()
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 # --------------------------POSTS-----------------------------------------
 
 
@@ -469,6 +485,14 @@ def getAllReplies():
 def getRepliesByPostId(postId):
     if request.method == 'GET':
         return MessageHandler().getRepliesByPostId(postId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/messages/numberOfRepliesPerDay', methods=['GET'])
+def getNumOfRepliesPerDate():
+    if request.method == 'GET':
+        return MessageHandler().getNumOfRepliesPerDay()
     else:
         return jsonify(Error="Method not allowed."), 405
 

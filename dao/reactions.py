@@ -125,6 +125,26 @@ class ReactionsDAO:
             result.append(row)
         return result
 
+    def getLikesPerDay(self):
+        cursor = self.conn.cursor()
+        query = "select date(reactionDate), count(*) as likesPerDay " \
+                "from reaction where type='LIKE' group by reactiondate;"
+        cursor.execute(query,)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getDislikesPerDay(self):
+        cursor = self.conn.cursor()
+        query = "select date(reactionDate), count(*) as dislikesPerDay " \
+                "from reaction where type='DISLIKE' group by reactiondate;"
+        cursor.execute(query,)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
     def getReactionsByArgs(self, args):
         return [self.reactionArray[1], self.reactionArray[2]]
 

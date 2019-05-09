@@ -24,6 +24,12 @@ class MessageHandler:
         result['username'] = row[5]
         return result
 
+    def buildRepliesByDayDict(self, row):
+        result = {}
+        result['day'] = row[0]
+        result['total'] = row[1]
+        return result
+
 
     def builMessageAttributes(self, messageId, postId, userId, content, messageDate):
         result = {}
@@ -114,6 +120,16 @@ class MessageHandler:
         result_list = []
         for row in messages_List:
             result = self.buildRepliesDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
+
+    def getNumOfRepliesPerDay(self):
+        dao = MessagesDAO()
+        messages_List = dao.getNumRepliesPerDay()
+        result_list = []
+        for row in messages_List:
+            result = self.buildRepliesByDayDict(row)
             result_list.append(result)
 
         return jsonify(result_list)

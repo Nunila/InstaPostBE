@@ -47,6 +47,12 @@ class ReactionHandler:
         result['dislikesCount']=row[1]
         return result
 
+    def buildReactPerDayDictionary(self, row):
+        result = {}
+        result['day'] = row[0]
+        result['total'] = row[1]
+        return result
+
 
 #--------------Operations-----------------------------------------------------------------------
     def getAllReactions(self):
@@ -102,6 +108,24 @@ class ReactionHandler:
         results = []
         for row in reaction_list:
             result = self.buildUserReactionDictionary(row)
+            results.append(result)
+        return jsonify(results), 200
+
+    def getLikesPerDay(self):
+        dao = ReactionsDAO()
+        reaction_list = dao.getLikesPerDay()
+        results = []
+        for row in reaction_list:
+            result = self.buildReactPerDayDictionary(row)
+            results.append(result)
+        return jsonify(results), 200
+
+    def getDislikesPerDay(self):
+        dao = ReactionsDAO()
+        reaction_list = dao.getDislikesPerDay()
+        results = []
+        for row in reaction_list:
+            result = self.buildReactPerDayDictionary(row)
             results.append(result)
         return jsonify(results), 200
 
