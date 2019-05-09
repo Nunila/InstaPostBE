@@ -312,6 +312,13 @@ def getUsersWhoDislikesByMessageId(messageId):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+@app.route('/InstaPost/notparticipants/person/<int:personId>/chat/<int:chatId>', methods=['GET'])
+def getContactsNotInChat(personId, chatId):
+    if request.method == 'GET':
+        return ParticipatesHandler().getContactsNotInChat(personId, chatId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 # --------------------------POSTS-----------------------------------------
 
 

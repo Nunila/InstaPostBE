@@ -15,6 +15,18 @@ class ParticipatesHandler:
         result['userId'] = row[6]
         return result
 
+    def buildParticipatesDict(self, row):
+        result = {}
+        result['personId'] = row[0]
+        result['userId'] = row[1]
+        result['username'] = row[2]
+        result['firstname'] = row[3]
+        result['lastname'] = row[4]
+        result['phonenumber'] = row[5]
+        result['email'] = row[6]
+        result['birthday'] = row[7]
+        return result
+
     def buildParticipatesAttributes(self, postId, chatId, userId, photourl, postDate):
         result = {}
         result['postId'] = postId
@@ -48,6 +60,15 @@ class ParticipatesHandler:
             user = self.buildUserDict(row)
 
         return jsonify(User=user)
+
+    def getContactsNotInChat(self, personId, chatId):
+        dao = ParticipatesDAO()
+        contacts_list = dao.getContactsNotInChat(personId, chatId)
+        result_list = []
+        for row in contacts_list:
+            result = self.buildParticipatesDict(row)
+            result_list.append(result)
+        return jsonify(result_list)
 
     def insertNewChatJson(self, chatId, json):
         owner = json['ownerId']
