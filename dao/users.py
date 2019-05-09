@@ -46,8 +46,16 @@ class UsersDAO:
         result = cursor.fetchone()
         return result
 
-    def getMostActiveUser(self):
-        return self.userArray[0]
+    def getMostActiveUsersByDate(self):
+        cursor = self.conn.cursor()
+        query = "select userid, date(messagedate), count(*) as numberOfMessages, username " \
+                "from message natural inner join users group by date(messagedate), userid, username " \
+                "order by date(messagedate) desc, count(*) desc;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
     def insert(self, json):
         username = json[0]

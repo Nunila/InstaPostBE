@@ -96,6 +96,17 @@ class MessagesDAO:
             result.append(row)
         return result
 
+    def getNumRepliesPerDay(self):
+        cursor = self.conn.cursor()
+        query = "select date(messageDate), count(*) as repliesPerDay " \
+                "                from reply natural inner join message" \
+                "                group by date(messageDate);"
+        cursor.execute(query,)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
     def getNumOfRepliesByDate(self, date):
         return 100
 
