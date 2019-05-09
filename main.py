@@ -103,13 +103,19 @@ def getOwnerInSpecificChat(cid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
-@app.route('/InstaPost/users/login/<string:username>/<string:password>', methods=['POST'])
-def userLogin(username, password):
+@app.route('/InstaPost/users/login', methods=['POST'])
+def userLogin():
     if request.method == 'POST':
-        return UsersHandler().userLogin(username, password)
+        return UsersHandler().userLogin(request.json)
     else:
         return jsonify(Error="Method not allowed."), 405
 
+@app.route('/InstaPost/users/signup', methods=['POST'])
+def userSignUp():
+    if request.method == 'POST':
+        return UsersHandler().insertUser(request.json)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 # ===============================================PERSONS========================================================#
 

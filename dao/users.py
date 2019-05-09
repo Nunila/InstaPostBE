@@ -39,25 +39,34 @@ class UsersDAO:
         result = cursor.fetchone()
         return result
 
-    def getUserLogin(self, username, password):
+    def getUserLogin(self, json):
         cursor = self.conn.cursor()
-        query = "select * from Users where username = %s and password = %s;"
+        username = json['username'], password = ['password']
+        query = "select * from (select userId, username, password, personId, firstName, lastName, phoneNumber, email, birthday " \
+                "from Users natural inner join Person where Person.userid = Users.userid) as foo where foo.userName = %s and foo.password = %s;"
         cursor.execute(query, (username, password,))
-        result = cursor.fetchone()
+        result = cursor.fetchone()#return person info using user ID pa el handler hacer el dictionary y pa lante
         return result
 
     def getMostActiveUser(self):
         return self.userArray[0]
 
     def insert(self, json):
-        username = json[0]
-        password = json[1]
+        username = json['username']
+        password = json['password']
         cursor = self.conn.cursor()
         query = "insert into Users(username, password) values (%s, %s) returning userId;"
         cursor.execute(query, (username, password,))
-        uid = cursor.fetchone()[0]
         self.conn.commit()
-        return uid
+        uId = cursor.fetchone()
+        if not uId:
+            return uId
+        fname = json['firstName'], lname = json['lastName'], pnum = json['phoneNum']
+        email = json['email'], bday = json['birthday'], userId = uId
+        query = "insert into Person(firstName, lastName, phoneNumber, email, birthday, userId) values (%s, %s, %s, %s, %s, %s) returning personId;"
+        cursor.execute(query, (fname, lname, pnum, email, bday, userId,))
+        self.conn.commit()
+        return userId
 
     def update(self, userId, username, password):
         cursor = self.conn.cursor()

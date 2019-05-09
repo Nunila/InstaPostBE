@@ -88,7 +88,7 @@ class PersonDAO:
 
     def getPersonByUserId(self, uid):
         cursor = self.conn.cursor()
-        query = "select personId from Person where userId = %s;"
+        query = "select * from Person where userId = %s;"
         cursor.execute(query, (uid,))
         result = cursor.fetchone()
         return result
@@ -99,7 +99,7 @@ class PersonDAO:
         cursor = self.conn.cursor()
         query = "insert into Person(firstName, lastName, phoneNumber, email, birthday, userId) values (%s, %s, %s, %s, %s, %s) returning personId;"
         cursor.execute(query, (fname, lname, pnum, email, bday, userId,))
-        perid = cursor.fetchone()[0]
+        perid = cursor.fetchone()
         self.conn.commit()
         return perid
 

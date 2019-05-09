@@ -10,12 +10,12 @@ class UsersHandler:
         result = {}
         result['userId'] = row[0]
         result['userName'] = row[1]
-        result['personId'] = row[2]
-        result['firstName'] = row[3]
-        result['lastName'] = row[4]
-        result['phoneNumber'] = row[5]
-        result['email'] = row[6]
-        result['birthday'] = row[7]
+        result['personId'] = row[3]
+        result['firstName'] = row[4]
+        result['lastName'] = row[5]
+        result['phoneNumber'] = row[6]
+        result['email'] = row[7]
+        result['birthday'] = row[8]
         return result
 #*
 # MADE FOR LOG IN PURPOSES#
@@ -58,25 +58,21 @@ class UsersHandler:
         return jsonify(most_active), 200
 #*
 # MADE FOR LOG IN PURPOSES#
-    def userLogin(self, username, password):
+    def userLogin(self, json):
         dao = UsersDAO()
-        result = dao.getUserLogin(username, password)
+        result = dao.getUserLogin(json)
         print(result)
         if not result:
             return jsonify(Error='Invalid Credentials.'), 405
         else:
-            user = self.buildLoginCredentials(result)
-            pid = PersonDAO().getPersonByUserId(user['userId'])
-            if not pid:
-                user['personId'] = 0
-            else:
-                user['personId'] = pid
-
+            user = self.buildUserAttributes(result)
         return jsonify(user), 200
 
     def insertUser(self, json):
         dao = UsersDAO()
         new_user = dao.insert(json)
+        if not new_user:
+            return jsonify(ERROR="This username is taken."), 400
         return jsonify(new_user), 200
 
     def updateUser(self, uid, form):
