@@ -69,7 +69,7 @@ def getUsersById(uid):
 @app.route('/InstaPost/users/mostactive', methods=['GET'])
 def getMostActiveUser():
     if request.method == 'GET':
-        return UsersHandler().getMostActiveUser()
+        return UsersHandler().getMostActiveUsersByDate()
     else:
         return jsonify(Error="Method not allowed."), 405
 

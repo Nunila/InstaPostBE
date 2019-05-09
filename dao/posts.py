@@ -75,7 +75,7 @@ class PostsDAO:
         cursor = self.conn.cursor()
         query = "select date(postdate), count(*) as postsPerDay " \
                 "from post " \
-                "group by postdate;"
+                "group by date(postdate);"
         cursor.execute(query)
         result = []
 

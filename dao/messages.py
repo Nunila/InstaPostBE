@@ -100,7 +100,7 @@ class MessagesDAO:
         cursor = self.conn.cursor()
         query = "select date(messageDate), count(*) as repliesPerDay " \
                 "                from reply natural inner join message" \
-                "                group by messageDate;"
+                "                group by date(messageDate);"
         cursor.execute(query,)
         result = []
         for row in cursor:
