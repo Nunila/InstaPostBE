@@ -84,11 +84,17 @@ class PostsDAO:
 
         return result
 
-    def getNumOfPostsByDateAndUser(self, date, userId):
-        return 8
+    def getNumOfPostsByDateOfUser(self, userId):
+        cursor = self.conn.cursor()
+        query = "select date(postDate), count(*) as PostPerDay " \
+                "from post where userId =%s " \
+                "group by date(postdate);"
+        cursor.execute(query, (userId,))
+        result = []
+        for row in cursor:
+            result.append(row)
 
-    def getNumOfPostsByDate(self, date):
-        return 100
+        return result
 
     def insertPost(self, chatId, userId, messageId, photourl, postDate):
         cursor = self.conn.cursor()

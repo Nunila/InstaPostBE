@@ -401,10 +401,10 @@ def getNumOfPostsByDate(date):
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaPost/posts/numberOfPosts/<string:date>/<int:userId>', methods=['GET'])
-def getNumOfPostsByDateAndUser(date, userId):
+@app.route('/InstaPost/posts/numberOfPostsPerDay/<int:userId>', methods=['GET'])
+def getNumOfPostsByDateOfUser(userId):
     if request.method == 'GET':
-        return PostHandler().getNumOfPostsByDateAndUser(date, userId)
+        return PostHandler().getNumOfPostsByDateOfUser(userId)
     else:
         return jsonify(Error="Method not allowed."), 405
 

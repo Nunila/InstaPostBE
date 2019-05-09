@@ -19,7 +19,7 @@ class UsersHandler:
     def buildUserAttributes(self, row):
         result = {}
         result['userId'] = row[0]
-        result['userName'] = row[1]
+        result['username'] = row[1]
         result['personId'] = row[2]
         result['firstName'] = row[3]
         result['lastName'] = row[4]

@@ -115,10 +115,15 @@ class PostHandler:
         numOfPosts = dao.getNumOfPostsByDate(date)
         return jsonify(numOfPosts)
 
-    def getNumOfPostsByDateAndUser(self, date, userId):
+    def getNumOfPostsByDateOfUser(self, userId):
         dao = PostsDAO()
-        numOfPosts = dao.getNumOfPostsByDateAndUser(date, userId)
-        return jsonify(numOfPosts)
+        posts = dao.getNumOfPostsByDateOfUser(userId)
+        result_list = []
+        for row in posts:
+            result = self.buildPostPerDayDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
 
     def insertPost(self, json):
         chatId = json['chatId']
