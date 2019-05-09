@@ -168,6 +168,21 @@ def deleteContact(ownerid, contactid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+@app.route('/InstaPost/notparticipants/person/<int:personId>/chat/<int:chatId>', methods=['GET', 'POST'])
+def getContactsNotInChat(personId, chatId):
+    if request.method == 'GET':
+        return ParticipatesHandler().getContactsNotInChat(personId, chatId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPost/addparticipants/chat/<int:chatId>', methods=['POST'])
+def addParticipantsToChat(chatId):
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ParticipatesHandler().insertParticipantsToChat(request.json, chatId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 
 # -----------------------------------CHATS------------------------------------------
 
@@ -309,13 +324,6 @@ def getUsersWhoLikeByMessageId(messageId):
 def getUsersWhoDislikesByMessageId(messageId):
     if request.method == 'GET':
         return ReactionHandler().getUsersWhoDislikesByMessageId(messageId)
-    else:
-        return jsonify(Error="Method not allowed."), 405
-
-@app.route('/InstaPost/notparticipants/person/<int:personId>/chat/<int:chatId>', methods=['GET'])
-def getContactsNotInChat(personId, chatId):
-    if request.method == 'GET':
-        return ParticipatesHandler().getContactsNotInChat(personId, chatId)
     else:
         return jsonify(Error="Method not allowed."), 405
 
