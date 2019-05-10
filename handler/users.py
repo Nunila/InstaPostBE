@@ -15,17 +15,18 @@ class UsersHandler:
         result['username'] = row[3]
         return result
 
-#userId, username, personId, firstName, lastName, phoneNumber, email, birthday
+#userId, username, password, personId, firstName, lastName, phoneNumber, email, birthday
     def buildUserAttributes(self, row):
         result = {}
         result['userId'] = row[0]
         result['username'] = row[1]
-        result['personId'] = row[2]
-        result['firstName'] = row[3]
-        result['lastName'] = row[4]
-        result['phoneNum'] = row[5]
-        result['email'] = row[6]
-        result['birthday'] = row[7]
+        result['password'] = row[2]
+        result['personId'] = row[3]
+        result['firstName'] = row[4]
+        result['lastName'] = row[5]
+        result['phonenumber'] = row[6]
+        result['email'] = row[7]
+        result['birthday'] = row[8]
         return result
 #*
 # MADE FOR LOG IN PURPOSES#
@@ -51,7 +52,7 @@ class UsersHandler:
             return jsonify(Error = 'User not found.'), 404
         else:
             user = self.buildUserAttributes(result)
-            return jsonify(User= user), 200
+            return jsonify(user), 200
 
     def getUserByUName(self, uname):
         dao = UsersDAO()
@@ -89,7 +90,7 @@ class UsersHandler:
             return jsonify(Error='Invalid Credentials.'), 405
         else:
             user = self.buildUserAttributes(result)
-            return jsonify(User= user), 200
+            return jsonify(user), 200
 
     def insertUser(self, json):
         dao = UsersDAO()
