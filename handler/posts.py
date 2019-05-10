@@ -37,6 +37,12 @@ class PostHandler:
         result['total'] = row[1]
         return result
 
+    def buildPostDictDashboard(self, row):
+        result = {}
+        result['postId'] = row[0]
+        result['caption'] = row[1]
+        return result
+
     def buildPostAttributes(self, postId, chatId, userId, messageId, photourl, postDate):
         result = {}
         result['postId'] = postId
@@ -55,6 +61,16 @@ class PostHandler:
         result_list = []
         for row in posts_List:
             result = self.buildPostDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
+
+    def getAllPostsForDashboard(self):
+        dao = PostsDAO()
+        posts_List = dao.getAllPostsForDashboard()
+        result_list = []
+        for row in posts_List:
+            result = self.buildPostDictDashboard(row)
             result_list.append(result)
 
         return jsonify(result_list)

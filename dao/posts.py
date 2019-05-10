@@ -29,6 +29,18 @@ class PostsDAO:
 
         return result
 
+    def getAllPostsForDashboard(self):
+        cursor = self.conn.cursor()
+        query = "select postid, content " \
+                "from post as P inner join message as M on P.messageid = M.messageid " \
+                "order by postdate desc, postid desc;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+
+        return result
+
     def getPostById(self, postId):
         cursor = self.conn.cursor()
         query = "select postId, chatId, userId, photourl, messageId, content, postDate " \
@@ -95,6 +107,7 @@ class PostsDAO:
             result.append(row)
 
         return result
+
 
     def insertPost(self, chatId, userId, messageId, photourl, postDate):
         cursor = self.conn.cursor()

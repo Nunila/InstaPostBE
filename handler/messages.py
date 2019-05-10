@@ -203,4 +203,8 @@ class MessageHandler:
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
 
-
+    # def getNumberRepliesOfPost(self, postId):
+    #     dao = MessagesDAO()
+    #     count = dao.getNumberOfRepliesOfPost(postId)
+    #     result = {'numberOfReplies': count}
+    #     return jsonify(result)
