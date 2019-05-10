@@ -33,9 +33,11 @@ class ChatsDAO:
 
     def getChatById(self, cid):
         cursor = self.conn.cursor()
-        query = "select * from chat where chatId = %s;"
+        query = "select chatid, chatname, creationdate, userid from chat natural inner join participates " \
+                "where role='owner' and chatid=%s;"
         cursor.execute(query, (cid,))
         result = cursor.fetchone()
+        print(result)
         return result
 
     def getChatsByParticipatingId(self, uid):

@@ -1,5 +1,6 @@
 from flask import jsonify
 from dao.messages import MessagesDAO
+from handler.hashtag import HashtagHandler
 import datetime
 
 
@@ -24,8 +25,23 @@ class MessageHandler:
         result['username'] = row[5]
         return result
 
+    def buildRepliesByDayDict(self, row):
+        result = {}
+        result['day'] = row[0]
+        result['total'] = row[1]
+        return result
 
-    def builMessageAttributes(self, messageId, userId, content, messageDate, type):
+
+    def buildReplyAttributes(self, messageId, postId, userId, content, messageDate):
+        result = {}
+        result['messageId'] = messageId
+        result['postId'] = postId
+        result['userId'] = userId
+        result['content'] = content
+        result['messageDate'] = messageDate
+        return result
+
+    def buildMessageAttributes(self, messageId, userId, content, messageDate):
         result = {}
         result['messageId'] = messageId
         result['userId'] = userId
@@ -117,6 +133,16 @@ class MessageHandler:
 
         return jsonify(result_list)
 
+    def getNumOfRepliesPerDay(self):
+        dao = MessagesDAO()
+        messages_List = dao.getNumRepliesPerDay()
+        result_list = []
+        for row in messages_List:
+            result = self.buildRepliesByDayDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
+
 
     def getNumOfRepliesByDate(self, date):
         dao = MessagesDAO()
@@ -129,9 +155,22 @@ class MessageHandler:
         return jsonify(numOfReplies)
 
     def insertMessage(self, json):
-        dao = MessagesDAO()
-        newMessage = dao.insertMessage(json)
-        return jsonify(newMessage)
+        userId = json['userId']
+        content = json['content']
+        messageDate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        if userId and content and messageDate:
+            dao = MessagesDAO()
+            messageId = dao.insertMessage(userId, content, messageDate)
+            result = self.buildMessageAttributes(messageId, userId, content, messageDate)
+
+            hashHandler = HashtagHandler()
+            hashResult = hashHandler.getHashtagsFromString(content)
+            if(hashResult) is not None:
+                hashHandler.insertHashtagArray(hashResult, messageId)
+            #print("Result: ", jsonify(result))
+            return messageId, 201
+        else:
+            return jsonify(Error="Unexpected attributes in post request"), 400
 
     def updateMessage(self, messageId, form):
         dao = MessagesDAO()
@@ -143,3 +182,29 @@ class MessageHandler:
         id = dao.deleteMessage(messageId)
         return jsonify(DeleteStatus="OK"), 200
 
+    def insertReplyJson(self, json):
+        postId = json['postId']
+        userId = json['userId']
+        content = json['content']
+        messageDate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        if postId and userId and content and messageDate:
+            dao = MessagesDAO()
+            messageId = dao.insertMessage(userId, content, messageDate)
+            result = self.buildReplyAttributes(messageId, postId, userId, content, messageDate)
+            notification = dao.insertReply(postId, messageId)
+            print(notification)
+
+            hashHandler = HashtagHandler()
+            hashresult = hashHandler.getHashtagsFromString(content)
+            if hashresult is not None:
+                hashHandler.insertHashtagArray(hashresult, messageId)
+
+            return jsonify(result), 201
+        else:
+            return jsonify(Error="Unexpected attributes in post request"), 400
+
+    # def getNumberRepliesOfPost(self, postId):
+    #     dao = MessagesDAO()
+    #     count = dao.getNumberOfRepliesOfPost(postId)
+    #     result = {'numberOfReplies': count}
+    #     return jsonify(result)

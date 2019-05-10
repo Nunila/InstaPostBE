@@ -1,15 +1,25 @@
 from flask import jsonify
 from dao.users import UsersDAO
 from dao.person import PersonDAO
+from collections import OrderedDict
+
 
 class UsersHandler:
 
+
+    def buildMostActiveUsersDict(self, row):
+        result = {}
+        result['userId'] = row[0]
+        result['day'] = row[1]
+        result['count'] = row[2]
+        result['username'] = row[3]
+        return result
 
 #userId, username, personId, firstName, lastName, phoneNumber, email, birthday
     def buildUserAttributes(self, row):
         result = {}
         result['userId'] = row[0]
-        result['userName'] = row[1]
+        result['username'] = row[1]
         result['personId'] = row[2]
         result['firstName'] = row[3]
         result['lastName'] = row[4]
@@ -52,11 +62,24 @@ class UsersHandler:
             user = self.buildUserAttributes(result)
             return jsonify(User= user), 200
 
-    def getMostActiveUser(self):
+
+
+    def getMostActiveUsersByDate(self):
         dao = UsersDAO()
-        most_active = dao.getMostActiveUser()
-        return jsonify(most_active), 200
-#*
+        most_active = dao.getMostActiveUsersByDate()
+        results = []
+        map = {}
+        for row in most_active:
+            element = self.buildMostActiveUsersDict(row)
+            results.append(element)
+            map[str(element['day'])] = []
+        for row in results:
+            map[str(row['day'])].append(row)
+
+        return jsonify(map), 200
+
+
+
 # MADE FOR LOG IN PURPOSES#
     def userLogin(self, username, password):
         dao = UsersDAO()

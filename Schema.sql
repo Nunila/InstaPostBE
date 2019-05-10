@@ -1,16 +1,16 @@
 create table Users(
-userId serial primary key,
-username varchar(20),
-password varchar(200));
+	userId serial primary key,
+	username varchar(20),
+	password varchar(200));
 
 create table Person(
-personId serial primary key,
-firstName varchar(200),
-lastName varchar(200),
-phoneNumber varchar(200),
-email varchar(200),
-birthday date,
-userId integer references Users(userId));
+	personId serial primary key,
+	firstName varchar(200),
+	lastName varchar(200),
+	phoneNumber varchar(200),
+	email varchar(200),
+	birthday date,
+	userId integer references Users(userId));
 
 create table Contacts(
 	ownerId integer references Person(personId),

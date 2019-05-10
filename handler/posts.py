@@ -1,5 +1,7 @@
 from flask import jsonify
 from dao.posts import PostsDAO
+from handler.messages import MessageHandler
+import datetime
 
 
 class PostHandler:
@@ -35,11 +37,18 @@ class PostHandler:
         result['total'] = row[1]
         return result
 
-    def buildPostAttributes(self, postId, chatId, userId, photourl, postDate):
+    def buildPostDictDashboard(self, row):
+        result = {}
+        result['postId'] = row[0]
+        result['caption'] = row[1]
+        return result
+
+    def buildPostAttributes(self, postId, chatId, userId, messageId, photourl, postDate):
         result = {}
         result['postId'] = postId
         result['chatId'] = chatId
         result['userId'] = userId
+        result['messageId'] = messageId
         result['photourl'] = photourl
         result['postDate'] = postDate
         return result
@@ -52,6 +61,16 @@ class PostHandler:
         result_list = []
         for row in posts_List:
             result = self.buildPostDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
+
+    def getAllPostsForDashboard(self):
+        dao = PostsDAO()
+        posts_List = dao.getAllPostsForDashboard()
+        result_list = []
+        for row in posts_List:
+            result = self.buildPostDictDashboard(row)
             result_list.append(result)
 
         return jsonify(result_list)
@@ -112,15 +131,30 @@ class PostHandler:
         numOfPosts = dao.getNumOfPostsByDate(date)
         return jsonify(numOfPosts)
 
-    def getNumOfPostsByDateAndUser(self, date, userId):
+    def getNumOfPostsByDateOfUser(self, userId):
         dao = PostsDAO()
-        numOfPosts = dao.getNumOfPostsByDateAndUser(date, userId)
-        return jsonify(numOfPosts)
+        posts = dao.getNumOfPostsByDateOfUser(userId)
+        result_list = []
+        for row in posts:
+            result = self.buildPostPerDayDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
 
     def insertPost(self, json):
-        dao = PostsDAO()
-        newPost = dao.insertPost(json)
-        return jsonify(newPost)
+        chatId = json['chatId']
+        userId = json['userId']
+        messageHandler = MessageHandler()
+        messageId = messageHandler.insertMessage(json)[0]
+        photourl = json['src']
+        postDate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        if chatId and userId and messageId and photourl and postDate:
+            dao = PostsDAO()
+            postId = dao.insertPost(chatId, userId, messageId, photourl, postDate)
+            result = self.buildPostAttributes(postId, chatId, userId, messageId, photourl, postDate)
+            return jsonify(result), 201
+        else:
+            return jsonify(Error="Unexpected attributes in post request"), 400
 
     def updatePost(self, postId, form):
         dao = PostsDAO()

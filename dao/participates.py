@@ -96,6 +96,21 @@ class ParticipatesDAO:
         result = cursor.fetchone()
         return result
 
+    def getContactsNotInChat(self, personId, chatId):
+        cursor = self.conn.cursor()
+        query = "select person.personid, users.userid, username, firstname, lastname, phonenumber, email, birthday from person " \
+                "inner join ((select contactId as personId from contacts where ownerid=%s) except " \
+                "(select personId from participates natural inner join person where chatId=%s)) as contactpeople " \
+                "on person.personId = contactpeople.personId inner join users on person.userId = users.userId;"
+        cursor.execute(query, (personId, chatId))
+        result = []
+        for row in cursor:
+            result.append(row)
+
+        return result
+
+
+
     def insert(self, chatId, memberid, role):
         cursor = self.conn.cursor()
         query = "insert into participates(chatId, userId, role) values (%s, %s, %s);"

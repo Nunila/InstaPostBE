@@ -38,7 +38,7 @@ class HashtagsDAO:
 
     def getHashByName(self, hname):
         cursor = self.conn.cursor()
-        query = "select * from Hashtag where hashname = %s;"
+        query = "select hashtagId, hashName, datetime from Hashtag where hashname = %s;"
         cursor.execute(query, (hname,))
         result = cursor.fetchone()
         return result
@@ -56,14 +56,12 @@ class HashtagsDAO:
             result.append(row)
         return result
 
-    def insert(self, hname):
+    def insert(self, hashName, timestamp):
         cursor = self.conn.cursor()
-        query = "insert into Hashtag(hashName, date) values (%s, %s) returning hashtagId;"
-        cursor.execute(query, (hname, datetime.datetime.now(),))
-        result = []
-        for row in cursor:
-            result.append(row)
-        return result
+        query = "insert into Hashtag(hashName, datetime) values (%s, %s) returning hashtagId;"
+        cursor.execute(query, (hashName, timestamp,))
+        hashtagId = cursor.fetchone()[0]
+        return hashtagId
 
     def update(self, hid, hname):
         cursor = self.conn.cursor()
@@ -78,3 +76,10 @@ class HashtagsDAO:
         cursor.execute(query, (hid,))
         self.conn.commit()
         return hid
+
+    def insertMentioned(self, hashtagId, messageId):
+        cursor = self.conn.cursor()
+        query = "insert into mentioned (hashtagId, messageId) values (%s, %s)"
+        cursor.execute(query, (hashtagId, messageId))
+        self.conn.commit()
+        return "Successfully inserted hashtag"

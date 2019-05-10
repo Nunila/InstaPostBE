@@ -29,6 +29,18 @@ class PostsDAO:
 
         return result
 
+    def getAllPostsForDashboard(self):
+        cursor = self.conn.cursor()
+        query = "select postid, content " \
+                "from post as P inner join message as M on P.messageid = M.messageid " \
+                "order by postdate desc, postid desc;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+
+        return result
+
     def getPostById(self, postId):
         cursor = self.conn.cursor()
         query = "select postId, chatId, userId, photourl, messageId, content, postDate " \
@@ -51,8 +63,8 @@ class PostsDAO:
 
     def getPostsByChatId(self, chatId):
         cursor = self.conn.cursor()
-        query = "select postId, chatId, userId, photourl, messageId, content, postDate " \
-                "from post natural inner join message where chatId = %s;"
+        query = "select postId, chatId, post.userId, photourl, post.messageId, content, postDate " \
+                "from post inner join message on post.messageId = message.messageId where chatId = %s;"
         cursor.execute(query, (chatId,))
         result = []
         for row in cursor:
@@ -75,7 +87,7 @@ class PostsDAO:
         cursor = self.conn.cursor()
         query = "select date(postdate), count(*) as postsPerDay " \
                 "from post " \
-                "group by postdate;"
+                "group by date(postdate);"
         cursor.execute(query)
         result = []
 
@@ -84,14 +96,26 @@ class PostsDAO:
 
         return result
 
-    def getNumOfPostsByDateAndUser(self, date, userId):
-        return 8
+    def getNumOfPostsByDateOfUser(self, userId):
+        cursor = self.conn.cursor()
+        query = "select date(postDate), count(*) as PostPerDay " \
+                "from post where userId =%s " \
+                "group by date(postdate);"
+        cursor.execute(query, (userId,))
+        result = []
+        for row in cursor:
+            result.append(row)
 
-    def getNumOfPostsByDate(self, date):
-        return 100
+        return result
 
-    def insertPost(self, json):
-        return 'Succesfully inserted new post!'
+
+    def insertPost(self, chatId, userId, messageId, photourl, postDate):
+        cursor = self.conn.cursor()
+        query = "insert into post (chatId, userId, messageId, photourl, postDate) values (%s, %s, %s, %s, %s) returning postId;"
+        cursor.execute(query, (chatId, userId, messageId, photourl, postDate))
+        postId = cursor.fetchone()[0]
+        self.conn.commit()
+        return postId
 
     def updatePost(self, pid, form):
         return self.postsArray[2]
