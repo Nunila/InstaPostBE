@@ -39,9 +39,8 @@ class UsersDAO:
         result = cursor.fetchone()
         return result
 
-    def getUserLogin(self, json):
+    def getUserLogin(self, username, password):
         cursor = self.conn.cursor()
-        username = json['username'], password = ['password']
         query = "select * from (select userId, username, password, personId, firstName, lastName, phoneNumber, email, birthday " \
                 "from Users natural inner join Person where Person.userid = Users.userid) as foo where foo.userName = %s and foo.password = %s;"
         cursor.execute(query, (username, password,))
@@ -52,7 +51,7 @@ class UsersDAO:
         return self.userArray[0]
 
     def insert(self, json):
-        username = json['username']
+        username = json['userName']
         password = json['password']
         cursor = self.conn.cursor()
         query = "insert into Users(username, password) values (%s, %s) returning userId;"
@@ -62,8 +61,12 @@ class UsersDAO:
         if not uId:
             return uId
         else:
-            fname = json['firstName'], lname = json['lastName'], pnum = json['phoneNum']
-            email = json['email'], bday = json['birthday'], userId = uId
+            fname = json['firstName']
+            lname = json['lastName']
+            pnum = json['phoneNum']
+            email = json['email']
+            bday = json['birthday']
+            userId = uId
             query = "insert into Person(firstName, lastName, phoneNumber, email, birthday, userId) values (%s, %s, %s, %s, %s, %s) returning personId;"
             cursor.execute(query, (fname, lname, pnum, email, bday, userId,))
             self.conn.commit()

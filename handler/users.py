@@ -10,12 +10,12 @@ class UsersHandler:
         result = {}
         result['userId'] = row[0]
         result['userName'] = row[1]
-        result['personId'] = row[3]
-        result['firstName'] = row[4]
-        result['lastName'] = row[5]
-        result['phoneNum'] = row[6]
-        result['email'] = row[7]
-        result['birthday'] = row[8]
+        result['personId'] = row[2]
+        result['firstName'] = row[3]
+        result['lastName'] = row[4]
+        result['phoneNum'] = row[5]
+        result['email'] = row[6]
+        result['birthday'] = row[7]
         return result
 #*
 # MADE FOR LOG IN PURPOSES#
@@ -58,10 +58,9 @@ class UsersHandler:
         return jsonify(most_active), 200
 #*
 # MADE FOR LOG IN PURPOSES#
-    def userLogin(self, json):
-        print('this is the json', json)
+    def userLogin(self, username, password):
         dao = UsersDAO()
-        result = dao.getUserLogin(json)
+        result = dao.getUserLogin(username, password)
         print(result)
         if not result:
             return jsonify(Error='Invalid Credentials.'), 405
