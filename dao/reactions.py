@@ -140,7 +140,7 @@ class ReactionsDAO:
 
     def insert(self, userId, postId, messageId, type, reactionDate):
         cursor = self.conn.cursor()
-        query = "insert into reaction (userId, postId, messageId, type, reactionDate) values (%s, %s, %s, %s, %s) returning reactionId"
+        query = "insert into reaction (userId, postId, messageId, type, reactionDate) values (%s, %s, %s, %s, %s) returning reactionId;"
         cursor.execute(query, (userId, postId, messageId, type, reactionDate))
         reactionId = cursor.fetchone()[0]
         self.conn.commit()
@@ -151,5 +151,15 @@ class ReactionsDAO:
 
     def delete(self, pid):
         return pid
+
+    def getUserReactionsByChatId(self, userId, chatId):
+        cursor = self.conn.cursor()
+        query = "select reactionId, reaction.userId, reaction.postId, reaction.messageId, type, reactionDate from reaction inner join post on reaction.postid = post.postid where reaction.userId=%s and chatId =%s;"
+        cursor.execute(query, (userId, chatId))
+        result = []
+        for row in cursor:
+            result.append(row)
+
+        return result
 
 
