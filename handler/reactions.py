@@ -1,6 +1,7 @@
 from flask import jsonify
 from dao.reactions import ReactionsDAO
 from collections import defaultdict
+import datetime
 
 
 class ReactionHandler:
@@ -47,6 +48,16 @@ class ReactionHandler:
         result['dislikesCount']=row[1]
         return result
 
+    def buildReactionAttributes(self, reactionId, userId, postId, messageId, type, reactionDate):
+        result = {}
+        result['reactionId'] = reactionId
+        result['userId'] = userId
+        result['postId'] = postId
+        result['messageId'] = messageId
+        result['type'] = type
+        result['reactionDate'] = reactionDate
+        return result
+
 
 #--------------Operations-----------------------------------------------------------------------
     def getAllReactions(self):
@@ -67,6 +78,7 @@ class ReactionHandler:
         for row in reaction_list:
             element = self.buildReactionDictionary(row)
             results.append(element)
+        print(results)
         return jsonify(results), 200
 
     def getLikesCountByMessageId(self, messageId):
@@ -111,8 +123,15 @@ class ReactionHandler:
         return jsonify(reaction_list), 200
 
     def insertReactionJson(self, json):
-        dao = ReactionsDAO()
-        newreaction = dao.insert(json)
+        userId = json['userId']
+        postId = json['postId']
+        messageId = json['messageId']
+        type = json['reactionType']
+        reactionDate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        if userId and postId and messageId and type and reactionDate:
+            dao = ReactionsDAO()
+            reactionId = dao.insert(userId, postId, messageId, type, reactionDate)
+            newreaction = self.buildReactionAttributes(reactionId, userId, postId, messageId, type, reactionDate)
         return jsonify(newreaction), 200
 
     def updateReaction(self, cid, form):

@@ -228,6 +228,14 @@ def addPersonToChat(cid, personid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+@app.route('/InstaPost/removemember/chat/<int:chatId>/user/<int:userid>', methods=['DELETE'])
+def deleteUserFromChat(chatId, userid):
+    if request.method == 'DELETE':
+        print("UserId: ", userid)
+        return ParticipatesHandler().delete(chatId, userid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 
 # ---------------------------REACTIONS--------------------------------
 
@@ -237,11 +245,10 @@ def getAllReactions():
     if request.method == 'POST':
         print("REQUEST: ", request.json)
         return ReactionHandler().insertReactionJson(request.json)
+    elif request.method == 'GET':
+        return ReactionHandler().getAllReactions()
     else:
-        if not request.args:
-            return ReactionHandler().getAllReactions()
-        else:
-            return ReactionHandler().searchReactions(request.args)
+        return jsonify(Error="Method not allowed."), 405
 
 
 @app.route('/InstaPost/reactionsPerMessage', methods=['GET'])

@@ -118,3 +118,10 @@ class ParticipatesDAO:
         userId = cursor.fetchone()[0]
         self.conn.commit()
         return userId
+
+    def delete(self, chatId, userId):
+        cursor = self.conn.cursor()
+        query = "delete from participates where chatId = %s and userId = %s;"
+        cursor.execute(query, (chatId, userId))
+        self.conn.commit()
+        return userId

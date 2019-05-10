@@ -112,8 +112,6 @@ class ReactionsDAO:
 
     def reactionsPerMessage(self):
         cursor = self.conn.cursor()
-        # query = "select postid, messageid, type, count(foo.type) from (select * from reaction) as foo group by messageid," \
-        #         " postid, type order by messageid asc, postid asc;"
         query = "select likes.messageid, likes.likecount, dislikes.dislikecount from " \
                 "(select messageid, count(r.type) as likecount from reaction as r where type = 'LIKE' group by messageid) as likes " \
                 "full outer join " \
@@ -140,8 +138,13 @@ class ReactionsDAO:
     def getDislikesOfPost(self, postid):
         return 9
 
-    def insert(self, json):
-        return self.reactionArray[2]
+    def insert(self, userId, postId, messageId, type, reactionDate):
+        cursor = self.conn.cursor()
+        query = "insert into reaction (userId, postId, messageId, type, reactionDate) values (%s, %s, %s, %s, %s) returning reactionId"
+        cursor.execute(query, (userId, postId, messageId, type, reactionDate))
+        reactionId = cursor.fetchone()[0]
+        self.conn.commit()
+        return messageId
 
     def update(self, pid, form):
         return self.reactionArray[4]

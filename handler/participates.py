@@ -106,3 +106,13 @@ class ParticipatesHandler:
             return jsonify(result), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
+
+    def delete(self, chatId, userid):
+        if chatId and userid:
+            dao = ParticipatesDAO()
+            result = dao.delete(chatId, userid)
+
+            return jsonify(result), 201
+        else:
+
+            return jsonify(Error="Unexpected attributes in delete request"), 400
