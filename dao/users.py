@@ -61,12 +61,13 @@ class UsersDAO:
         uId = cursor.fetchone()
         if not uId:
             return uId
-        fname = json['firstName'], lname = json['lastName'], pnum = json['phoneNum']
-        email = json['email'], bday = json['birthday'], userId = uId
-        query = "insert into Person(firstName, lastName, phoneNumber, email, birthday, userId) values (%s, %s, %s, %s, %s, %s) returning personId;"
-        cursor.execute(query, (fname, lname, pnum, email, bday, userId,))
-        self.conn.commit()
-        return userId
+        else:
+            fname = json['firstName'], lname = json['lastName'], pnum = json['phoneNum']
+            email = json['email'], bday = json['birthday'], userId = uId
+            query = "insert into Person(firstName, lastName, phoneNumber, email, birthday, userId) values (%s, %s, %s, %s, %s, %s) returning personId;"
+            cursor.execute(query, (fname, lname, pnum, email, bday, userId,))
+            self.conn.commit()
+            return userId
 
     def update(self, userId, username, password):
         cursor = self.conn.cursor()

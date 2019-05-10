@@ -13,7 +13,7 @@ class UsersHandler:
         result['personId'] = row[3]
         result['firstName'] = row[4]
         result['lastName'] = row[5]
-        result['phoneNumber'] = row[6]
+        result['phoneNum'] = row[6]
         result['email'] = row[7]
         result['birthday'] = row[8]
         return result
@@ -59,6 +59,7 @@ class UsersHandler:
 #*
 # MADE FOR LOG IN PURPOSES#
     def userLogin(self, json):
+        print('this is the json', json)
         dao = UsersDAO()
         result = dao.getUserLogin(json)
         print(result)
@@ -66,14 +67,17 @@ class UsersHandler:
             return jsonify(Error='Invalid Credentials.'), 405
         else:
             user = self.buildUserAttributes(result)
-        return jsonify(user), 200
+            return jsonify(User= user), 200
 
     def insertUser(self, json):
         dao = UsersDAO()
         new_user = dao.insert(json)
         if not new_user:
             return jsonify(ERROR="This username is taken."), 400
-        return jsonify(new_user), 200
+        else:
+            result = dao.getUserByID(new_user)
+            user = self.buildUserAttributes(result)
+            return jsonify(User= user)
 
     def updateUser(self, uid, form):
         dao = UsersDAO()
