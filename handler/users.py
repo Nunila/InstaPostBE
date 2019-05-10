@@ -80,7 +80,6 @@ class UsersHandler:
         return jsonify(map), 200
 
 
-
 # MADE FOR LOG IN PURPOSES#
     def userLogin(self, username, password):
         dao = UsersDAO()
@@ -98,9 +97,11 @@ class UsersHandler:
         if not new_user:
             return jsonify(ERROR="This username is taken."), 400
         else:
+            print(json)
             result = dao.getUserByID(new_user)
+            print(result)
             user = self.buildUserAttributes(result)
-            return jsonify(User= user)
+            return jsonify(user)
 
     def updateUser(self, uid, form):
         dao = UsersDAO()

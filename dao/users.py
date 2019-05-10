@@ -26,7 +26,7 @@ class UsersDAO:
 
     def getUserByID(self, uid):
         cursor = self.conn.cursor()
-        query = "select userId, username, personId, firstName, lastName, phoneNumber, email, birthday from Users natural inner join Person where userid = %s;"
+        query = "select userId, username, password, personId, firstName, lastName, phoneNumber, email, birthday from Users natural inner join Person where userid = %s;"
         cursor.execute(query, (uid,))
         result = cursor.fetchone()
         return result
