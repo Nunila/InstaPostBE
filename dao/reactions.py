@@ -149,8 +149,12 @@ class ReactionsDAO:
     def update(self, pid, form):
         return self.reactionArray[4]
 
-    def delete(self, pid):
-        return pid
+    def delete(self, userId, messageId):
+        cursor = self.conn.cursor()
+        query = "delete from reaction where userId = %s and messageId = %s;"
+        cursor.execute(query, (userId, messageId))
+        self.conn.commit()
+        return userId
 
     def getUserReactionsByChatId(self, userId, chatId):
         cursor = self.conn.cursor()

@@ -147,9 +147,9 @@ class ReactionHandler:
         updatedreaction = dao.update(cid, form)
         return jsonify(updatedreaction), 200
 
-    def deleteReaction(self, cid):
+    def deleteReaction(self, userId, messageId):
         dao = ReactionsDAO()
-        id = dao.delete(cid)
+        id = dao.delete(userId, messageId)
         return jsonify(DeleteStatus="OK"), 200
 
     def getLikesCountOnDate(self, date):
