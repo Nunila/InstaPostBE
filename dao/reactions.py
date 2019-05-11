@@ -112,11 +112,11 @@ class ReactionsDAO:
 
     def reactionsPerMessage(self):
         cursor = self.conn.cursor()
-        query = "select likes.messageid, likes.likecount, dislikes.dislikecount from " \
+        query = "select likes.messageid, dislikes.messageId, likes.likecount, dislikes.dislikecount from " \
                 "(select messageid, count(r.type) as likecount from reaction as r where type = 'LIKE' group by messageid) as likes " \
                 "full outer join " \
                 "(select messageid, count(r.type) as dislikecount from reaction as r where type = 'DISLIKE' group by messageid) as dislikes " \
-                "on likes.messageId = dislikes.messageId order by messageid;"
+                "on likes.messageId = dislikes.messageId order by likes.messageid;"
         cursor.execute(query)
         result = []
         for row in cursor:

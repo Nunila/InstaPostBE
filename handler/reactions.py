@@ -8,9 +8,13 @@ class ReactionHandler:
 
     def buildReactionDictionary(self, row):
         result = {}
-        result['messageId'] = row[0]
-        result['likes'] = row[1]
-        result['dislikes'] = row[2]
+        if row[0] is None:
+            result['messageId'] = row[1]
+        else:
+            result['messageId'] = row[0]
+
+        result['likes'] = row[2]
+        result['dislikes'] = row[3]
         if result['likes'] is None:
             result['likes'] = 0
         if result['dislikes'] is None:
