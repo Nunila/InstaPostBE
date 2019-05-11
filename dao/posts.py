@@ -63,8 +63,8 @@ class PostsDAO:
 
     def getPostsByChatId(self, chatId):
         cursor = self.conn.cursor()
-        query = "select postId, chatId, post.userId, photourl, post.messageId, content, postDate " \
-                "from post inner join message on post.messageId = message.messageId where chatId = %s;"
+        query = "select postId, chatId, post.userId, photourl, post.messageId, content, postDate, username " \
+                "from post natural inner join users inner join message on post.messageId = message.messageId  where chatId = %s;"
         cursor.execute(query, (chatId,))
         result = []
         for row in cursor:

@@ -28,7 +28,7 @@ class PostHandler:
         result['messageId'] = row[4]
         result['content']= row[5]
         result['postDate'] = row[6]
-
+        result['username'] = row[7]
         return result
 
     def buildPostPerDayDict(self, row):
