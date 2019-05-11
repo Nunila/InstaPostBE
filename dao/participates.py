@@ -75,7 +75,7 @@ class ParticipatesDAO:
 
     def getUsersInSpecificChat(self, chatid):
         cursor = self.conn.cursor()
-        query = "select firstname, lastname, phonenumber, email, birthday, username, userid " \
+        query = "select firstname, lastname, phonenumber, email, birthday, username, PP.userid, personId " \
                 "from (participates as PP natural inner join users natural inner join " \
                 "person natural inner join chat)" \
                 "where PP.chatid=%s;"
@@ -113,8 +113,15 @@ class ParticipatesDAO:
 
     def insert(self, chatId, memberid, role):
         cursor = self.conn.cursor()
-        query = "insert into participates(chatId, userId, role) values (%s, %s, %s);"
+        query = "insert into participates(chatId, userId, role) values (%s, %s, %s) returning userId;"
         cursor.execute(query, (chatId, memberid, role,))
+        userId = cursor.fetchone()[0]
         self.conn.commit()
-        return 'success'
+        return userId
 
+    def delete(self, chatId, userId):
+        cursor = self.conn.cursor()
+        query = "delete from participates where chatId = %s and userId = %s;"
+        cursor.execute(query, (chatId, userId))
+        self.conn.commit()
+        return userId

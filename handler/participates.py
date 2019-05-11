@@ -6,13 +6,14 @@ class ParticipatesHandler:
 
     def buildUserDict(self, row):
         result = {}
-        result['firstname'] = row[0]
-        result['lastname'] = row[1]
+        result['firstName'] = row[0]
+        result['lastName'] = row[1]
         result['phonenumber'] = row[2]
         result['email'] = row[3]
         result['birthday'] = row[4]
-        result['username'] = row[5]
+        result['userName'] = row[5]
         result['userId'] = row[6]
+        result['personId'] = row[7]
         return result
 
     def buildParticipatesDict(self, row):
@@ -25,6 +26,13 @@ class ParticipatesHandler:
         result['phonenumber'] = row[5]
         result['email'] = row[6]
         result['birthday'] = row[7]
+        return result
+
+    def buildParticipatesDict2(self, userId, chatId, role):
+        result = {}
+        result['userId'] = userId
+        result['chatId'] = chatId
+        result['role'] = role
         return result
 
     def buildParticipatesAttributes(self, postId, chatId, userId, photourl, postDate):
@@ -85,3 +93,26 @@ class ParticipatesHandler:
         else:
 
             return jsonify(Error="Unexpected attributes in post request"), 400
+
+    def insertParticipantsToChat(self, json, chatId):
+        participants = json['participants']
+        role = "member"
+        if chatId and participants:
+            dao = ParticipatesDAO()
+            result = []
+            for user in participants:
+                userId = dao.insert(chatId, user, role)
+                result.append(self.buildParticipatesDict2(user, chatId, role))
+            return jsonify(result), 201
+        else:
+            return jsonify(Error="Unexpected attributes in post request"), 400
+
+    def delete(self, chatId, userid):
+        if chatId and userid:
+            dao = ParticipatesDAO()
+            result = dao.delete(chatId, userid)
+
+            return jsonify(result), 201
+        else:
+
+            return jsonify(Error="Unexpected attributes in delete request"), 400

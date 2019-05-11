@@ -168,6 +168,21 @@ def deleteContact(ownerid, contactid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+@app.route('/InstaPost/notparticipants/person/<int:personId>/chat/<int:chatId>', methods=['GET', 'POST'])
+def getContactsNotInChat(personId, chatId):
+    if request.method == 'GET':
+        return ParticipatesHandler().getContactsNotInChat(personId, chatId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
+@app.route('/InstaPost/addparticipants/chat/<int:chatId>', methods=['POST'])
+def addParticipantsToChat(chatId):
+    if request.method == 'POST':
+        print("REQUEST: ", request.json)
+        return ParticipatesHandler().insertParticipantsToChat(request.json, chatId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 
 # -----------------------------------CHATS------------------------------------------
 
@@ -213,20 +228,35 @@ def addPersonToChat(cid, personid):
     else:
         return jsonify(Error="Method not allowed."), 405
 
+@app.route('/InstaPost/removemember/chat/<int:chatId>/user/<int:userid>', methods=['DELETE'])
+def deleteUserFromChat(chatId, userid):
+    if request.method == 'DELETE':
+        print("UserId: ", userid)
+        return ParticipatesHandler().delete(chatId, userid)
+    else:
+        return jsonify(Error="Method not allowed."), 405
+
 
 # ---------------------------REACTIONS--------------------------------
 
 
-@app.route('/InstaPost/reactions', methods=['GET', 'POST'])
+@app.route('/InstaPost/reactions', methods=['GET', 'POST', 'DELETE'])
 def getAllReactions():
     if request.method == 'POST':
         print("REQUEST: ", request.json)
         return ReactionHandler().insertReactionJson(request.json)
+    elif request.method == 'GET':
+        return ReactionHandler().getAllReactions()
     else:
-        if not request.args:
-            return ReactionHandler().getAllReactions()
-        else:
-            return ReactionHandler().searchReactions(request.args)
+        return jsonify(Error="Method not allowed."), 405
+
+
+@app.route('/InstaPost/deletereaction/user/<int:userId>/message/<int:messageId>', methods=['DELETE'])
+def deleteReaction(userId, messageId):
+    if request.method == 'DELETE':
+        return ReactionHandler().deleteReaction(userId, messageId)
+    else:
+        return jsonify(Error="Method not allowed."), 405
 
 
 @app.route('/InstaPost/reactionsPerMessage', methods=['GET'])
@@ -313,12 +343,6 @@ def getUsersWhoDislikesByMessageId(messageId):
         return jsonify(Error="Method not allowed."), 405
 
 
-@app.route('/InstaPost/notparticipants/person/<int:personId>/chat/<int:chatId>', methods=['GET'])
-def getContactsNotInChat(personId, chatId):
-    if request.method == 'GET':
-        return ParticipatesHandler().getContactsNotInChat(personId, chatId)
-
-
 @app.route('/InstaPost/reactions/likesPerDay', methods=['GET'])
 def getLikesPerDay():
     if request.method == 'GET':
@@ -331,9 +355,15 @@ def getLikesPerDay():
 def getDislikesPerDay():
     if request.method == 'GET':
         return ReactionHandler().getDislikesPerDay()
+
+
+@app.route('/InstaPost/reactions/user/<int:userId>/chat/<int:chatId>', methods=['GET'])
+def getUserReactionsByChatId(userId, chatId):
+    if request.method == 'GET':
+        print('ChatId: ', chatId)
+        return ReactionHandler().getUserReactionsByChatId(userId, chatId)
     else:
         return jsonify(Error="Method not allowed."), 405
-
 # --------------------------POSTS-----------------------------------------
 
 
