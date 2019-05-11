@@ -37,6 +37,12 @@ class PostHandler:
         result['total'] = row[1]
         return result
 
+    def buildPostDictDashboard(self, row):
+        result = {}
+        result['postId'] = row[0]
+        result['caption'] = row[1]
+        return result
+
     def buildPostAttributes(self, postId, chatId, userId, messageId, photourl, postDate):
         result = {}
         result['postId'] = postId
@@ -55,6 +61,16 @@ class PostHandler:
         result_list = []
         for row in posts_List:
             result = self.buildPostDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
+
+    def getAllPostsForDashboard(self):
+        dao = PostsDAO()
+        posts_List = dao.getAllPostsForDashboard()
+        result_list = []
+        for row in posts_List:
+            result = self.buildPostDictDashboard(row)
             result_list.append(result)
 
         return jsonify(result_list)
@@ -115,10 +131,15 @@ class PostHandler:
         numOfPosts = dao.getNumOfPostsByDate(date)
         return jsonify(numOfPosts)
 
-    def getNumOfPostsByDateAndUser(self, date, userId):
+    def getNumOfPostsByDateOfUser(self, userId):
         dao = PostsDAO()
-        numOfPosts = dao.getNumOfPostsByDateAndUser(date, userId)
-        return jsonify(numOfPosts)
+        posts = dao.getNumOfPostsByDateOfUser(userId)
+        result_list = []
+        for row in posts:
+            result = self.buildPostPerDayDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
 
     def insertPost(self, json):
         chatId = json['chatId']

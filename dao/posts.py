@@ -29,6 +29,18 @@ class PostsDAO:
 
         return result
 
+    def getAllPostsForDashboard(self):
+        cursor = self.conn.cursor()
+        query = "select postid, content " \
+                "from post as P inner join message as M on P.messageid = M.messageid " \
+                "order by postdate desc, postid desc;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+
+        return result
+
     def getPostById(self, postId):
         cursor = self.conn.cursor()
         query = "select postId, chatId, userId, photourl, messageId, content, postDate " \
@@ -75,7 +87,7 @@ class PostsDAO:
         cursor = self.conn.cursor()
         query = "select date(postdate), count(*) as postsPerDay " \
                 "from post " \
-                "group by postdate;"
+                "group by date(postdate);"
         cursor.execute(query)
         result = []
 
@@ -84,11 +96,18 @@ class PostsDAO:
 
         return result
 
-    def getNumOfPostsByDateAndUser(self, date, userId):
-        return 8
+    def getNumOfPostsByDateOfUser(self, userId):
+        cursor = self.conn.cursor()
+        query = "select date(postDate), count(*) as PostPerDay " \
+                "from post where userId =%s " \
+                "group by date(postdate);"
+        cursor.execute(query, (userId,))
+        result = []
+        for row in cursor:
+            result.append(row)
 
-    def getNumOfPostsByDate(self, date):
-        return 100
+        return result
+
 
     def insertPost(self, chatId, userId, messageId, photourl, postDate):
         cursor = self.conn.cursor()

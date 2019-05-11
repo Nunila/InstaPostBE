@@ -1,21 +1,32 @@
 from flask import jsonify
 from dao.users import UsersDAO
 from dao.person import PersonDAO
+from collections import OrderedDict
+
 
 class UsersHandler:
 
 
-#userId, username, personId, firstName, lastName, phoneNumber, email, birthday
+    def buildMostActiveUsersDict(self, row):
+        result = {}
+        result['userId'] = row[0]
+        result['day'] = row[1]
+        result['count'] = row[2]
+        result['username'] = row[3]
+        return result
+
+#userId, username, password, personId, firstName, lastName, phoneNumber, email, birthday
     def buildUserAttributes(self, row):
         result = {}
         result['userId'] = row[0]
-        result['userName'] = row[1]
-        result['personId'] = row[2]
-        result['firstName'] = row[3]
-        result['lastName'] = row[4]
-        result['phoneNumber'] = row[5]
-        result['email'] = row[6]
-        result['birthday'] = row[7]
+        result['username'] = row[1]
+        result['password'] = row[2]
+        result['personId'] = row[3]
+        result['firstName'] = row[4]
+        result['lastName'] = row[5]
+        result['phonenumber'] = row[6]
+        result['email'] = row[7]
+        result['birthday'] = row[8]
         return result
 #*
 # MADE FOR LOG IN PURPOSES#
@@ -41,7 +52,7 @@ class UsersHandler:
             return jsonify(Error = 'User not found.'), 404
         else:
             user = self.buildUserAttributes(result)
-            return jsonify(User= user), 200
+            return jsonify(user), 200
 
     def getUserByUName(self, uname):
         dao = UsersDAO()
@@ -52,11 +63,23 @@ class UsersHandler:
             user = self.buildUserAttributes(result)
             return jsonify(User= user), 200
 
-    def getMostActiveUser(self):
+
+
+    def getMostActiveUsersByDate(self):
         dao = UsersDAO()
-        most_active = dao.getMostActiveUser()
-        return jsonify(most_active), 200
-#*
+        most_active = dao.getMostActiveUsersByDate()
+        results = []
+        map = {}
+        for row in most_active:
+            element = self.buildMostActiveUsersDict(row)
+            results.append(element)
+            map[str(element['day'])] = []
+        for row in results:
+            map[str(row['day'])].append(row)
+
+        return jsonify(map), 200
+
+
 # MADE FOR LOG IN PURPOSES#
     def userLogin(self, username, password):
         dao = UsersDAO()
@@ -65,19 +88,20 @@ class UsersHandler:
         if not result:
             return jsonify(Error='Invalid Credentials.'), 405
         else:
-            user = self.buildLoginCredentials(result)
-            pid = PersonDAO().getPersonByUserId(user['userId'])
-            if not pid:
-                user['personId'] = 0
-            else:
-                user['personId'] = pid
-
-        return jsonify(user), 200
+            user = self.buildUserAttributes(result)
+            return jsonify(user), 200
 
     def insertUser(self, json):
         dao = UsersDAO()
         new_user = dao.insert(json)
-        return jsonify(new_user), 200
+        if not new_user:
+            return jsonify(ERROR="This username is taken."), 400
+        else:
+            print(json)
+            result = dao.getUserByID(new_user)
+            print(result)
+            user = self.buildUserAttributes(result)
+            return jsonify(user)
 
     def updateUser(self, uid, form):
         dao = UsersDAO()

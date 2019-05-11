@@ -25,6 +25,12 @@ class MessageHandler:
         result['username'] = row[5]
         return result
 
+    def buildRepliesByDayDict(self, row):
+        result = {}
+        result['day'] = row[0]
+        result['total'] = row[1]
+        return result
+
 
     def buildReplyAttributes(self, messageId, postId, userId, content, messageDate):
         result = {}
@@ -127,6 +133,16 @@ class MessageHandler:
 
         return jsonify(result_list)
 
+    def getNumOfRepliesPerDay(self):
+        dao = MessagesDAO()
+        messages_List = dao.getNumRepliesPerDay()
+        result_list = []
+        for row in messages_List:
+            result = self.buildRepliesByDayDict(row)
+            result_list.append(result)
+
+        return jsonify(result_list)
+
 
     def getNumOfRepliesByDate(self, date):
         dao = MessagesDAO()
@@ -187,4 +203,8 @@ class MessageHandler:
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
 
-
+    # def getNumberRepliesOfPost(self, postId):
+    #     dao = MessagesDAO()
+    #     count = dao.getNumberOfRepliesOfPost(postId)
+    #     result = {'numberOfReplies': count}
+    #     return jsonify(result)

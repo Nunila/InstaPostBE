@@ -70,6 +70,7 @@ class MessagesDAO:
             result.append(row)
         return result
 
+
     def getMessagesByDate(self, messageDate):
         cursor = self.conn.cursor()
         query = "select messageId, userId, content, messageDate, type from message where messageDate = %s;"
@@ -94,6 +95,27 @@ class MessagesDAO:
         result = []
         for row in cursor:
             result.append(row)
+        return result
+
+    def getNumRepliesPerDay(self):
+        cursor = self.conn.cursor()
+        query = "select date(messageDate), count(*) as repliesPerDay " \
+                "                from reply natural inner join message" \
+                "                group by date(messageDate);"
+        cursor.execute(query,)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getNumberOfRepliesOfPost(self, postid):
+        cursor = self.conn.cursor()
+        query = "select count(*) from reply " \
+                "where postid = %s;"
+        # query = "select postId, count(*) from reply " \
+        #         "where postid = %s group by postid;"
+        cursor.execute(query, (postid,))
+        result = cursor.fetchone()[0]
         return result
 
     def getNumOfRepliesByDate(self, date):
