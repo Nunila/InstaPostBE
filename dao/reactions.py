@@ -152,11 +152,23 @@ class ReactionsDAO:
     def getDislikesCountOnDate(self, date):
         return 149
 
-    def getLikesOfPost(self, postid):
-        return 15
+    def getNumberOfLikesOfPost(self, postid):
+        cursor = self.conn.cursor()
+        query = "select count(*) " \
+                "from reaction where postid = %s and type='LIKE';"
+        # query = "select postid, count(*) " \
+        #         "from reaction where postid = %s and type='LIKE' group by postid;"
+        cursor.execute(query, (postid,))
+        result = cursor.fetchone()[0]
+        return result
 
-    def getDislikesOfPost(self, postid):
-        return 9
+    def getNumberOfDislikesOfPost(self, postid):
+        cursor = self.conn.cursor()
+        query = "select count(*) " \
+                "from reaction where postid = %s and type='DISLIKE';"
+        cursor.execute(query, (postid,))
+        result = cursor.fetchone()[0]
+        return result
 
     def insert(self, userId, postId, messageId, type, reactionDate):
         cursor = self.conn.cursor()
