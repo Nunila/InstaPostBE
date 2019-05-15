@@ -146,7 +146,7 @@ class PostHandler:
         userId = json['userId']
         messageHandler = MessageHandler()
         messageId = messageHandler.insertMessage(json)[0]
-        photourl = json['src']
+        photourl = str(json['src'])
         postDate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         if chatId and userId and messageId and photourl and postDate:
             dao = PostsDAO()

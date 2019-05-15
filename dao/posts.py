@@ -108,11 +108,10 @@ class PostsDAO:
 
         return result
 
-
     def insertPost(self, chatId, userId, messageId, photourl, postDate):
         cursor = self.conn.cursor()
         query = "insert into post (chatId, userId, messageId, photourl, postDate) values (%s, %s, %s, %s, %s) returning postId;"
-        cursor.execute(query, (chatId, userId, messageId, photourl, postDate))
+        cursor.execute(query, (chatId, userId, messageId, str(photourl), postDate))
         postId = cursor.fetchone()[0]
         self.conn.commit()
         return postId

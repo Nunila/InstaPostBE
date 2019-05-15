@@ -97,7 +97,6 @@ class ReactionHandler:
         for row in reaction_list:
             element = self.buildReactionDictionary(row)
             results.append(element)
-        print(results)
         return jsonify(results), 200
 
     def getLikesCountByMessageId(self, messageId):
